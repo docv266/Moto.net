@@ -11,8 +11,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Moto</RootNamespace>
-    <AssemblyName>Moto</AssemblyName>
+    <RootNamespace>Motonet</RootNamespace>
+    <AssemblyName>Motonet</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
@@ -161,6 +161,10 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MarquesController.cs" />
+    <Compile Include="Controllers\MotosController.cs" />
+    <Compile Include="DAL\MotoContext.cs" />
+    <Compile Include="DAL\MotoInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -233,6 +237,16 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Marques\Create.cshtml" />
+    <Content Include="Views\Marques\Delete.cshtml" />
+    <Content Include="Views\Marques\Details.cshtml" />
+    <Content Include="Views\Marques\Edit.cshtml" />
+    <Content Include="Views\Marques\Index.cshtml" />
+    <Content Include="Views\Motos\Create.cshtml" />
+    <Content Include="Views\Motos\Delete.cshtml" />
+    <Content Include="Views\Motos\Details.cshtml" />
+    <Content Include="Views\Motos\Edit.cshtml" />
+    <Content Include="Views\Motos\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

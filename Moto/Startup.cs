@@ -1,8 +1,8 @@
 ﻿using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(Moto.Startup))]
-namespace Moto
+[assembly: OwinStartupAttribute(typeof(Motonet.Startup))]
+namespace Motonet
 {
     public partial class Startup
     {

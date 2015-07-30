@@ -5,9 +5,9 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
-using Moto.Models;
+using Motonet.Models;
 
-namespace Moto
+namespace Motonet
 {
     public partial class Startup
     {

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
-namespace Moto.Models
+namespace Motonet.Models
 {
     public class IndexViewModel
     {

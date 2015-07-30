@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moto;
-using Moto.Controllers;
+using Motonet;
+using Motonet.Controllers;
 
-namespace Moto.Tests.Controllers
+namespace Motonet.Tests.Controllers
 {
     [TestClass]
     public class HomeControllerTest

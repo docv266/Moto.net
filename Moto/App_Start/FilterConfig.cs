@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace Moto
+namespace Motonet
 {
     public class FilterConfig
     {

@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace Moto
+namespace Motonet
 {
     public class BundleConfig
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Moto.Models
+namespace Motonet.Models
 {
     public class Annonce
     {

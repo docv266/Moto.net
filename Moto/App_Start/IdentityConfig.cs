@@ -10,9 +10,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using Moto.Models;
+using Motonet.Models;
 
-namespace Moto
+namespace Motonet
 {
     public class EmailService : IIdentityMessageService
     {

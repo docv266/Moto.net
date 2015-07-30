@@ -9,7 +9,7 @@
     <ProjectGuid>{1F580C9E-6F67-4E87-8EA6-4A78368C7C7C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Moto.Tests</RootNamespace>
+    <RootNamespace>Motonet.Tests</RootNamespace>
     <AssemblyName>Moto.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

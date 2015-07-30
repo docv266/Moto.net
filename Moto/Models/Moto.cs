@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Moto.Models
+namespace Motonet.Models
 {
     public class Moto
     {
@@ -11,6 +11,7 @@ namespace Moto.Models
         public string Modele { get; set; }
         public Marque Marque { get; set; }
         public Genre Genre { get; set; }
+        public int Cylindree { get; set; }
 
         public virtual List<Annonce> Annonces { get; set; }
     }

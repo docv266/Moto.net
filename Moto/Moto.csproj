@@ -159,6 +159,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AnnoncesController.cs" />
+    <Compile Include="Controllers\GenresController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MarquesController.cs" />
@@ -247,6 +249,16 @@
     <Content Include="Views\Motos\Details.cshtml" />
     <Content Include="Views\Motos\Edit.cshtml" />
     <Content Include="Views\Motos\Index.cshtml" />
+    <Content Include="Views\Annonces\Create.cshtml" />
+    <Content Include="Views\Annonces\Delete.cshtml" />
+    <Content Include="Views\Annonces\Details.cshtml" />
+    <Content Include="Views\Annonces\Edit.cshtml" />
+    <Content Include="Views\Annonces\Index.cshtml" />
+    <Content Include="Views\Genres\Create.cshtml" />
+    <Content Include="Views\Genres\Delete.cshtml" />
+    <Content Include="Views\Genres\Details.cshtml" />
+    <Content Include="Views\Genres\Edit.cshtml" />
+    <Content Include="Views\Genres\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

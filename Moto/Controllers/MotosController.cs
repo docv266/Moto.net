@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Motonet.DAL;
 using Motonet.Models;
+using System.Data.Entity.Infrastructure;
 
 namespace Motonet.Controllers
 {
@@ -39,6 +40,8 @@ namespace Motonet.Controllers
         // GET: Motos/Create
         public ActionResult Create()
         {
+            PopulateGenresDropDownList();
+            PopulateMarquesDropDownList();
             return View();
         }
 
@@ -47,15 +50,24 @@ namespace Motonet.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Modele,Cylindree")] Moto moto)
+        public ActionResult Create([Bind(Include = "Modele,Cylindree,Genre")] Moto moto)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Motos.Add(moto);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Motos.Add(moto);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
-
+            catch (DataException /* dex */)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+            }
+            PopulateGenresDropDownList(moto.Genre);
+            PopulateMarquesDropDownList(moto.Marque);
             return View(moto);
         }
 
@@ -71,15 +83,16 @@ namespace Motonet.Controllers
             {
                 return HttpNotFound();
             }
+            PopulateGenresDropDownList(moto.Genre);
             return View(moto);
         }
 
         // POST: Motos/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Modele,Cylindree")] Moto moto)
+        public ActionResult Edit([Bind(Include = "Modele,Cylindree")] Moto moto)
         {
             if (ModelState.IsValid)
             {
@@ -123,6 +136,22 @@ namespace Motonet.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void PopulateGenresDropDownList(object selectedGenre = null)
+        {
+            var genresQuery = from d in db.Genres
+                                   orderby d.Nom
+                                   select d;
+            ViewBag.Genre = new SelectList(genresQuery, "Id", "Nom", selectedGenre);
+        }
+
+        private void PopulateMarquesDropDownList(object selectedMarque = null)
+        {
+            var marquesQuery = from d in db.Marques
+                              orderby d.Nom
+                              select d;
+            ViewBag.Marque = new SelectList(marquesQuery, "Id", "Nom", selectedMarque);
         }
     }
 }

@@ -7,7 +7,7 @@ using Motonet.Models;
 
 namespace Motonet.DAL
 {
-    public class MotoInitializer : System.Data.Entity.DropCreateDatabaseAlways<MotoContext>
+    public class MotoInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<MotoContext>
     {
         protected override void Seed(MotoContext context)
         {

@@ -17,7 +17,28 @@
         <dd>
             @Html.DisplayFor(model => model.Nom)
         </dd>
-
+        <dt>
+            @Html.DisplayNameFor(model => model.Motos)
+        </dt>
+        <dd>
+            <table class="table">
+                <tr>
+                    <th>Modèle</th>
+                    <th>Cylindrée</th>
+                </tr>
+                @foreach (var item in Model.Motos)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Modele)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Cylindree)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </dd>
     </dl>
 </div>
 <p>

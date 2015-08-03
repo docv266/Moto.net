@@ -50,7 +50,7 @@ namespace Motonet.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Modele,Cylindree,Genre")] Moto moto)
+        public ActionResult Create([Bind(Include = "Modele,Cylindree,GenreID,MarqueID")] Moto moto)
         {
             try
             {
@@ -66,8 +66,8 @@ namespace Motonet.Controllers
                 //Log the error (uncomment dex variable name and add a line here to write a log.
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
-            PopulateGenresDropDownList(moto.Genre);
-            PopulateMarquesDropDownList(moto.Marque);
+            PopulateGenresDropDownList(moto.GenreID);
+            PopulateMarquesDropDownList(moto.MarqueID);
             return View(moto);
         }
 
@@ -83,7 +83,8 @@ namespace Motonet.Controllers
             {
                 return HttpNotFound();
             }
-            PopulateGenresDropDownList(moto.Genre);
+            PopulateGenresDropDownList(moto.GenreID);
+            PopulateMarquesDropDownList(moto.MarqueID);
             return View(moto);
         }
 
@@ -92,7 +93,7 @@ namespace Motonet.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Modele,Cylindree")] Moto moto)
+        public ActionResult Edit([Bind(Include = "Modele,Cylindree,GenreID,MarqueID")] Moto moto)
         {
             if (ModelState.IsValid)
             {
@@ -100,6 +101,8 @@ namespace Motonet.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            PopulateGenresDropDownList(moto.GenreID);
+            PopulateMarquesDropDownList(moto.MarqueID);
             return View(moto);
         }
 
@@ -143,7 +146,7 @@ namespace Motonet.Controllers
             var genresQuery = from d in db.Genres
                                    orderby d.Nom
                                    select d;
-            ViewBag.Genre = new SelectList(genresQuery, "Id", "Nom", selectedGenre);
+            ViewBag.GenreID = new SelectList(genresQuery, "ID", "Nom", selectedGenre);
         }
 
         private void PopulateMarquesDropDownList(object selectedMarque = null)
@@ -151,7 +154,7 @@ namespace Motonet.Controllers
             var marquesQuery = from d in db.Marques
                               orderby d.Nom
                               select d;
-            ViewBag.Marque = new SelectList(marquesQuery, "Id", "Nom", selectedMarque);
+            ViewBag.MarqueID = new SelectList(marquesQuery, "ID", "Nom", selectedMarque);
         }
     }
 }

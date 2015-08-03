@@ -9,8 +9,8 @@ namespace Motonet.Models
     {
         public int ID { get; set; }
         public string Modele { get; set; }
-        public Marque Marque { get; set; }
-        public Genre Genre { get; set; }
+        public int MarqueID { get; set; }
+        public int GenreID { get; set; }
         public int Cylindree { get; set; }
 
         public virtual List<Annonce> Annonces { get; set; }

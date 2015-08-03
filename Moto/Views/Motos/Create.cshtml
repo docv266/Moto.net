@@ -32,18 +32,18 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Genre, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.GenreID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("Genre", String.Empty)
-                @Html.ValidationMessageFor(model => model.Genre)
-            </div>
+                @Html.DropDownList("GenreID", null, String.Empty, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.GenreID, "", new { @class = "text-danger" })
+            </div> 
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Marque, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.MarqueID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("Marque", String.Empty)
-                @Html.ValidationMessageFor(model => model.Marque)
+                @Html.DropDownList("MarqueID", null, String.Empty, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.MarqueID, "", new { @class = "text-danger" })
             </div>
         </div>
 

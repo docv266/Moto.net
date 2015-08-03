@@ -188,11 +188,11 @@ namespace Motonet.DAL
 
             var motos = new List<Moto>
             {
-                new Moto{Modele="Monster", Cylindree=1100, Marque=marques.Find(r => r.Nom.Equals("Ducati")), Genre=genres.Find(r => r.Nom.Equals("Roadster"))},
-                new Moto{Modele="Monster", Cylindree=800, Marque=marques.Find(r => r.Nom.Equals("Ducati")), Genre=genres.Find(r => r.Nom.Equals("Roadster"))},
-                new Moto{Modele="Hypermotard", Cylindree=1100, Marque=marques.Find(r => r.Nom.Equals("Ducati")), Genre=genres.Find(r => r.Nom.Equals("Supermotard"))},
-                new Moto{Modele="CBF", Cylindree=1000, Marque=marques.Find(r => r.Nom.Equals("Honda")), Genre=genres.Find(r => r.Nom.Equals("Routière"))},
-                new Moto{Modele="CBR", Cylindree=1000, Marque=marques.Find(r => r.Nom.Equals("Honda")), Genre=genres.Find(r => r.Nom.Equals("Roadster"))}
+                new Moto{Modele="Monster", Cylindree=1100, MarqueID=marques.Find(r => r.Nom.Equals("Ducati")).ID, GenreID=genres.Find(r => r.Nom.Equals("Roadster")).ID},
+                new Moto{Modele="Monster", Cylindree=800, MarqueID=marques.Find(r => r.Nom.Equals("Ducati")).ID, GenreID=genres.Find(r => r.Nom.Equals("Roadster")).ID},
+                new Moto{Modele="Hypermotard", Cylindree=1100, MarqueID=marques.Find(r => r.Nom.Equals("Ducati")).ID, GenreID=genres.Find(r => r.Nom.Equals("Supermotard")).ID},
+                new Moto{Modele="CBF", Cylindree=1000, MarqueID=marques.Find(r => r.Nom.Equals("Honda")).ID, GenreID=genres.Find(r => r.Nom.Equals("Routière")).ID},
+                new Moto{Modele="CBR", Cylindree=1000, MarqueID=marques.Find(r => r.Nom.Equals("Honda")).ID, GenreID=genres.Find(r => r.Nom.Equals("Roadster")).ID}
             };
             motos.ForEach(s => context.Motos.Add(s));
             context.SaveChanges();

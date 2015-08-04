@@ -13,6 +13,8 @@ namespace Motonet.Models
         public int GenreID { get; set; }
         public int Cylindree { get; set; }
 
+        public virtual Marque Marque { get; set; }
+        public virtual Genre Genre { get; set; }
         public virtual List<Annonce> Annonces { get; set; }
     }
 }

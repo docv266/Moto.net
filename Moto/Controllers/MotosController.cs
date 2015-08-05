@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Motonet.DAL;
 using Motonet.Models;
 using System.Data.Entity.Infrastructure;
+using PagedList;
 
 namespace Motonet.Controllers
 {
@@ -17,9 +18,67 @@ namespace Motonet.Controllers
         private MotoContext db = new MotoContext();
 
         // GET: Motos
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            return View(db.Motos.ToList());
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.ModeleSortParm = String.IsNullOrEmpty(sortOrder) ? "modele_desc" : "";
+            ViewBag.MarqueSortParm = sortOrder == "marque" ? "marque_desc" : "marque";
+            ViewBag.CylindreeSortParm = sortOrder == "cylindree" ? "cylindree_desc" : "cylindree";
+            ViewBag.GenreSortParm = sortOrder == "genre" ? "genre_desc" : "genre";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+            
+            
+            var motos = from s in db.Motos
+                           select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                motos = motos.Where(s => s.Modele.Contains(searchString)
+                                       || s.Marque.Nom.Contains(searchString));
+            }
+
+
+            switch (sortOrder)
+            {
+                case "modele_desc":
+                    motos = motos.OrderByDescending(s => s.Modele);
+                    break;
+                case "marque":
+                    motos = motos.OrderBy(s => s.Marque.Nom);
+                    break;
+                case "marque_desc":
+                    motos = motos.OrderByDescending(s => s.Marque.Nom);
+                    break;
+                case "cylindree":
+                    motos = motos.OrderBy(s => s.Cylindree);
+                    break;
+                case "cylindree_desc":
+                    motos = motos.OrderByDescending(s => s.Cylindree);
+                    break;
+                case "genre":
+                    motos = motos.OrderBy(s => s.Genre.Nom);
+                    break;
+                case "genre_desc":
+                    motos = motos.OrderByDescending(s => s.Genre.Nom);
+                    break;
+                default:
+                    motos = motos.OrderBy(s => s.Modele);
+                    break;
+            }
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(motos.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Motos/Details/5
@@ -93,25 +152,44 @@ namespace Motonet.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Modele,Cylindree,GenreID,MarqueID")] Moto moto)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(moto).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            PopulateGenresDropDownList(moto.GenreID);
-            PopulateMarquesDropDownList(moto.MarqueID);
-            return View(moto);
-        }
-
-        // GET: Motos/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult EditPost(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var motoToUpdate = db.Motos.Find(id);
+            if (TryUpdateModel(motoToUpdate, "",
+               new string[] { "Modele", "Cylindree", "MarqueID", "GenreID" }))
+            {
+                try
+                {
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                catch (DataException /* dex */)
+                {
+                    //Log the error (uncomment dex variable name and add a line here to write a log.
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                }
+            }
+
+            PopulateGenresDropDownList(motoToUpdate.GenreID);
+            PopulateMarquesDropDownList(motoToUpdate.MarqueID);
+            return View(motoToUpdate);
+        }
+
+        // GET: Motos/Delete/5
+        public ActionResult Delete(int? id, bool? saveChangesError = false)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists see your system administrator.";
             }
             Moto moto = db.Motos.Find(id);
             if (moto == null)
@@ -124,11 +202,19 @@ namespace Motonet.Controllers
         // POST: Motos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Delete(int id)
         {
-            Moto moto = db.Motos.Find(id);
-            db.Motos.Remove(moto);
-            db.SaveChanges();
+            try
+            {
+                Moto moto = db.Motos.Find(id);
+                db.Motos.Remove(moto);
+                db.SaveChanges();
+            }
+            catch (DataException/* dex */)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                return RedirectToAction("Delete", new { id = id, saveChangesError = true });
+            }
             return RedirectToAction("Index");
         }
 

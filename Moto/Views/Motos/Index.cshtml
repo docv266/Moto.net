@@ -1,27 +1,38 @@
-﻿@model IEnumerable<Motonet.Models.Moto>
+﻿@model PagedList.IPagedList<Motonet.Models.Moto>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Motos";
 }
 
-<h2>Index</h2>
+<h2>Motos</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+@using (Html.BeginForm("Index", "Motos", FormMethod.Get))
+{
+    <p>
+        Filtrer par le modèle ou la marque: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+    </p>
+}
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Marque)
+            @Html.ActionLink("Marque", "Index", new { sortOrder = ViewBag.MarqueSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Modele)
+            @Html.ActionLink("Modèle", "Index", new { sortOrder = ViewBag.ModeleSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Cylindree)
+            @Html.ActionLink("Cylindrée", "Index", new { sortOrder = ViewBag.CylindreeSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Genre)
+            @Html.ActionLink("Genre", "Index", new { sortOrder = ViewBag.GenreSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th></th>
     </tr>
@@ -49,3 +60,9 @@
 }
 
 </table>
+
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

@@ -39,6 +39,7 @@ namespace Motonet.Controllers
         // GET: Annonces/Create
         public ActionResult Create()
         {
+            PopulateMotosDropDownLists();
             return View();
         }
 
@@ -123,6 +124,14 @@ namespace Motonet.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void PopulateMotosDropDownLists(object selectedMoto = null)
+        {
+            var motosQuery = from d in db.Motos
+                              orderby d.Modele
+                              select d;
+            ViewBag.MotoID = new SelectList(motosQuery, "ID", "Modele", selectedMoto);
         }
     }
 }

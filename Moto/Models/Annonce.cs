@@ -20,9 +20,11 @@ namespace Motonet.Models
         public string Date { get; set; }
         public Boolean Autorisee { get; set; }
         public Boolean Validee { get; set; }
+        public int MotoProposeeID { get; set; }
+        public int DepartementID { get; set; }
 
 
-        public virtual Moto Moto { get; set; }
+        public virtual Moto MotoProposee { get; set; }
         public virtual List<Photo> Photos { get; set; }
         public virtual List<Moto> MotosAcceptees { get; set; }
         public virtual List<Marque> MarquesAcceptees { get; set; }

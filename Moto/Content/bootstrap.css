@@ -148,9 +148,10 @@ figure {
 }
 
 fieldset {
-  padding: 0.35em 0.625em 0.75em;
-  margin: 0 2px;
-  border: 1px solid #c0c0c0;
+  padding: 10px;
+  margin: 0 0 20px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 legend {
@@ -1633,11 +1634,11 @@ table th[class*="col-"] {
   }
 }
 
-fieldset {
+/*fieldset {
   padding: 0;
   margin: 0;
   border: 0;
-}
+}*/
 
 legend {
   display: block;

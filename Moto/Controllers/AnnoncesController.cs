@@ -40,6 +40,9 @@ namespace Motonet.Controllers
         public ActionResult Create()
         {
             PopulateMotosDropDownLists();
+            PopulateGenresDropDownList();
+            PopulateMarquesDropDownList();
+            PopulateDepartementsDropDownList();
             return View();
         }
 
@@ -56,7 +59,10 @@ namespace Motonet.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            PopulateMotosDropDownLists(annonce.MotoProposeeID, annonce.MotosAccepteesID);
+            PopulateGenresDropDownList(annonce.GenresAcceptesID);
+            PopulateMarquesDropDownList(annonce.MarquesAccepteesID);
+            PopulateDepartementsDropDownList(annonce.DepartementID);
             return View(annonce);
         }
 
@@ -126,12 +132,40 @@ namespace Motonet.Controllers
             base.Dispose(disposing);
         }
 
-        private void PopulateMotosDropDownLists(object selectedMoto = null)
+        private void PopulateMotosDropDownLists(object selectedMoto = null, List<int> selectedMotos = null)
         {
             var motosQuery = from d in db.Motos
                               orderby d.Modele
                               select d;
-            ViewBag.MotoID = new SelectList(motosQuery, "ID", "Modele", selectedMoto);
+            ViewBag.MotoProposeeID = new SelectList(motosQuery, "ID", "Modele", selectedMoto);
+            ViewBag.MotosAccepteesID = new MultiSelectList(motosQuery, "ID", "Modele", selectedMotos);
+        }
+
+        private void PopulateGenresDropDownList(List<int> selectedGenres = null)
+        {
+            var genresQuery = from d in db.Genres
+                             orderby d.Nom
+                             select d;
+
+            ViewBag.GenresAcceptesID = new MultiSelectList(genresQuery, "ID", "Nom", selectedGenres);
+        }
+
+        private void PopulateMarquesDropDownList(List<int> selectedMarques = null)
+        {
+            var marquesQuery = from d in db.Marques
+                              orderby d.Nom
+                              select d;
+
+            ViewBag.MarquesAccepteesID = new MultiSelectList(marquesQuery, "ID", "Nom", selectedMarques);
+        }
+
+        private void PopulateDepartementsDropDownList(object selectedDepartement = null)
+        {
+            var departementsQuery = from d in db.Departements
+                               orderby d.Nom
+                               select d;
+
+            ViewBag.DepartementID = new SelectList(departementsQuery, "ID", "Nom", selectedDepartement);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace Motonet.Models
 {
@@ -11,7 +12,9 @@ namespace Motonet.Models
         public string Nom { get; set; }
         public string CP { get; set; }
 
+        [Required]
         public virtual Region Region { get; set; }
+
         public virtual List<Annonce> Annonces { get; set; }
     }
 }

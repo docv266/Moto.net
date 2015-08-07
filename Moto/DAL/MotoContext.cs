@@ -26,6 +26,27 @@ namespace Motonet.DAL
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+
+            modelBuilder.Entity<Annonce>().HasRequired(d => d.MotoProposee).WithMany().WillCascadeOnDelete(false);
+            //modelBuilder.Entity<Annonce>().HasRequired(d => d.Departement).WithMany().WillCascadeOnDelete(false);
+
+            //modelBuilder.Entity<Annonce>()
+            // .HasMany(c => c.MotosAcceptees).WithMany(i => i.Annonces)
+            // .Map(t => t.MapLeftKey("AnnonceID")
+            //     .MapRightKey("MotosAccepteesID")
+            //     .ToTable("AnnonceMotosAcceptees"));
+
+            //modelBuilder.Entity<Annonce>()
+            // .HasMany(c => c.MarquesAcceptees).WithMany(i => i.Annonces)
+            // .Map(t => t.MapLeftKey("AnnonceID")
+            //     .MapRightKey("MarquesAccepteesID")
+            //     .ToTable("AnnonceMarquesAcceptees"));
+
+            //modelBuilder.Entity<Annonce>()
+            // .HasMany(c => c.GenresAcceptes).WithMany(i => i.Annonces)
+            // .Map(t => t.MapLeftKey("AnnonceID")
+            //     .MapRightKey("GenresAcceptesID")
+            //     .ToTable("AnnonceGenresAcceptes"));
         }
     }
 }

@@ -39,7 +39,8 @@ namespace Motonet.DAL
                 new Region{Nom="Poitou-Charentes"},
                 new Region{Nom="Provence-Alpes-Côte d'Azur"},
                 new Region{Nom="Réunion"},
-                new Region{Nom="Rhône-Alpes"}
+                new Region{Nom="Rhône-Alpes"},
+                new Region{Nom="Outre-Mer"}
             };
 
             regions.ForEach(s => context.Regions.Add(s));
@@ -69,12 +70,12 @@ namespace Motonet.DAL
                 new Departement{Nom="Finistère",CP="29",Region=regions.Find(r => r.Nom.Equals("Bretagne"))},
                 new Departement{Nom="Ille et Vilaine",CP="35",Region=regions.Find(r => r.Nom.Equals("Bretagne"))},
                 new Departement{Nom="Morbihan",CP="56",Region=regions.Find(r => r.Nom.Equals("Bretagne"))},
-                new Departement{Nom="Cher",CP="18",Region=regions.Find(r => r.Nom.Equals("Centre"))},
-                new Departement{Nom="Eure et Loire",CP="28",Region=regions.Find(r => r.Nom.Equals("Centre"))},
-                new Departement{Nom="Indre",CP="36",Region=regions.Find(r => r.Nom.Equals("Centre"))},
-                new Departement{Nom="Indre et Loire",CP="37",Region=regions.Find(r => r.Nom.Equals("Centre"))},
-                new Departement{Nom="Loire et Cher",CP="41",Region=regions.Find(r => r.Nom.Equals("Centre"))},
-                new Departement{Nom="Loiret",CP="45",Region=regions.Find(r => r.Nom.Equals("Centre"))},
+                new Departement{Nom="Cher",CP="18",Region=regions.Find(r => r.Nom.Equals("Centre-Val de Loire"))},
+                new Departement{Nom="Eure et Loire",CP="28",Region=regions.Find(r => r.Nom.Equals("Centre-Val de Loire"))},
+                new Departement{Nom="Indre",CP="36",Region=regions.Find(r => r.Nom.Equals("Centre-Val de Loire"))},
+                new Departement{Nom="Indre et Loire",CP="37",Region=regions.Find(r => r.Nom.Equals("Centre-Val de Loire"))},
+                new Departement{Nom="Loire et Cher",CP="41",Region=regions.Find(r => r.Nom.Equals("Centre-Val de Loire"))},
+                new Departement{Nom="Loiret",CP="45",Region=regions.Find(r => r.Nom.Equals("Centre-Val de Loire"))},
                 new Departement{Nom="Ardennes",CP="08",Region=regions.Find(r => r.Nom.Equals("Champagne-Ardenne"))},
                 new Departement{Nom="Aube",CP="10",Region=regions.Find(r => r.Nom.Equals("Champagne-Ardenne"))},
                 new Departement{Nom="Marne",CP="51",Region=regions.Find(r => r.Nom.Equals("Champagne-Ardenne"))},

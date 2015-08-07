@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Motonet.DAL;
 using Motonet.Models;
+using System.Data.Entity.Infrastructure;
 
 namespace Motonet.Controllers
 {
@@ -39,10 +40,12 @@ namespace Motonet.Controllers
         // GET: Annonces/Create
         public ActionResult Create()
         {
+
             PopulateMotosDropDownLists();
             PopulateGenresDropDownList();
             PopulateMarquesDropDownList();
             PopulateDepartementsDropDownList();
+
             return View();
         }
 
@@ -51,18 +54,21 @@ namespace Motonet.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Titre,Description,Annee,Kilometrage,Prix,Nom,Mail,Telephone,MotDePasse,Date,Autorisee,Validee")] Annonce annonce)
+        public ActionResult Create([Bind(Include = "Titre,Description,MotoProposeeID,Annee,Kilometrage,Prix,MotosAccepteesID,MarquesAccepteesID,GenresAcceptesID,Nom,Mail,Telephone,DepartementID,MotDePasse")] Annonce annonce)
         {
             if (ModelState.IsValid)
             {
+                annonce.Date = DateTime.Today;
                 db.Annonces.Add(annonce);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
             PopulateMotosDropDownLists(annonce.MotoProposeeID, annonce.MotosAccepteesID);
             PopulateGenresDropDownList(annonce.GenresAcceptesID);
             PopulateMarquesDropDownList(annonce.MarquesAccepteesID);
             PopulateDepartementsDropDownList(annonce.DepartementID);
+
             return View(annonce);
         }
 
@@ -78,23 +84,51 @@ namespace Motonet.Controllers
             {
                 return HttpNotFound();
             }
+
+            PopulateMotosDropDownLists(annonce.MotoProposeeID, annonce.MotosAccepteesID);
+            PopulateGenresDropDownList(annonce.GenresAcceptesID);
+            PopulateMarquesDropDownList(annonce.MarquesAccepteesID);
+            PopulateDepartementsDropDownList(annonce.DepartementID);
+
             return View(annonce);
         }
 
         // POST: Annonces/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Titre,Description,Annee,Kilometrage,Prix,Nom,Mail,Telephone,MotDePasse,Date,Autorisee,Validee")] Annonce annonce)
+        public ActionResult EditPost(int? id)
         {
-            if (ModelState.IsValid)
+            if (id == null)
             {
-                db.Entry(annonce).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            return View(annonce);
+            var annonceToUpdate = db.Annonces.Find(id);
+            if (TryUpdateModel(annonceToUpdate, "",
+               new string[] { "Titre", "Description", "MotoProposeeID", "Annee", "Kilometrage", "Prix", "MotosAccepteesID", "MarquesAccepteesID", "GenresAcceptesID", "Nom", "Mail", "Telephone", "DepartementID", "MotDePasse" }))
+            {
+                try
+                {
+                    annonceToUpdate.Date = DateTime.Today;
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                catch (DataException /* dex */)
+                {
+                    //Log the error (uncomment dex variable name and add a line here to write a log.
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                }
+            }
+
+            PopulateMotosDropDownLists(annonceToUpdate.MotoProposeeID, annonceToUpdate.MotosAccepteesID);
+            PopulateGenresDropDownList(annonceToUpdate.GenresAcceptesID);
+            PopulateMarquesDropDownList(annonceToUpdate.MarquesAccepteesID);
+            PopulateDepartementsDropDownList(annonceToUpdate.DepartementID);
+
+            return View(annonceToUpdate);
+                        
         }
 
         // GET: Annonces/Delete/5
@@ -137,8 +171,8 @@ namespace Motonet.Controllers
             var motosQuery = from d in db.Motos
                               orderby d.Modele
                               select d;
-            ViewBag.MotoProposeeID = new SelectList(motosQuery, "ID", "Modele", selectedMoto);
-            ViewBag.MotosAccepteesID = new MultiSelectList(motosQuery, "ID", "Modele", selectedMotos);
+            ViewBag.MotoProposeeID = new SelectList(motosQuery, "ID", "Identification", selectedMoto);
+            ViewBag.MotosAccepteesID = new MultiSelectList(motosQuery, "ID", "Identification", selectedMotos);
         }
 
         private void PopulateGenresDropDownList(List<int> selectedGenres = null)

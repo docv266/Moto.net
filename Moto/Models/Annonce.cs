@@ -42,7 +42,8 @@ namespace Motonet.Models
         public string Nom { get; set; }
 
         [Required]
-        [DataType(DataType.EmailAddress)]
+        [StringLength(50, MinimumLength = 5)]
+        [DataType(DataType.Text)]
         public string Mail { get; set; }
 
         [DataType(DataType.PhoneNumber)]
@@ -53,6 +54,13 @@ namespace Motonet.Models
         [DataType(DataType.Password)]
         [DisplayAttribute(Name = "Mot de passe")]
         public string MotDePasse { get; set; }
+
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirmer le mot de passe")]
+        [Compare("MotDePasse", ErrorMessage = "Les mots de passe sont différents.")]
+        public string ConfirmationMotDePasse { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
@@ -71,6 +79,7 @@ namespace Motonet.Models
         [DisplayAttribute(Name = "Département")]
         public int DepartementID { get; set; }
 
+        [Required]
         [DisplayAttribute(Name = "Modèles")]
         public List<int> MotosAccepteesID { get; set; }
 
@@ -94,5 +103,17 @@ namespace Motonet.Models
         public virtual List<Marque> MarquesAcceptees { get; set; }
 
         public virtual List<Genre> GenresAcceptes { get; set; }
+
+        public Annonce()
+        {
+            MotosAccepteesID = new List<int>();
+            GenresAcceptesID = new List<int>();
+            MarquesAccepteesID = new List<int>();
+
+            MotosAcceptees = new List<Moto>();
+            MarquesAcceptees = new List<Marque>();
+            GenresAcceptes = new List<Genre>();
+        }
+
     }
 }

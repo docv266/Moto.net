@@ -54,19 +54,39 @@ namespace Motonet.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Titre,Description,MotoProposeeID,Annee,Kilometrage,Prix,MotosAccepteesID,MarquesAccepteesID,GenresAcceptesID,Nom,Mail,Telephone,DepartementID,MotDePasse")] Annonce annonce)
+        public ActionResult Create([Bind(Include = "Titre,Description,MotoProposeeID,Annee,Kilometrage,Prix,MotosAccepteesID,MarquesAccepteesID,GenresAcceptesID,Nom,Mail,Telephone,DepartementID,MotDePasse,ConfirmationMotDePasse")] Annonce annonce)
         {
             if (ModelState.IsValid)
             {
                 annonce.Date = DateTime.Today;
+                ProcessManyToManyRelationships(annonce);
                 db.Annonces.Add(annonce);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
+            
+            foreach (Moto moto in annonce.MotosAcceptees)
+            {
+                annonce.MotosAccepteesID.Add(moto.ID);
+            }
             PopulateMotosDropDownLists(annonce.MotoProposeeID, annonce.MotosAccepteesID);
+            
+            
+            foreach (Genre genre in annonce.GenresAcceptes)
+            {
+                annonce.GenresAcceptesID.Add(genre.ID);
+            }
             PopulateGenresDropDownList(annonce.GenresAcceptesID);
+              
+                      
+            foreach (Marque marque in annonce.MarquesAcceptees)
+            {
+                annonce.MarquesAccepteesID.Add(marque.ID);
+            }
             PopulateMarquesDropDownList(annonce.MarquesAccepteesID);
+            
+
             PopulateDepartementsDropDownList(annonce.DepartementID);
 
             return View(annonce);
@@ -85,9 +105,30 @@ namespace Motonet.Controllers
                 return HttpNotFound();
             }
 
+            
+            foreach (Moto moto in annonce.MotosAcceptees)
+            {
+                annonce.MotosAccepteesID.Add(moto.ID);
+            }
             PopulateMotosDropDownLists(annonce.MotoProposeeID, annonce.MotosAccepteesID);
+            
+
+            
+            foreach (Genre genre in annonce.GenresAcceptes)
+            {
+                annonce.GenresAcceptesID.Add(genre.ID);
+            }
             PopulateGenresDropDownList(annonce.GenresAcceptesID);
+            
+
+            
+            foreach (Marque marque in annonce.MarquesAcceptees)
+            {
+                annonce.MarquesAccepteesID.Add(marque.ID);
+            }
             PopulateMarquesDropDownList(annonce.MarquesAccepteesID);
+            
+
             PopulateDepartementsDropDownList(annonce.DepartementID);
 
             return View(annonce);
@@ -106,11 +147,12 @@ namespace Motonet.Controllers
             }
             var annonceToUpdate = db.Annonces.Find(id);
             if (TryUpdateModel(annonceToUpdate, "",
-               new string[] { "Titre", "Description", "MotoProposeeID", "Annee", "Kilometrage", "Prix", "MotosAccepteesID", "MarquesAccepteesID", "GenresAcceptesID", "Nom", "Mail", "Telephone", "DepartementID", "MotDePasse" }))
+               new string[] { "Titre", "Description", "MotoProposeeID", "Annee", "Kilometrage", "Prix", "MotosAccepteesID", "MarquesAccepteesID", "GenresAcceptesID", "Nom", "Mail", "Telephone", "DepartementID", "MotDePasse", "ConfirmationMotDePasse" }))
             {
                 try
                 {
                     annonceToUpdate.Date = DateTime.Today;
+                    ProcessManyToManyRelationships(annonceToUpdate);
                     db.SaveChanges();
 
                     return RedirectToAction("Index");
@@ -122,9 +164,30 @@ namespace Motonet.Controllers
                 }
             }
 
+            
+            foreach (Moto moto in annonceToUpdate.MotosAcceptees)
+            {
+                annonceToUpdate.MotosAccepteesID.Add(moto.ID);
+            }
             PopulateMotosDropDownLists(annonceToUpdate.MotoProposeeID, annonceToUpdate.MotosAccepteesID);
+            
+
+            
+            foreach (Genre genre in annonceToUpdate.GenresAcceptes)
+            {
+                annonceToUpdate.GenresAcceptesID.Add(genre.ID);
+            }
             PopulateGenresDropDownList(annonceToUpdate.GenresAcceptesID);
+            
+
+            
+            foreach (Marque marque in annonceToUpdate.MarquesAcceptees)
+            {
+                annonceToUpdate.MarquesAccepteesID.Add(marque.ID);
+            }
             PopulateMarquesDropDownList(annonceToUpdate.MarquesAccepteesID);
+            
+
             PopulateDepartementsDropDownList(annonceToUpdate.DepartementID);
 
             return View(annonceToUpdate);
@@ -200,6 +263,29 @@ namespace Motonet.Controllers
                                select d;
 
             ViewBag.DepartementID = new SelectList(departementsQuery, "ID", "Nom", selectedDepartement);
+        }
+
+        private void ProcessManyToManyRelationships(Annonce annonce)
+        {
+            
+            annonce.MotosAcceptees.Clear();
+            foreach (int motoID in annonce.MotosAccepteesID)
+            {
+                annonce.MotosAcceptees.Add(db.Motos.Find(motoID));
+            }
+                       
+            annonce.MarquesAcceptees.Clear();
+            foreach (int marqueID in annonce.MarquesAccepteesID)
+            {
+                annonce.MarquesAcceptees.Add(db.Marques.Find(marqueID));
+            }
+                        
+            annonce.GenresAcceptes.Clear();
+            foreach (int genreID in annonce.GenresAcceptesID)
+            {
+                annonce.GenresAcceptes.Add(db.Genres.Find(genreID));
+            }
+            
         }
     }
 }

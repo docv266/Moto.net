@@ -36,7 +36,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", rows = 10 } })
                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -82,7 +82,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.MotosAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownList("MotosAccepteesID", (MultiSelectList)ViewBag.MotosAccepteesID, new { multiple = "multiple", @class = "chosen-select form-control" })
+                    @Html.DropDownList("MotosAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control" })
                     @Html.ValidationMessageFor(model => model.MotosAccepteesID, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -90,7 +90,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.MarquesAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownList("MarquesAccepteesID", (MultiSelectList)ViewBag.MarquesAccepteesID, new { multiple = "multiple", @class = "chosen-select form-control" })
+                    @Html.DropDownList("MarquesAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control" })
                     @Html.ValidationMessageFor(model => model.MarquesAccepteesID, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -98,7 +98,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.GenresAcceptesID, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownList("GenresAcceptesID", (MultiSelectList)ViewBag.GenresAcceptesID, new { multiple = "multiple", @class = "chosen-select form-control" })
+                    @Html.DropDownList("GenresAcceptesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control" })
                     @Html.ValidationMessageFor(model => model.GenresAcceptesID, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -136,7 +136,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.DepartementID, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownList("DepartementID", (MultiSelectList)ViewBag.DepartementID, new { @class = "chosen-select form-control" })
+                    @Html.DropDownList("DepartementID", null, String.Empty, new { @class = "chosen-select form-control" })
                     @Html.ValidationMessageFor(model => model.DepartementID, "", new { @class = "text-danger" })
                 </div>
             </div>

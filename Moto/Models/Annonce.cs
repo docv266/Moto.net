@@ -89,6 +89,8 @@ namespace Motonet.Models
         [DisplayAttribute(Name = "Genres")]
         public List<int> GenresAcceptesID { get; set; }
 
+        [DisplayAttribute(Name = "Photos")]
+        public List<int> PhotosID { get; set; }
 
         [InverseProperty("AnnoncesAvecMotoProposee")]
         public virtual Moto MotoProposee { get; set; }

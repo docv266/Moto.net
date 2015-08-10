@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Motonet.DAL;
 using Motonet.Models;
 using System.Data.Entity.Infrastructure;
+using System.IO;
 
 namespace Motonet.Controllers
 {
@@ -54,10 +55,25 @@ namespace Motonet.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Titre,Description,MotoProposeeID,Annee,Kilometrage,Prix,MotosAccepteesID,MarquesAccepteesID,GenresAcceptesID,Nom,Mail,Telephone,DepartementID,MotDePasse,ConfirmationMotDePasse")] Annonce annonce)
+        public ActionResult Create([Bind(Include = "Titre,Description,MotoProposeeID,Annee,Kilometrage,Prix,MotosAccepteesID,MarquesAccepteesID,GenresAcceptesID,Nom,Mail,Telephone,DepartementID,MotDePasse,ConfirmationMotDePasse")] Annonce annonce, HttpPostedFileBase Photo1)
         {
             if (ModelState.IsValid)
             {
+
+                if (Photo1 != null && Photo1.ContentLength > 0)
+                {
+                    var photo = new Photo
+                    {
+                        FileName = System.IO.Path.GetFileName(Photo1.FileName),
+                        ContentType = Photo1.ContentType
+                    };
+                    using (var reader = new System.IO.BinaryReader(Photo1.InputStream))
+                    {
+                        photo.Content = reader.ReadBytes(Photo1.ContentLength);
+                    }
+                    annonce.Photos = new List<Photo> { photo };
+                }
+
                 annonce.Date = DateTime.Today;
                 ProcessManyToManyRelationships(annonce);
                 db.Annonces.Add(annonce);

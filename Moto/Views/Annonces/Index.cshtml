@@ -21,6 +21,9 @@
             @Html.DisplayNameFor(model => model.MotoProposee.Modele)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Photos)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Annee)
         </th>
         <th>
@@ -39,16 +42,7 @@
             @Html.DisplayNameFor(model => model.Telephone)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.MotDePasse)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.Date)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Autorisee)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Validee)
         </th>
         <th></th>
     </tr>
@@ -63,6 +57,12 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.MotoProposee.Modele)
+        </td>
+        <td>
+            @if (item.Photos.Count > 0)
+            {
+                <img src="~/Photo?id=@item.Photos.First().ID" alt="Image" />
+            }
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Annee)
@@ -83,16 +83,7 @@
             @Html.DisplayFor(modelItem => item.Telephone)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.MotDePasse)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.Date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Autorisee)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Validee)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |

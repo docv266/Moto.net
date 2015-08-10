@@ -171,6 +171,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MarquesController.cs" />
     <Compile Include="Controllers\MotosController.cs" />
+    <Compile Include="Controllers\PhotoController.cs" />
     <Compile Include="DAL\MotoContext.cs" />
     <Compile Include="DAL\MotoInitializer.cs" />
     <Compile Include="Global.asax.cs">
@@ -286,6 +287,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Photo\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -43,6 +43,25 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.MotoProposee)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MotoProposee.Identification)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Photos)
+        </dt>
+
+        <dd>
+            @foreach (var photo in Model.Photos)
+            {
+                <img src="~/Photo?id=@photo.ID" alt="Image" />
+            }
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.Prix)
         </dt>
 

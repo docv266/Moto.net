@@ -10,6 +10,7 @@ using Motonet.DAL;
 using Motonet.Models;
 using System.Data.Entity.Infrastructure;
 using System.IO;
+using PagedList;
 
 namespace Motonet.Controllers
 {
@@ -18,9 +19,58 @@ namespace Motonet.Controllers
         private MotoContext db = new MotoContext();
 
         // GET: Annonces
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            return View(db.Annonces.ToList());
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewBag.PrixSortParm = sortOrder == "prix" ? "prix_desc" : "prix";
+            ViewBag.CylindreeSortParm = sortOrder == "cylindree" ? "cylindree_desc" : "cylindree";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            var annonces = from s in db.Annonces
+                        select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                annonces = annonces.Where(s => s.MotoProposee.Identification.Contains(searchString));
+            }
+
+
+            switch (sortOrder)
+            {
+                case "date_desc":
+                    annonces = annonces.OrderByDescending(s => s.Date);
+                    break;
+                case "cylindree":
+                    annonces = annonces.OrderBy(s => s.MotoProposee.Cylindree);
+                    break;
+                case "cylindree_desc":
+                    annonces = annonces.OrderByDescending(s => s.MotoProposee.Cylindree);
+                    break;
+                case "prix":
+                    annonces = annonces.OrderBy(s => s.Prix);
+                    break;
+                case "prix_desc":
+                    annonces = annonces.OrderByDescending(s => s.Prix);
+                    break;
+                default:
+                    annonces = annonces.OrderBy(s => s.Date);
+                    break;
+            }
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(annonces.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Annonces/Details/5
@@ -55,30 +105,33 @@ namespace Motonet.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Titre,Description,MotoProposeeID,Annee,Kilometrage,Prix,MotosAccepteesID,MarquesAccepteesID,GenresAcceptesID,Nom,Mail,Telephone,DepartementID,MotDePasse,ConfirmationMotDePasse")] Annonce annonce, HttpPostedFileBase Photo1)
+        public ActionResult Create([Bind(Include = "Titre,Description,MotoProposeeID,Annee,Kilometrage,Prix,MotosAccepteesID,MarquesAccepteesID,GenresAcceptesID,Nom,Mail,Telephone,DepartementID,MotDePasse,ConfirmationMotDePasse")] Annonce annonce, IEnumerable<HttpPostedFileBase> photos)
         {
             if (ModelState.IsValid)
             {
-
-                if (Photo1 != null && Photo1.ContentLength > 0)
-                {
-                    var photo = new Photo
+                foreach (var fichier in photos)
+                {                    
+                    if (fichier != null && fichier.ContentLength > 0)
                     {
-                        FileName = System.IO.Path.GetFileName(Photo1.FileName),
-                        ContentType = Photo1.ContentType
-                    };
-                    using (var reader = new System.IO.BinaryReader(Photo1.InputStream))
-                    {
-                        photo.Content = reader.ReadBytes(Photo1.ContentLength);
+                        var photo = new Photo
+                        {
+                            FileName = System.IO.Path.GetFileName(fichier.FileName),
+                            ContentType = fichier.ContentType
+                        };
+                        using (var reader = new System.IO.BinaryReader(fichier.InputStream))
+                        {
+                            photo.Content = reader.ReadBytes(fichier.ContentLength);
+                        }
+                        annonce.Photos.Add(photo);
                     }
-                    annonce.Photos = new List<Photo> { photo };
                 }
+                annonce.Photos = annonce.Photos.Take(3).ToList();
 
                 annonce.Date = DateTime.Today;
                 ProcessManyToManyRelationships(annonce);
                 db.Annonces.Add(annonce);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = annonce.ID });
             }
 
             

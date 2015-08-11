@@ -111,10 +111,12 @@ namespace Motonet.Models
             MotosAccepteesID = new List<int>();
             GenresAcceptesID = new List<int>();
             MarquesAccepteesID = new List<int>();
+            PhotosID = new List<int>();
 
             MotosAcceptees = new List<Moto>();
             MarquesAcceptees = new List<Marque>();
             GenresAcceptes = new List<Genre>();
+            Photos = new List<Photo>();
         }
 
     }

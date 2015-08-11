@@ -2,6 +2,7 @@
 
 @section Styles {
     <link href="~/Content/chosen.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-fileinput/css/fileinput.css" rel="stylesheet" />
 }
 
 @{
@@ -49,18 +50,12 @@
                         
             <div class="form-group">
                 @Html.LabelFor(model => model.Photos, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10 input-group">
-                    <span class="input-group-btn">
-                        <span class="btn btn-primary btn-file">
-                            Parcourir
-                            <input type="file" multiple id="Photo1" name="Photo1" />
-                        </span>
-                    </span>
-                    <input type="text" class="form-control" readonly>
+                <div class="col-md-10">
+                    <input type="file" class="file" multiple id="photos" name="photos" data-language="fr" accept="image/*" data-show-upload="false" data-max-file-count=3 />
                     @Html.ValidationMessageFor(model => model.Photos, "", new { @class = "text-danger" })
                 </div>
             </div>
-
+            
             <div class="form-group">
                 @Html.LabelFor(model => model.Annee, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -187,6 +182,8 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script src="/Scripts/chosen.jquery.js"></script>
+    <script src="~/Scripts/fileinput.js"></script>
+    <script src="~/Scripts/fileinput_locale_fr.js"></script>
 
     <script type="text/javascript">
         $(".chosen-select").chosen({ placeholder_text_multiple: "Choisir plusieurs éléments", placeholder_text_single: "Choisir un élément", no_results_text: "Pas de résultat pour" })
@@ -194,29 +191,7 @@
         $('form').validate({
             ignore: []
         });
-
-        $(document).on('change', '.btn-file :file', function () {
-            var input = $(this),
-                numFiles = input.get(0).files ? input.get(0).files.length : 1,
-                label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-            input.trigger('fileselect', [numFiles, label]);
-        });
-
-        $(document).ready(function () {
-            $('.btn-file :file').on('fileselect', function (event, numFiles, label) {
-
-                var input = $(this).parents('.input-group').find(':text'),
-                    log = numFiles > 1 ? numFiles + ' files selected' : label;
-
-                if (input.length) {
-                    input.val(log);
-                } else {
-                    if (log) alert(log);
-                }
-
-            });
-        });
-
+        
     </script>
 
 }

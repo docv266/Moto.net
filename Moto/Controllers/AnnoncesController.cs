@@ -11,6 +11,10 @@ using Motonet.Models;
 using System.Data.Entity.Infrastructure;
 using System.IO;
 using PagedList;
+using System.Web.Helpers;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace Motonet.Controllers
 {
@@ -19,33 +23,17 @@ namespace Motonet.Controllers
         private MotoContext db = new MotoContext();
 
         // GET: Annonces
-        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
+        public ActionResult Index(string sortOrder, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
             ViewBag.PrixSortParm = sortOrder == "prix" ? "prix_desc" : "prix";
             ViewBag.CylindreeSortParm = sortOrder == "cylindree" ? "cylindree_desc" : "cylindree";
 
-            if (searchString != null)
-            {
-                page = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-            ViewBag.CurrentFilter = searchString;
-
+            
             var annonces = from s in db.Annonces
                         select s;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                annonces = annonces.Where(s => s.MotoProposee.Identification.Contains(searchString));
-            }
-
-
+                        
             switch (sortOrder)
             {
                 case "date_desc":
@@ -68,7 +56,7 @@ namespace Motonet.Controllers
                     break;
             }
 
-            int pageSize = 10;
+            int pageSize = 5;
             int pageNumber = (page ?? 1);
             return View(annonces.ToPagedList(pageNumber, pageSize));
         }
@@ -109,8 +97,13 @@ namespace Motonet.Controllers
         {
             if (ModelState.IsValid)
             {
-                foreach (var fichier in photos)
-                {                    
+                foreach (HttpPostedFileBase fichier in photos)
+                {
+                    Image image = Image.FromStream(fichier.InputStream, true, true);
+
+                    Bitmap bitmap = ResizeImage(image, 130, 100);
+                    
+                                       
                     if (fichier != null && fichier.ContentLength > 0)
                     {
                         var photo = new Photo
@@ -120,7 +113,8 @@ namespace Motonet.Controllers
                         };
                         using (var reader = new System.IO.BinaryReader(fichier.InputStream))
                         {
-                            photo.Content = reader.ReadBytes(fichier.ContentLength);
+                            //photo.Content = reader.ReadBytes(fichier.ContentLength);
+                            photo.Content = imageToByteArray(bitmap, photo.ContentType);
                         }
                         annonce.Photos.Add(photo);
                     }
@@ -355,6 +349,61 @@ namespace Motonet.Controllers
                 annonce.GenresAcceptes.Add(db.Genres.Find(genreID));
             }
             
+        }
+
+        private Bitmap ResizeImage(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
+        }
+
+        private byte[] imageToByteArray(System.Drawing.Image imageIn, String ContentType)
+        {
+            MemoryStream ms = new MemoryStream();
+
+            if (ContentType.Equals(GetMimeType(System.Drawing.Imaging.ImageFormat.Bmp)))
+            {
+                imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+            }
+            else if (ContentType.Equals(GetMimeType(System.Drawing.Imaging.ImageFormat.Gif)))
+            {
+                imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
+            }
+            else if (ContentType.Equals(GetMimeType(System.Drawing.Imaging.ImageFormat.Jpeg)))
+            {
+                imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+            else if (ContentType.Equals(GetMimeType(System.Drawing.Imaging.ImageFormat.Png)))
+            {
+                imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            }                    
+
+            return ms.ToArray();
+        }
+              
+        private string GetMimeType(ImageFormat imageFormat)
+        {
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
+            return codecs.First(codec => codec.FormatID == imageFormat.Guid).MimeType;
         }
     }
 }

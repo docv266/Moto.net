@@ -117,7 +117,7 @@
 .file-preview-frame {
     display: table;
     margin: 8px;
-    height: 160px;
+    height: 115px;
     border: 1px solid #ddd;
     box-shadow: 1px 1px 5px 0px #a2958a;
     padding: 6px;
@@ -182,6 +182,7 @@
 }
 
 .file-thumbnail-footer .file-caption-name {
+    display: none;
     padding-top: 4px;
     font-size: 11px;
     color: #777;

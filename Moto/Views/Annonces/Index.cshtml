@@ -12,13 +12,10 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 
-@using (Html.BeginForm("Index", "Annonces", FormMethod.Get))
-{
-    <p>
-        Filtrer par le modèle ou la marque: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
-    </p>
-}
+<br />
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort }))
+<br />
 
 <table class="table">
     <tr>
@@ -26,22 +23,22 @@
             Titre
         </th>
         <th>
-            @Html.ActionLink("Moto proposée", "Index", new { sortOrder = ViewBag.MotoProposeeSortParm, currentFilter = ViewBag.CurrentFilter })
+            Modèle
         </th>
         <th>
-            Photos
+            Photo principale
         </th>
         <th>
-            @Html.ActionLink("Année", "Index", new { sortOrder = ViewBag.AnneeSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Année", "Index", new { sortOrder = ViewBag.AnneeSortParm })
         </th>
         <th>
-            @Html.ActionLink("Kilométrage", "Index", new { sortOrder = ViewBag.KilometrageSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Kilométrage", "Index", new { sortOrder = ViewBag.KilometrageSortParm })
         </th>
         <th>
-            @Html.ActionLink("Prix", "Index", new { sortOrder = ViewBag.PrixSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Prix", "Index", new { sortOrder = ViewBag.PrixSortParm })
         </th>
         <th>
-            @Html.ActionLink("Date", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Date", "Index", new { sortOrder = ViewBag.DateSortParm })
         </th>
         <th></th>
     </tr>
@@ -86,4 +83,4 @@
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
 @Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    new { page, sortOrder = ViewBag.CurrentSort }))

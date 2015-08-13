@@ -36,6 +36,7 @@
                 @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", rows = 10 } })
+                    <div id="textarea_feedback"></div>
                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -51,7 +52,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Photos, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    <input type="file" class="file" multiple id="photos" name="photos" data-language="fr" accept="image/*" data-show-upload="false" data-max-file-count=3 />
+                    <input type="file" class="file" multiple id="photos" name="photos" data-language="fr" accept="image/*" data-show-upload="false" data-max-file-count=@ViewBag.nombreMaxdePhotos data-max-file-size=@ViewBag.tailleMaxiUploadEnOctet />
                     @Html.ValidationMessageFor(model => model.Photos, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -84,7 +85,7 @@
 
         <fieldset>
 
-            <h5>Ce que vous cherchez:</h5>
+            <h5>Et pourquoi pas un échange?</h5>
 
             <div class="form-group">
                 @Html.LabelFor(model => model.MotosAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -192,6 +193,18 @@
             ignore: []
         });
         
+        $(document).ready(function () {
+            var text_max = @ViewBag.nombreMaxCaracteresDescription;
+            $('#textarea_feedback').html(text_max + ' caractères restants');
+
+            $('#Description').keyup(function () {
+                var text_length = $('#Description').val().length;
+                var text_remaining = text_max - text_length;
+
+                $('#textarea_feedback').html(text_remaining + ' caractères restants');
+            });
+        });
+
     </script>
 
 }

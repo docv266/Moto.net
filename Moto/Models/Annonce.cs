@@ -32,7 +32,6 @@ namespace Motonet.Models
         public int Kilometrage { get; set; }
 
         [Required]
-        [DataType(DataType.Currency)]
         [Range(0, 999999, ErrorMessage = "Veuillez saisir un nombre compris entre 0 et 999999.")]
         public int Prix { get; set; }
 
@@ -117,6 +116,22 @@ namespace Motonet.Models
             MarquesAcceptees = new List<Marque>();
             GenresAcceptes = new List<Genre>();
             Photos = new List<Photo>();
+        }
+
+        public string KilometrageAvecUnite
+        {
+            get
+            {
+                return Kilometrage + "km";
+            }
+        }
+
+        public string PrixAvecUnite
+        {
+            get
+            {
+                return Prix + "€";
+            }
         }
 
     }

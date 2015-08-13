@@ -15,6 +15,7 @@ using System.Web.Helpers;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Configuration;
 
 namespace Motonet.Controllers
 {
@@ -29,6 +30,7 @@ namespace Motonet.Controllers
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
             ViewBag.PrixSortParm = sortOrder == "prix" ? "prix_desc" : "prix";
             ViewBag.CylindreeSortParm = sortOrder == "cylindree" ? "cylindree_desc" : "cylindree";
+            ViewBag.KilometrageSortParm = sortOrder == "kilometrage" ? "kilometrage_desc" : "kilometrage";
 
             
             var annonces = from s in db.Annonces
@@ -51,12 +53,18 @@ namespace Motonet.Controllers
                 case "prix_desc":
                     annonces = annonces.OrderByDescending(s => s.Prix);
                     break;
+                case "kilometrage":
+                    annonces = annonces.OrderBy(s => s.Kilometrage);
+                    break;
+                case "kilometrage_desc":
+                    annonces = annonces.OrderByDescending(s => s.Kilometrage);
+                    break;
                 default:
                     annonces = annonces.OrderBy(s => s.Date);
                     break;
             }
 
-            int pageSize = 5;
+            int pageSize = int.Parse(ConfigurationManager.AppSettings["pageSize"]);
             int pageNumber = (page ?? 1);
             return View(annonces.ToPagedList(pageNumber, pageSize));
         }
@@ -80,6 +88,10 @@ namespace Motonet.Controllers
         public ActionResult Create()
         {
 
+            ViewBag.tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]) / 1024;
+            ViewBag.nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
+            ViewBag.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
+
             PopulateMotosDropDownLists();
             PopulateGenresDropDownList();
             PopulateMarquesDropDownList();
@@ -95,39 +107,68 @@ namespace Motonet.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Titre,Description,MotoProposeeID,Annee,Kilometrage,Prix,MotosAccepteesID,MarquesAccepteesID,GenresAcceptesID,Nom,Mail,Telephone,DepartementID,MotDePasse,ConfirmationMotDePasse")] Annonce annonce, IEnumerable<HttpPostedFileBase> photos)
         {
+
+            int tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]);
+            int nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
+
             if (ModelState.IsValid)
             {
-                foreach (HttpPostedFileBase fichier in photos)
+                
+                // On parcourt les fichiers sélectionnés (dans la limite de "nombreMaxdePhotos") afin de les redimensionner et les stocker
+                for (int i = 0; i < ((nombreMaxdePhotos < photos.Count()) ? nombreMaxdePhotos : photos.Count()); i++)
                 {
-                    Image image = Image.FromStream(fichier.InputStream, true, true);
+                    HttpPostedFileBase fichier = photos.ElementAt(i);
 
-                    Bitmap bitmap = ResizeImage(image, 130, 100);
-                    
-                                       
-                    if (fichier != null && fichier.ContentLength > 0)
+                    if (fichier != null && fichier.ContentLength > 0 && fichier.ContentLength < tailleMaxiUploadEnOctet)
                     {
-                        var photo = new Photo
+                        Image imageOriginale = Image.FromStream(fichier.InputStream, true, true);
+
+                        // Ajout de la version Miniature de cette image
+                        int largeurMaxMiniature = int.Parse(ConfigurationManager.AppSettings["largeurMaxMiniature"]);
+                        int hauteurMaxMiniature = int.Parse(ConfigurationManager.AppSettings["hauteurMaxMiniature"]);
+
+                        Image imageRedimensionneeMiniature = ScaleImage(imageOriginale, largeurMaxMiniature, hauteurMaxMiniature);
+
+                        var photoMiniature = new Photo
                         {
-                            FileName = System.IO.Path.GetFileName(fichier.FileName),
-                            ContentType = fichier.ContentType
+                            Taille = Photo.TypeTaille.Miniature,
+                            ContentType = fichier.ContentType,
+                            Content = imageToByteArray(imageRedimensionneeMiniature, fichier.ContentType)
                         };
-                        using (var reader = new System.IO.BinaryReader(fichier.InputStream))
+                                          
+                        annonce.Photos.Add(photoMiniature);
+                        
+                        // Ajout de la version Vignette de cette image
+                        int largeurMaxVignette = int.Parse(ConfigurationManager.AppSettings["largeurMaxVignette"]);
+                        int hauteurMaxVignette = int.Parse(ConfigurationManager.AppSettings["hauteurMaxVignette"]);
+
+                        Image imageRedimensionneeVignette = ScaleImage(imageOriginale, largeurMaxVignette, hauteurMaxVignette);
+
+                        var photoVignette = new Photo
                         {
-                            //photo.Content = reader.ReadBytes(fichier.ContentLength);
-                            photo.Content = imageToByteArray(bitmap, photo.ContentType);
-                        }
-                        annonce.Photos.Add(photo);
+                            Taille = Photo.TypeTaille.Vignette,
+                            ContentType = fichier.ContentType,
+                            Content = imageToByteArray(imageRedimensionneeVignette, fichier.ContentType)
+                        };
+
+                        annonce.Photos.Add(photoVignette);
                     }
                 }
-                annonce.Photos = annonce.Photos.Take(3).ToList();
 
+                // L'annonce est faite à la date du jour
                 annonce.Date = DateTime.Today;
+
+                // On ajoute les modèles, marques et genres acceptés
                 ProcessManyToManyRelationships(annonce);
+
                 db.Annonces.Add(annonce);
                 db.SaveChanges();
                 return RedirectToAction("Details", new { id = annonce.ID });
             }
 
+            ViewBag.tailleMaxiUploadEnOctet = tailleMaxiUploadEnOctet / 1024;
+            ViewBag.nombreMaxdePhotos = nombreMaxdePhotos;
+            ViewBag.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
             
             foreach (Moto moto in annonce.MotosAcceptees)
             {
@@ -351,30 +392,22 @@ namespace Motonet.Controllers
             
         }
 
-        private Bitmap ResizeImage(Image image, int width, int height)
+        private Image ScaleImage(Image image, int maxWidth, int maxHeight)
         {
-            var destRect = new Rectangle(0, 0, width, height);
-            var destImage = new Bitmap(width, height);
+            var ratioX = (double)maxWidth / image.Width;
+            var ratioY = (double)maxHeight / image.Height;
+            var ratio = Math.Min(ratioX, ratioY);
 
-            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+            var newWidth = (int)(image.Width * ratio);
+            var newHeight = (int)(image.Height * ratio);
 
-            using (var graphics = Graphics.FromImage(destImage))
-            {
-                graphics.CompositingMode = CompositingMode.SourceCopy;
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            var newImage = new Bitmap(newWidth, newHeight);
 
-                using (var wrapMode = new ImageAttributes())
-                {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                }
-            }
+            using (var graphics = Graphics.FromImage(newImage))
+                graphics.DrawImage(image, 0, 0, newWidth, newHeight);
 
-            return destImage;
-        }
+            return newImage;
+        }        
 
         private byte[] imageToByteArray(System.Drawing.Image imageIn, String ContentType)
         {

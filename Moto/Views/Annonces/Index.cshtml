@@ -40,13 +40,12 @@
         <th>
             @Html.ActionLink("Date", "Index", new { sortOrder = ViewBag.DateSortParm })
         </th>
-        <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Titre)
+            @Html.ActionLink(item.Titre, "Details", new { id = item.ID })
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.MotoProposee.Identification)
@@ -54,25 +53,20 @@
         <td>
             @if (item.Photos.Count > 0)
             {
-                <img src="~/Photo?id=@item.Photos.First().ID" alt="Image" />
+                <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature).ID" alt="Photo non disponible" />
             }
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Annee)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Kilometrage)
+            @Html.DisplayFor(modelItem => item.KilometrageAvecUnite)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Prix)
+            @Html.DisplayFor(modelItem => item.PrixAvecUnite)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Date)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
         </td>
     </tr>
 }

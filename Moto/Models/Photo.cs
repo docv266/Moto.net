@@ -10,8 +10,7 @@ namespace Motonet.Models
     {
         public int ID { get; set; }
 
-        [StringLength(255)]
-        public string FileName { get; set; }
+        public TypeTaille Taille { get; set; }
 
         [StringLength(100)]
         public string ContentType { get; set; }
@@ -21,5 +20,8 @@ namespace Motonet.Models
         public int AnnonceID { get; set; }
 
         public virtual Annonce Annonce { get; set; }
+
+        public enum TypeTaille { Miniature, Vignette }
     }
+
 }

@@ -4,130 +4,156 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h3>@Html.DisplayFor(model => model.Titre)</h3>
 
-<div>
-    <h4>Annonce</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Titre)
-        </dt>
+<hr />
+  
 
-        <dd>
-            @Html.DisplayFor(model => model.Titre)
-        </dd>
+<div class="row">
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
+    <div class="col-md-4">
+        <fieldset>
+            <dl class="dl-horizontal">
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.MotoProposee.Modele)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.MotoProposee.Identification)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Annee)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Annee)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Kilometrage)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.KilometrageAvecUnite)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Prix)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.PrixAvecUnite)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Annee)
-        </dt>
+            </dl>
+        </fieldset>
 
-        <dd>
-            @Html.DisplayFor(model => model.Annee)
-        </dd>
+        <fieldset>
+            <dl class="dl-horizontal">
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Kilometrage)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Date)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Date)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Nom)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Nom)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Mail)
+                </dt>
+                <dd>
+                    <a href="mailto:@Model.Mail">@Model.Mail</a>
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Telephone)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Telephone)
+                </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Kilometrage)
-        </dd>
+            </dl>
+        </fieldset>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.MotoProposee)
-        </dt>
+        @if (Model.MotosAcceptees.Any() || Model.MarquesAcceptees.Any() || Model.GenresAcceptes.Any())
+        {
+            
+            <fieldset>
 
-        <dd>
-            @Html.DisplayFor(model => model.MotoProposee.Identification)
-        </dd>
+                <h4>Echange possible!</h4>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Photos)
-        </dt>
+                <dl class="dl-horizontal">
 
-        <dd>
-            @foreach (var photo in Model.Photos)
-            {
-                <img src="~/Photo?id=@photo.ID" alt="Image" />
-            }
-        </dd>
+                    @if (Model.MotosAcceptees.Any())
+                    {
+                        <dt>
+                            @Html.DisplayNameFor(model => model.MotosAcceptees)
+                        </dt>
+                        <dd>
+                            <ul>
+                                @foreach (Moto moto in Model.MotosAcceptees)
+                                {
+                                    <li>@moto.Identification</li>
+                                }
+                            </ul>
+                        </dd>
+                    }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Prix)
-        </dt>
+                    @if (Model.MarquesAcceptees.Any())
+                    {
+                        <dt>
+                            @Html.DisplayNameFor(model => model.MarquesAcceptees)
+                        </dt>
+                        <dd>
+                            <ul>
+                                @foreach (Marque marque in Model.MarquesAcceptees)
+                                {
+                                    <li>@marque.Nom</li>
+                                }
+                            </ul>
+                        </dd>
+                    }
 
-        <dd>
-            @Html.DisplayFor(model => model.Prix)
-        </dd>
+                    @if (Model.GenresAcceptes.Any())
+                    {
+                        <dt>
+                            @Html.DisplayNameFor(model => model.GenresAcceptes)
+                        </dt>
+                        <dd>
+                            <ul>
+                                @foreach (Genre genre in Model.GenresAcceptes)
+                                {
+                                    <li>@genre.Nom</li>
+                                }
+                            </ul>
+                        </dd>
+                    }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Nom)
-        </dt>
+                </dl>
+            </fieldset>
+            
+        }
 
-        <dd>
-            @Html.DisplayFor(model => model.Nom)
-        </dd>
+    </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Mail)
-        </dt>
+    <div class="col-md-8">
 
-        <dd>
-            @Html.DisplayFor(model => model.Mail)
-        </dd>
+        @foreach (Photo photo in Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Vignette))
+        {
+            <img src="~/Photo?id=@photo.ID" alt="Photo non disponible" />
+        }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Telephone)
-        </dt>
+        <br />
+        <br />
 
-        <dd>
-            @Html.DisplayFor(model => model.Telephone)
-        </dd>
+        
+        <pre>@Html.DisplayFor(model => model.Description)</pre>
+                
 
-        <dt>
-            @Html.DisplayNameFor(model => model.MotDePasse)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.MotDePasse)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Date)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Date)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Autorisee)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Autorisee)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Validee)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Validee)
-        </dd>
-
-    </dl>
+    </div>
 </div>
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Modifier", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Supprimer", "Delete", new { id = Model.ID }) |
+    @Html.ActionLink("Revenir à la liste des annonces", "Index")
 </p>

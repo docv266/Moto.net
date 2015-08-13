@@ -28,10 +28,8 @@ namespace Motonet.Models
         [DisplayAttribute(Name = "Cylindrée")]
         public int Cylindree { get; set; }
 
-        [Required]
         public virtual Marque Marque { get; set; }
 
-        [Required]
         public virtual Genre Genre { get; set; }
 
         [InverseProperty("MotoProposee")]

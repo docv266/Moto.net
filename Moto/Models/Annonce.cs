@@ -99,10 +99,13 @@ namespace Motonet.Models
         public virtual List<Photo> Photos { get; set; }
 
         [InverseProperty("AnnoncesAvecMotosAcceptees")]
+        [Display(Name = "Modèles acceptés")]
         public virtual List<Moto> MotosAcceptees { get; set; }
 
+        [Display(Name = "Marques accepteés")]
         public virtual List<Marque> MarquesAcceptees { get; set; }
 
+        [Display(Name = "Genres acceptés")]
         public virtual List<Genre> GenresAcceptes { get; set; }
 
         public Annonce()

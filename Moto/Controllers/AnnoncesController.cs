@@ -193,6 +193,7 @@ namespace Motonet.Controllers
 
             PopulateDepartementsDropDownList(annonce.DepartementID);
 
+
             return View(annonce);
         }
 
@@ -208,6 +209,11 @@ namespace Motonet.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]) / 1024;
+            ViewBag.nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
+            ViewBag.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
+            
 
             
             foreach (Moto moto in annonce.MotosAcceptees)
@@ -243,8 +249,12 @@ namespace Motonet.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost(int? id)
+        public ActionResult EditPost(int? id, IEnumerable<HttpPostedFileBase> photos)
         {
+
+            int tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]);
+            int nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -255,11 +265,60 @@ namespace Motonet.Controllers
             {
                 try
                 {
+                    if (photos.First() != null)
+                    {
+                        // On vide la liste pour mettre uniquement les nouvelles photos.
+                        db.Photos.RemoveRange(annonceToUpdate.Photos);
+                        db.SaveChanges();
+
+                        // On parcourt les fichiers sélectionnés (dans la limite de "nombreMaxdePhotos") afin de les redimensionner et les stocker
+                        for (int i = 0; i < ((nombreMaxdePhotos < photos.Count()) ? nombreMaxdePhotos : photos.Count()); i++)
+                        {
+                            HttpPostedFileBase fichier = photos.ElementAt(i);
+
+                            if (fichier != null && fichier.ContentLength > 0 && fichier.ContentLength < tailleMaxiUploadEnOctet)
+                            {
+                                Image imageOriginale = Image.FromStream(fichier.InputStream, true, true);
+
+                                // Ajout de la version Miniature de cette image
+                                int largeurMaxMiniature = int.Parse(ConfigurationManager.AppSettings["largeurMaxMiniature"]);
+                                int hauteurMaxMiniature = int.Parse(ConfigurationManager.AppSettings["hauteurMaxMiniature"]);
+
+                                Image imageRedimensionneeMiniature = ScaleImage(imageOriginale, largeurMaxMiniature, hauteurMaxMiniature);
+
+                                var photoMiniature = new Photo
+                                {
+                                    Taille = Photo.TypeTaille.Miniature,
+                                    ContentType = fichier.ContentType,
+                                    Content = imageToByteArray(imageRedimensionneeMiniature, fichier.ContentType)
+                                };
+
+                                annonceToUpdate.Photos.Add(photoMiniature);
+
+                                // Ajout de la version Vignette de cette image
+                                int largeurMaxVignette = int.Parse(ConfigurationManager.AppSettings["largeurMaxVignette"]);
+                                int hauteurMaxVignette = int.Parse(ConfigurationManager.AppSettings["hauteurMaxVignette"]);
+
+                                Image imageRedimensionneeVignette = ScaleImage(imageOriginale, largeurMaxVignette, hauteurMaxVignette);
+
+                                var photoVignette = new Photo
+                                {
+                                    Taille = Photo.TypeTaille.Vignette,
+                                    ContentType = fichier.ContentType,
+                                    Content = imageToByteArray(imageRedimensionneeVignette, fichier.ContentType)
+                                };
+
+                                annonceToUpdate.Photos.Add(photoVignette);
+                            }
+                        }
+                    }
+
+
                     annonceToUpdate.Date = DateTime.Today;
                     ProcessManyToManyRelationships(annonceToUpdate);
                     db.SaveChanges();
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Details", new { id = annonceToUpdate.ID });
                 }
                 catch (DataException /* dex */)
                 {
@@ -293,6 +352,11 @@ namespace Motonet.Controllers
             
 
             PopulateDepartementsDropDownList(annonceToUpdate.DepartementID);
+
+            ViewBag.tailleMaxiUploadEnOctet = tailleMaxiUploadEnOctet / 1024;
+            ViewBag.nombreMaxdePhotos = nombreMaxdePhotos;
+            ViewBag.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
+            
 
             return View(annonceToUpdate);
                         

@@ -1,5 +1,9 @@
 ﻿@model Motonet.Models.Annonce
 
+@section Styles {
+    
+}
+
 @{
     ViewBag.Title = "Details";
 }
@@ -137,23 +141,42 @@
 
     <div class="col-md-8">
 
-        @foreach (Photo photo in Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Vignette))
-        {
-            <img src="~/Photo?id=@photo.ID" alt="Photo non disponible" />
-        }
-
-        <br />
-        <br />
-
+       
         
+        <img name="grandePhoto" src="~/Photo?id=@Model.Photos.First().ID" alt="Photo non disponible" />
+        <br />
+
+        @foreach (Photo photo in Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Miniature))
+        {
+            <a href="javascript:afficher()"><img src="~/Photo?id=@photo.ID" alt="Photo non disponible" /></a>
+        }
+          
+        <br />
+        <br />
+
+
         <pre>@Html.DisplayFor(model => model.Description)</pre>
-                
+
 
     </div>
-</div>
+    </div>
 
 <p>
     @Html.ActionLink("Modifier", "Edit", new { id = Model.ID }) |
     @Html.ActionLink("Supprimer", "Delete", new { id = Model.ID }) |
     @Html.ActionLink("Revenir à la liste des annonces", "Index")
 </p>
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+        function afficher()
+        {
+            document.grandePhoto.src = "~/Photo?id=@Model.Photos.Last().ID";
+        }
+
+    </script>
+
+}

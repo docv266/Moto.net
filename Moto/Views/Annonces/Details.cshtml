@@ -63,6 +63,12 @@
                     @Html.DisplayFor(model => model.Nom)
                 </dd>
                 <dt>
+                    @Html.DisplayNameFor(model => model.Departement)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Departement.Nom)
+                </dd>
+                <dt>
                     @Html.DisplayNameFor(model => model.Mail)
                 </dt>
                 <dd>
@@ -142,13 +148,9 @@
     <div class="col-md-8">
 
        
-        
-        <img name="grandePhoto" src="~/Photo?id=@Model.Photos.First().ID" alt="Photo non disponible" />
-        <br />
-
         @foreach (Photo photo in Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Miniature))
         {
-            <a href="javascript:afficher()"><img src="~/Photo?id=@photo.ID" alt="Photo non disponible" /></a>
+            <img src="~/Photo?id=@photo.ID" alt="Photo non disponible" />
         }
           
         <br />
@@ -170,13 +172,6 @@
 @section Scripts{
     @Scripts.Render("~/bundles/jqueryval")
 
-    <script type="text/javascript">
-
-        function afficher()
-        {
-            document.grandePhoto.src = "~/Photo?id=@Model.Photos.Last().ID";
-        }
-
-    </script>
+    
 
 }

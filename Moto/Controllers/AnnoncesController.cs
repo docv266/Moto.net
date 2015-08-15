@@ -24,6 +24,7 @@ namespace Motonet.Controllers
         private MotoContext db = new MotoContext();
 
         // GET: Annonces
+        [AllowAnonymous]
         public ActionResult Index(string sortOrder, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
@@ -105,7 +106,7 @@ namespace Motonet.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Titre,Description,MotoProposeeID,Annee,Kilometrage,Prix,MotosAccepteesID,MarquesAccepteesID,GenresAcceptesID,Nom,Mail,Telephone,DepartementID,MotDePasse,ConfirmationMotDePasse")] Annonce annonce, IEnumerable<HttpPostedFileBase> photos)
+        public ActionResult Create([Bind(Include = "Titre,Description,MotoProposeeID,Annee,Kilometrage,Prix,MotosAccepteesID,MarquesAccepteesID,GenresAcceptesID,Nom,Mail,Telephone,DepartementID")] Annonce annonce, IEnumerable<HttpPostedFileBase> photos)
         {
 
             int tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]);
@@ -261,7 +262,7 @@ namespace Motonet.Controllers
             }
             var annonceToUpdate = db.Annonces.Find(id);
             if (TryUpdateModel(annonceToUpdate, "",
-               new string[] { "Titre", "Description", "MotoProposeeID", "Annee", "Kilometrage", "Prix", "MotosAccepteesID", "MarquesAccepteesID", "GenresAcceptesID", "Nom", "Mail", "Telephone", "DepartementID", "MotDePasse", "ConfirmationMotDePasse" }))
+               new string[] { "Titre", "Description", "MotoProposeeID", "Annee", "Kilometrage", "Prix", "MotosAccepteesID", "MarquesAccepteesID", "GenresAcceptesID", "Nom", "Mail", "Telephone", "DepartementID" }))
             {
                 try
                 {

@@ -10,8 +10,9 @@ namespace Motonet.DAL
 {
     public class MotoContext: DbContext
     {
-    
-        public MotoContext() : base("MotoContext")
+
+        public MotoContext()
+            : base("MotoNetConnection")
         {
         }
         
@@ -27,26 +28,21 @@ namespace Motonet.DAL
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
-            modelBuilder.Entity<Annonce>().HasRequired(d => d.MotoProposee).WithMany().WillCascadeOnDelete(false);
-            //modelBuilder.Entity<Annonce>().HasRequired(d => d.Departement).WithMany().WillCascadeOnDelete(false);
+            modelBuilder.Entity<Moto>().HasRequired(m => m.Genre).WithMany(g => g.Motos).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Moto>().HasRequired(m => m.Marque).WithMany(m => m.Motos).WillCascadeOnDelete(false);
 
-            //modelBuilder.Entity<Annonce>()
-            // .HasMany(c => c.MotosAcceptees).WithMany(i => i.Annonces)
-            // .Map(t => t.MapLeftKey("AnnonceID")
-            //     .MapRightKey("MotosAccepteesID")
-            //     .ToTable("AnnonceMotosAcceptees"));
+            modelBuilder.Entity<Departement>().HasRequired(d => d.Region).WithMany(r => r.Departements).WillCascadeOnDelete(false);
 
-            //modelBuilder.Entity<Annonce>()
-            // .HasMany(c => c.MarquesAcceptees).WithMany(i => i.Annonces)
-            // .Map(t => t.MapLeftKey("AnnonceID")
-            //     .MapRightKey("MarquesAccepteesID")
-            //     .ToTable("AnnonceMarquesAcceptees"));
+            modelBuilder.Entity<Annonce>().HasRequired(d => d.MotoProposee).WithMany(m => m.AnnoncesAvecMotoProposee).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Annonce>().HasRequired(d => d.Departement).WithMany(d => d.Annonces).WillCascadeOnDelete(false);
 
-            //modelBuilder.Entity<Annonce>()
-            // .HasMany(c => c.GenresAcceptes).WithMany(i => i.Annonces)
-            // .Map(t => t.MapLeftKey("AnnonceID")
-            //     .MapRightKey("GenresAcceptesID")
-            //     .ToTable("AnnonceGenresAcceptes"));
+            modelBuilder.Entity<Annonce>().HasMany(a => a.MarquesAcceptees).WithMany(m => m.Annonces);
+            modelBuilder.Entity<Annonce>().HasMany(a => a.MotosAcceptees).WithMany(m => m.AnnoncesAvecMotosAcceptees);
+            modelBuilder.Entity<Annonce>().HasMany(a => a.GenresAcceptes).WithMany(g => g.Annonces);
+
+            modelBuilder.Entity<Annonce>().HasMany(a => a.Photos).WithRequired(p => p.Annonce);
+
+            
         }
     }
 }

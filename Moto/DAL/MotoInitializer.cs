@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data.Entity;
 using Motonet.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Motonet.DAL
 {
@@ -11,6 +12,9 @@ namespace Motonet.DAL
     {
         protected override void Seed(MotoContext context)
         {
+
+
+
             var regions = new List<Region>
             {
                 new Region{Nom="Alsace"},

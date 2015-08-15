@@ -50,18 +50,6 @@ namespace Motonet.Models
         public string Telephone { get; set; }
 
         [Required]
-        [DataType(DataType.Password)]
-        [DisplayAttribute(Name = "Mot de passe")]
-        public string MotDePasse { get; set; }
-
-
-        [Required]
-        [DataType(DataType.Password)]
-        [Display(Name = "Confirmer le mot de passe")]
-        [Compare("MotDePasse", ErrorMessage = "Les mots de passe sont différents.")]
-        public string ConfirmationMotDePasse { get; set; }
-
-        [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }

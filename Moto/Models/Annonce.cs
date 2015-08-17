@@ -4,6 +4,11 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Cryptography;
+using System.Runtime.CompilerServices;
+using System.Net.Mail;
+using System.Threading.Tasks;
+using System.Text;
 
 namespace Motonet.Models
 {
@@ -28,7 +33,7 @@ namespace Motonet.Models
 
         [Required]
         [Range(0, 99999, ErrorMessage = "Veuillez saisir un nombre compris entre 0 et 99999.")]
-        [DisplayAttribute(Name = "Kilomètrage")]
+        [DisplayAttribute(Name = "Kilométrage")]
         public int Kilometrage { get; set; }
 
         [Required]
@@ -39,6 +44,25 @@ namespace Motonet.Models
         [StringLength(30, MinimumLength = 3)]
         [DataType(DataType.Text)]
         public string Nom { get; set; }
+
+        [Required]
+        [StringLength(68, MinimumLength = 3)]
+        [DataType(DataType.Password)]
+        [DisplayAttribute(Name = "Mot de passe")]
+        public string MotDePasse { get; set; }
+
+        [Required]
+        [NotMapped]
+        [StringLength(68, MinimumLength = 3)]
+        [DataType(DataType.Password)]
+        [DisplayAttribute(Name = "Confirmer le mot de passe")]
+        [Compare("MotDePasse", ErrorMessage = "Les mots de passe sont différents")]
+        public string ConfirmerMotDePasse { get; set; }
+
+        [Required]
+        [DataType(DataType.Text)]
+        [StringLength(20, MinimumLength = 20)]
+        public string CodeValidation { get; set; }
 
         [Required]
         [StringLength(50, MinimumLength = 5)]
@@ -107,6 +131,9 @@ namespace Motonet.Models
             MarquesAcceptees = new List<Marque>();
             GenresAcceptes = new List<Genre>();
             Photos = new List<Photo>();
+
+            // On génère le code de validation afin de l'envoyer à l'adresse spécifiée
+            CodeValidation = GenerateRandomCode();
         }
 
         public string KilometrageAvecUnite
@@ -123,6 +150,88 @@ namespace Motonet.Models
             {
                 return Prix + "€";
             }
+        }
+
+        public static string HashPassword(string password)
+        {
+            byte[] salt;
+            byte[] buffer2;
+            if (password == null)
+            {
+                throw new ArgumentNullException("password");
+            }
+            using (Rfc2898DeriveBytes bytes = new Rfc2898DeriveBytes(password, 0x10, 0x3e8))
+            {
+                salt = bytes.Salt;
+                buffer2 = bytes.GetBytes(0x20);
+            }
+            byte[] dst = new byte[0x31];
+            Buffer.BlockCopy(salt, 0, dst, 1, 0x10);
+            Buffer.BlockCopy(buffer2, 0, dst, 0x11, 0x20);
+            return Convert.ToBase64String(dst);
+        }
+
+        public static bool VerifyHashedPassword(string hashedPassword, string password)
+        {
+            byte[] buffer4;
+            if (hashedPassword == null)
+            {
+                return false;
+            }
+            if (password == null)
+            {
+                throw new ArgumentNullException("password");
+            }
+            byte[] src = Convert.FromBase64String(hashedPassword);
+            if ((src.Length != 0x31) || (src[0] != 0))
+            {
+                return false;
+            }
+            byte[] dst = new byte[0x10];
+            Buffer.BlockCopy(src, 1, dst, 0, 0x10);
+            byte[] buffer3 = new byte[0x20];
+            Buffer.BlockCopy(src, 0x11, buffer3, 0, 0x20);
+            using (Rfc2898DeriveBytes bytes = new Rfc2898DeriveBytes(password, dst, 0x3e8))
+            {
+                buffer4 = bytes.GetBytes(0x20);
+            }
+            return ByteArraysEqual(buffer3, buffer4);
+        }
+
+        // Compares two byte arrays for equality. The method is specifically written so that the loop is not optimized. 
+        [MethodImpl(MethodImplOptions.NoOptimization)]
+        private static bool ByteArraysEqual(byte[] a, byte[] b)
+        {
+            if (Object.ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            if (a == null || b == null || a.Length != b.Length)
+            {
+                return false;
+            }
+
+            bool areSame = true;
+            for (int i = 0; i < a.Length; i++)
+            {
+                areSame &= (a[i] == b[i]);
+            }
+            return areSame;
+        } 
+
+        public static String GenerateRandomCode()
+        {
+            StringBuilder builder = new StringBuilder();
+            Random random = new Random();
+            char ch;
+            for (int i = 0; i < 20; i++)
+            {
+                ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
+                builder.Append(ch);
+            }
+
+            return builder.ToString();
         }
 
     }

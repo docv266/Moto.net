@@ -1,21 +1,17 @@
-﻿using System;
+﻿using Motonet.DAL;
+using Motonet.Models;
+using PagedList;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
-using System.Data.Entity;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using Motonet.DAL;
-using Motonet.Models;
-using System.Data.Entity.Infrastructure;
-using System.IO;
-using PagedList;
-using System.Web.Helpers;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Configuration;
 
 namespace Motonet.Controllers
 {
@@ -71,6 +67,7 @@ namespace Motonet.Controllers
         }
 
         // GET: Annonces/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -86,6 +83,7 @@ namespace Motonet.Controllers
         }
 
         // GET: Annonces/Create
+        [AllowAnonymous]
         public ActionResult Create()
         {
 
@@ -106,7 +104,8 @@ namespace Motonet.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Titre,Description,MotoProposeeID,Annee,Kilometrage,Prix,MotosAccepteesID,MarquesAccepteesID,GenresAcceptesID,Nom,Mail,Telephone,DepartementID")] Annonce annonce, IEnumerable<HttpPostedFileBase> photos)
+        [AllowAnonymous]
+        public ActionResult Create([Bind(Include = "Titre,Description,MotoProposeeID,Annee,Kilometrage,Prix,MotosAccepteesID,MarquesAccepteesID,GenresAcceptesID,Nom,Mail,Telephone,DepartementID,MotDepasse,ConfirmerMotDePasse")] Annonce annonce, IEnumerable<HttpPostedFileBase> photos)
         {
 
             int tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]);
@@ -156,6 +155,10 @@ namespace Motonet.Controllers
                     }
                 }
 
+                // On hash le mot de passe
+                annonce.MotDePasse = Annonce.HashPassword(annonce.MotDePasse);
+                annonce.ConfirmerMotDePasse = annonce.MotDePasse;
+
                 // L'annonce est faite à la date du jour
                 annonce.Date = DateTime.Today;
 
@@ -164,7 +167,19 @@ namespace Motonet.Controllers
 
                 db.Annonces.Add(annonce);
                 db.SaveChanges();
-                return RedirectToAction("Details", new { id = annonce.ID });
+                
+                // On envoie un mail pour valider l'adresse
+                var email = new MailValiderAdresse
+                {
+                    Destinataire = annonce.Mail,
+                    Nom = annonce.Nom,
+                    Lien = Url.Action("ValidateMail", "Annonces", new { annonceId = annonce.ID.ToString(), code = annonce.CodeValidation }, Request.Url.Scheme)
+                };
+                
+                email.Send();
+
+                return RedirectToAction("Index");
+                
             }
 
             ViewBag.tailleMaxiUploadEnOctet = tailleMaxiUploadEnOctet / 1024;
@@ -199,6 +214,7 @@ namespace Motonet.Controllers
         }
 
         // GET: Annonces/Edit/5
+        [AllowAnonymous]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -215,15 +231,11 @@ namespace Motonet.Controllers
             ViewBag.nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
             ViewBag.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
             
-
-            
             foreach (Moto moto in annonce.MotosAcceptees)
             {
                 annonce.MotosAccepteesID.Add(moto.ID);
             }
             PopulateMotosDropDownLists(annonce.MotoProposeeID, annonce.MotosAccepteesID);
-            
-
             
             foreach (Genre genre in annonce.GenresAcceptes)
             {
@@ -231,15 +243,12 @@ namespace Motonet.Controllers
             }
             PopulateGenresDropDownList(annonce.GenresAcceptesID);
             
-
-            
             foreach (Marque marque in annonce.MarquesAcceptees)
             {
                 annonce.MarquesAccepteesID.Add(marque.ID);
             }
             PopulateMarquesDropDownList(annonce.MarquesAccepteesID);
             
-
             PopulateDepartementsDropDownList(annonce.DepartementID);
 
             return View(annonce);
@@ -250,6 +259,7 @@ namespace Motonet.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public ActionResult EditPost(int? id, IEnumerable<HttpPostedFileBase> photos)
         {
 
@@ -364,6 +374,7 @@ namespace Motonet.Controllers
         }
 
         // GET: Annonces/Delete/5
+        [AllowAnonymous]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -381,12 +392,43 @@ namespace Motonet.Controllers
         // POST: Annonces/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public ActionResult DeleteConfirmed(int id)
         {
             Annonce annonce = db.Annonces.Find(id);
             db.Annonces.Remove(annonce);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        [AllowAnonymous]
+        public ActionResult ValidateMail(int annonceId, string code)
+        {
+            if (code == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Annonce annonce = db.Annonces.Find(annonceId);
+
+            if (annonce == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            if (!code.Equals(annonce.CodeValidation))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            annonce.Validee = true;
+
+            db.SaveChanges();
+
+            ViewBag.Title = "Votre adresse mail est validée.";
+            ViewBag.Message = "Votre annonce va maintenant etre examinée puis validée sous peu.";
+
+            return View();
         }
 
         protected override void Dispose(bool disposing)
@@ -503,5 +545,6 @@ namespace Motonet.Controllers
             ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
             return codecs.First(codec => codec.FormatID == imageFormat.Guid).MimeType;
         }
+
     }
 }

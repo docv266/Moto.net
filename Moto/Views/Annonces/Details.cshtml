@@ -80,6 +80,18 @@
                 <dd>
                     @Html.DisplayFor(model => model.Telephone)
                 </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Validee)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Validee)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Autorisee)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Autorisee)
+                </dd>
 
             </dl>
         </fieldset>
@@ -147,20 +159,43 @@
 
     <div class="col-md-8">
 
-       
-        @foreach (Photo photo in Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Miniature))
+        @if (Model.Photos.Any())
         {
-            <img src="~/Photo?id=@photo.ID" alt="Photo non disponible" />
+
+
+            <fieldset style="text-align: center;">
+
+                <div id="0" name="Vignette" style="display: block;">
+                    <img src="~/Photo?id=@Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Vignette).ElementAt(0).ID" alt="Photo non disponible" />
+                </div>
+
+                @for (int i = 1; i < Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Vignette).Count(); i++)
+                {
+                    <div id="@i" name="Vignette" style="display: none;">
+                        <img src="~/Photo?id=@Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Vignette).ElementAt(i).ID" alt="Photo non disponible" />
+                    </div>
+                }
+
+                <br />
+            
+            
+                @for (int i = 0; i < Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Miniature).Count(); i++)
+                {
+                    <a href="javascript: gestionAffichageImages(@i)">
+                        <img src="~/Photo?id=@Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Miniature).ElementAt(i).ID" alt=" photo non disponible" />
+                    </a>
+                }
+
+            </fieldset>
+
+    
         }
-          
-        <br />
-        <br />
 
 
         <pre>@Html.DisplayFor(model => model.Description)</pre>
 
 
-    </div>
+</div>
     </div>
 
 <p>
@@ -172,6 +207,21 @@
 @section Scripts{
     @Scripts.Render("~/bundles/jqueryval")
 
-    
+    <script type="text/javascript">
+
+        function gestionAffichageImages(indexVignette)
+        {
+
+            for (var i = 0; i < document.getElementsByName('Vignette').length; i++)
+            {
+                document.getElementsByName('Vignette')[i].style.display = 'none';
+            }
+            
+            document.getElementById(indexVignette).style.display = 'block';
+            
+        }
+
+
+    </script>
 
 }

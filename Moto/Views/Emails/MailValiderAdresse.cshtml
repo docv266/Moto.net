@@ -1,0 +1,12 @@
+﻿@model Motonet.Models.MailValiderAdresse
+To: @Model.Destinataire
+From: admin@motonet.com
+Subject: Validation de l'adresse
+
+Bonjour @Model.Nom!
+Merci d'avoir déposé une annonce sur MotoNet.
+
+Afin de valider l'adresse mail fournie, veuillez cliquer sur le lien suivant:
+@Model.Lien
+
+L'équipe MotoNet

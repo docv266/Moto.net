@@ -271,6 +271,9 @@ namespace Motonet.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var annonceToUpdate = db.Annonces.Find(id);
+
+            annonceToUpdate.ConfirmerMotDePasse = annonceToUpdate.MotDePasse;
+
             if (TryUpdateModel(annonceToUpdate, "",
                new string[] { "Titre", "Description", "MotoProposeeID", "Annee", "Kilometrage", "Prix", "MotosAccepteesID", "MarquesAccepteesID", "GenresAcceptesID", "Nom", "Mail", "Telephone", "DepartementID" }))
             {
@@ -421,13 +424,12 @@ namespace Motonet.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+
+            annonce.ConfirmerMotDePasse = annonce.MotDePasse;
             annonce.Validee = true;
 
             db.SaveChanges();
-
-            ViewBag.Title = "Votre adresse mail est validée.";
-            ViewBag.Message = "Votre annonce va maintenant etre examinée puis validée sous peu.";
-
+            
             return View();
         }
 

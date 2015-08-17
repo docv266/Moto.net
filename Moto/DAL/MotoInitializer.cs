@@ -13,8 +13,6 @@ namespace Motonet.DAL
         protected override void Seed(MotoContext context)
         {
 
-
-
             var regions = new List<Region>
             {
                 new Region{Nom="Alsace"},

@@ -19,7 +19,7 @@ namespace Motonet.Controllers
     {
         private MotoContext db = new MotoContext();
 
-        // GET: Annonces
+        // Liste toutes les annonces autorisée et validées
         [AllowAnonymous]
         public ActionResult Index(string sortOrder, int? page)
         {
@@ -66,7 +66,7 @@ namespace Motonet.Controllers
             return View(annonces.ToPagedList(pageNumber, pageSize));
         }
 
-        // GET: Annonces/Details/5
+        // Affiche les détails d'une annonce en particulier
         [AllowAnonymous]
         public ActionResult Details(int? id)
         {
@@ -82,7 +82,7 @@ namespace Motonet.Controllers
             return View(annonce);
         }
 
-        // GET: Annonces/Create
+        // Affiche le formulaire de création d'une annonce (premier affichage)
         [AllowAnonymous]
         public ActionResult Create()
         {
@@ -99,9 +99,7 @@ namespace Motonet.Controllers
             return View();
         }
 
-        // POST: Annonces/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // Affiche le formulaire de création d'une annonce (affichages suivants)
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
@@ -213,7 +211,7 @@ namespace Motonet.Controllers
             return View(annonce);
         }
 
-        // GET: Annonces/Edit/5
+        // Affiche la demande de mot de passe avant de pouvoir éditer l'annonce
         [AllowAnonymous]
         public ActionResult Edit(int? id)
         {
@@ -221,46 +219,80 @@ namespace Motonet.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            
+            // On récupère l'annonce
             Annonce annonce = db.Annonces.Find(id);
             if (annonce == null)
             {
                 return HttpNotFound();
             }
 
+            ViewBag.AnnonceID = annonce.ID;
+            ViewBag.actionName = "EditPassword";
+            return View();
+        }
+
+        // Affiche le formulaire pour éditer l'annonce (premier affichage)
+        [HttpPost, ActionName("EditPassword")]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public ActionResult EditPostPassword(int? annonceID, string password)
+        {
+
+            if (annonceID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var annonce = db.Annonces.Find(annonceID);
+
+
+            // On vérifie que le code saisi est le bon (une fois hashé)
+            if (!Annonce.VerifyHashedPassword(annonce.MotDePasse, password))
+            {
+                ViewBag.Message = "Mot de passe incorrect";
+                ViewBag.AnnonceID = annonce.ID;
+                ViewBag.actionName = "EditPassword";
+                return View("Edit");
+            }
+
+
+            // A ce niveau, le mot de passe a été renseigné et est correct
+            // On affiche la page d'édition de l'annonce
             ViewBag.tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]) / 1024;
             ViewBag.nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
             ViewBag.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
-            
+
             foreach (Moto moto in annonce.MotosAcceptees)
             {
                 annonce.MotosAccepteesID.Add(moto.ID);
             }
             PopulateMotosDropDownLists(annonce.MotoProposeeID, annonce.MotosAccepteesID);
-            
+
             foreach (Genre genre in annonce.GenresAcceptes)
             {
                 annonce.GenresAcceptesID.Add(genre.ID);
             }
             PopulateGenresDropDownList(annonce.GenresAcceptesID);
-            
+
             foreach (Marque marque in annonce.MarquesAcceptees)
             {
                 annonce.MarquesAccepteesID.Add(marque.ID);
             }
             PopulateMarquesDropDownList(annonce.MarquesAccepteesID);
-            
+
             PopulateDepartementsDropDownList(annonce.DepartementID);
 
-            return View(annonce);
+            ViewBag.password = password;
+
+            return View("Edit", annonce);
+                        
         }
 
-        // POST: Annonces/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // Affiche le formulaire pour éditer l'annonce (affichages suivants)
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
-        public ActionResult EditPost(int? id, IEnumerable<HttpPostedFileBase> photos)
+        public ActionResult EditPost(int? id, string password, IEnumerable<HttpPostedFileBase> photos)
         {
 
             int tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]);
@@ -272,6 +304,14 @@ namespace Motonet.Controllers
             }
             var annonceToUpdate = db.Annonces.Find(id);
 
+
+            // On vérifie que le code saisi est le bon (une fois hashé)
+            if (!Annonce.VerifyHashedPassword(annonceToUpdate.MotDePasse, password))
+            {
+                ViewBag.Message = "Mot de passe incorrect";
+                return View();
+            }
+
             annonceToUpdate.ConfirmerMotDePasse = annonceToUpdate.MotDePasse;
 
             if (TryUpdateModel(annonceToUpdate, "",
@@ -279,7 +319,7 @@ namespace Motonet.Controllers
             {
                 try
                 {
-                    if (photos.First() != null)
+                    if (photos != null && photos.First() != null)
                     {
                         // On vide la liste pour mettre uniquement les nouvelles photos.
                         db.Photos.RemoveRange(annonceToUpdate.Photos);
@@ -341,42 +381,42 @@ namespace Motonet.Controllers
                 }
             }
 
-            
+
             foreach (Moto moto in annonceToUpdate.MotosAcceptees)
             {
                 annonceToUpdate.MotosAccepteesID.Add(moto.ID);
             }
             PopulateMotosDropDownLists(annonceToUpdate.MotoProposeeID, annonceToUpdate.MotosAccepteesID);
-            
 
-            
+
+
             foreach (Genre genre in annonceToUpdate.GenresAcceptes)
             {
                 annonceToUpdate.GenresAcceptesID.Add(genre.ID);
             }
             PopulateGenresDropDownList(annonceToUpdate.GenresAcceptesID);
-            
 
-            
+
+
             foreach (Marque marque in annonceToUpdate.MarquesAcceptees)
             {
                 annonceToUpdate.MarquesAccepteesID.Add(marque.ID);
             }
             PopulateMarquesDropDownList(annonceToUpdate.MarquesAccepteesID);
-            
+
 
             PopulateDepartementsDropDownList(annonceToUpdate.DepartementID);
 
             ViewBag.tailleMaxiUploadEnOctet = tailleMaxiUploadEnOctet / 1024;
             ViewBag.nombreMaxdePhotos = nombreMaxdePhotos;
             ViewBag.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
-            
+
 
             return View(annonceToUpdate);
-                        
+
         }
 
-        // GET: Annonces/Delete/5
+        // Affiche la demande de mot de passe avant de pouvoir supprimer l'annonce
         [AllowAnonymous]
         public ActionResult Delete(int? id)
         {
@@ -389,21 +429,50 @@ namespace Motonet.Controllers
             {
                 return HttpNotFound();
             }
-            return View(annonce);
+
+            ViewBag.AnnonceID = annonce.ID;
+            ViewBag.actionName = "DeletePassword";
+            ViewBag.supprimee = false;
+            return View();
         }
 
-        // POST: Annonces/Delete/5
-        [HttpPost, ActionName("Delete")]
+        // Affiche le formulaire pour supprimer l'annonce (premier affichage)
+        [HttpPost, ActionName("DeletePassword")]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeletePostPassword(int? annonceID, string password)
         {
-            Annonce annonce = db.Annonces.Find(id);
+
+            if (annonceID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var annonce = db.Annonces.Find(annonceID);
+
+
+            // On vérifie que le code saisi est le bon (une fois hashé)
+            if (!Annonce.VerifyHashedPassword(annonce.MotDePasse, password))
+            {
+                ViewBag.Message = "Mot de passe incorrect";
+                ViewBag.AnnonceID = annonce.ID;
+                ViewBag.actionName = "DeletePassword";
+                ViewBag.supprimee = false;
+                return View("Delete");
+            }
+
+            // A ce niveau, le mot de passe a été renseigné et est correct
+            // On affiche la page de suppression de l'annonce
+
             db.Annonces.Remove(annonce);
             db.SaveChanges();
-            return RedirectToAction("Index");
+
+
+            ViewBag.supprimee = true;
+            return View("Delete");
+
         }
 
+        // Affiche la page de validation de l'adresse (et donc de l'annonce) si le code fourni est le bon
         [AllowAnonymous]
         public ActionResult ValidateMail(int annonceId, string code)
         {
@@ -433,6 +502,7 @@ namespace Motonet.Controllers
             return View();
         }
 
+        // Dispose
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -442,6 +512,7 @@ namespace Motonet.Controllers
             base.Dispose(disposing);
         }
 
+        // Peuple les listes déroulantes des modèles moto
         private void PopulateMotosDropDownLists(object selectedMoto = null, List<int> selectedMotos = null)
         {
             var motosQuery = from d in db.Motos
@@ -451,6 +522,7 @@ namespace Motonet.Controllers
             ViewBag.MotosAccepteesID = new MultiSelectList(motosQuery, "ID", "Identification", selectedMotos);
         }
 
+        // Peuple la liste déroulante des genres moto
         private void PopulateGenresDropDownList(List<int> selectedGenres = null)
         {
             var genresQuery = from d in db.Genres
@@ -460,6 +532,7 @@ namespace Motonet.Controllers
             ViewBag.GenresAcceptesID = new MultiSelectList(genresQuery, "ID", "Nom", selectedGenres);
         }
 
+        // Peuple la liste déroulante des marques moto
         private void PopulateMarquesDropDownList(List<int> selectedMarques = null)
         {
             var marquesQuery = from d in db.Marques
@@ -469,6 +542,7 @@ namespace Motonet.Controllers
             ViewBag.MarquesAccepteesID = new MultiSelectList(marquesQuery, "ID", "Nom", selectedMarques);
         }
 
+        // Peuple la liste déroulante des départements
         private void PopulateDepartementsDropDownList(object selectedDepartement = null)
         {
             var departementsQuery = from d in db.Departements
@@ -478,6 +552,7 @@ namespace Motonet.Controllers
             ViewBag.DepartementID = new SelectList(departementsQuery, "ID", "Nom", selectedDepartement);
         }
 
+        // Rempli les listes des paramètres virtuels concernant les relations many-many
         private void ProcessManyToManyRelationships(Annonce annonce)
         {
             
@@ -501,6 +576,7 @@ namespace Motonet.Controllers
             
         }
 
+        // Redimensionne l'image en gardant son ratio et en étant inférieur au maximum de largeur et hauteur
         private Image ScaleImage(Image image, int maxWidth, int maxHeight)
         {
             var ratioX = (double)maxWidth / image.Width;
@@ -518,6 +594,7 @@ namespace Motonet.Controllers
             return newImage;
         }        
 
+        // Image vers Byte array
         private byte[] imageToByteArray(System.Drawing.Image imageIn, String ContentType)
         {
             MemoryStream ms = new MemoryStream();
@@ -542,6 +619,7 @@ namespace Motonet.Controllers
             return ms.ToArray();
         }
               
+        // Récupérer le type Mime de l'image
         private string GetMimeType(ImageFormat imageFormat)
         {
             ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();

@@ -314,6 +314,7 @@
     <Content Include="Views\Emails\_ViewStart.cshtml" />
     <Content Include="Views\Emails\MailValiderAdresse.cshtml" />
     <Content Include="Views\Annonces\ValidateMail.cshtml" />
+    <Content Include="Views\Annonces\PasswordForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

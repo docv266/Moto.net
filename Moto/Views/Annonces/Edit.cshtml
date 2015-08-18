@@ -1,200 +1,211 @@
 ﻿@model Motonet.Models.Annonce
 
-@section Styles {
-    <link href="~/Content/chosen.css" rel="stylesheet" />
-    <link href="~/Content/bootstrap-fileinput/css/fileinput.css" rel="stylesheet" />
-}
 
-@{
-    ViewBag.Title = "Modifier une annonce";
-}
-
-<h2>Edit</h2>
-
-@using (Html.BeginForm("Edit", "Annonces", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+@if (Model == null)
 {
-    @Html.AntiForgeryToken()
+    Html.RenderPartial("~/Views/Annonces/PasswordForm.cshtml");
+}
+else
+{
+
+    @section Styles {
+        <link href="~/Content/chosen.css" rel="stylesheet" />
+        <link href="~/Content/bootstrap-fileinput/css/fileinput.css" rel="stylesheet" />
+    }
+
     
-    <div class="form-horizontal">
-        <h4>Nouvelle annonce</h4>
-        <hr />
+    ViewBag.Title = "Modifier une annonce";
+    
 
-        <fieldset>
+    <h2>Modifier</h2>
 
-            <h5>Ce que vous proposez:</h5>
+    using (Html.BeginForm("Edit", "Annonces", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken();
+    
+        <div class="form-horizontal">
+            <h4>Nouvelle annonce</h4>
+            <hr />
 
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor(model => model.ID)
+            <fieldset>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Titre, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Titre, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Titre, "", new { @class = "text-danger" })
-                </div>
-            </div>
+                <h5>Ce que vous proposez:</h5>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", rows = 10 } })
-                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-                </div>
-            </div>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.ID)
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.MotoProposeeID, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownList("MotoProposeeID", null, String.Empty, new { @class = "chosen-select form-control" })
-                    @Html.ValidationMessageFor(model => model.MotoProposeeID, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            
-            @if (Model.Photos.Any())
-            {
+                <input type="hidden" name="password" value=@ViewBag.password>   
+
                 <div class="form-group">
-                    <label class="control-label col-md-2">
-                        Photos actuelles
-                    </label>
-
+                    @Html.LabelFor(model => model.Titre, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @foreach (Photo photo in Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Miniature))
-                        {
-                            <img src="~/Photo?id=@photo.ID" alt="Photo non disponible" />
-                        }
+                        @Html.EditorFor(model => model.Titre, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Titre, "", new { @class = "text-danger" })
                     </div>
                 </div>
-            }
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", rows = 10 } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MotoProposeeID, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("MotoProposeeID", null, String.Empty, new { @class = "chosen-select form-control" })
+                        @Html.ValidationMessageFor(model => model.MotoProposeeID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            
+                @if (Model.Photos.Any())
+                {
+                    <div class="form-group">
+                        <label class="control-label col-md-2">
+                            Photos actuelles
+                        </label>
+
+                        <div class="col-md-10">
+                            @foreach (Photo photo in Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Miniature))
+                            {
+                                <img src="~/Photo?id=@photo.ID" alt="Photo non disponible" />
+                            }
+                        </div>
+                    </div>
+                }
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Photos, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input type="file" class="file" multiple id="photos" name="photos" data-language="fr" accept="image/*" data-show-upload="false" data-max-file-count=@ViewBag.nombreMaxdePhotos data-max-file-size=@ViewBag.tailleMaxiUploadEnOctet />
+                        @Html.ValidationMessageFor(model => model.Photos, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Annee, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Annee, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Annee, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Kilometrage, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Kilometrage, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Kilometrage, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Prix, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Prix, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Prix, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+    </fieldset>
+
+            <fieldset>
+
+                <h5>Ce que vous cherchez:</h5>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MotosAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("MotosAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control" })
+                        @Html.ValidationMessageFor(model => model.MotosAccepteesID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MarquesAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("MarquesAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control" })
+                        @Html.ValidationMessageFor(model => model.MarquesAccepteesID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.GenresAcceptesID, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("GenresAcceptesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control" })
+                        @Html.ValidationMessageFor(model => model.GenresAcceptesID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </fieldset>
+
+            <fieldset>
+
+                <h5>A propos de vous:</h5>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Nom, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Nom, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Nom, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Mail, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Mail, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Telephone, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Telephone, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Telephone, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DepartementID, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("DepartementID", null, String.Empty, new { @class = "chosen-select form-control" })
+                        @Html.ValidationMessageFor(model => model.DepartementID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </fieldset>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.Photos, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <input type="file" class="file" multiple id="photos" name="photos" data-language="fr" accept="image/*" data-show-upload="false" data-max-file-count=@ViewBag.nombreMaxdePhotos data-max-file-size=@ViewBag.tailleMaxiUploadEnOctet />
-                    @Html.ValidationMessageFor(model => model.Photos, "", new { @class = "text-danger" })
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Valider les modifications" class="btn btn-default" />
                 </div>
             </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Annee, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Annee, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Annee, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Kilometrage, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Kilometrage, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Kilometrage, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Prix, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Prix, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Prix, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-</fieldset>
-
-        <fieldset>
-
-            <h5>Ce que vous cherchez:</h5>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.MotosAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownList("MotosAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control" })
-                    @Html.ValidationMessageFor(model => model.MotosAccepteesID, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.MarquesAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownList("MarquesAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control" })
-                    @Html.ValidationMessageFor(model => model.MarquesAccepteesID, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.GenresAcceptesID, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownList("GenresAcceptesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control" })
-                    @Html.ValidationMessageFor(model => model.GenresAcceptesID, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-        </fieldset>
-
-        <fieldset>
-
-            <h5>A propos de vous:</h5>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Nom, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Nom, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Nom, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Mail, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Mail, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Telephone, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Telephone, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Telephone, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.DepartementID, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownList("DepartementID", null, String.Empty, new { @class = "chosen-select form-control" })
-                    @Html.ValidationMessageFor(model => model.DepartementID, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-        </fieldset>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Valider les modifications" class="btn btn-default" />
-            </div>
         </div>
+    }
 
+    <div>
+        @Html.ActionLink("Revenir à la liste des annonces", "Index")
     </div>
-}
 
-<div>
-    @Html.ActionLink("Revenir à la liste des annonces", "Index")
-</div>
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        <script src="/Scripts/chosen.jquery.js"></script>
+        <script src="~/Scripts/fileinput.js"></script>
+        <script src="~/Scripts/fileinput_locale_fr.js"></script>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    <script src="/Scripts/chosen.jquery.js"></script>
-    <script src="~/Scripts/fileinput.js"></script>
-    <script src="~/Scripts/fileinput_locale_fr.js"></script>
+        <script type="text/javascript">
+            $(".chosen-select").chosen({ placeholder_text_multiple: "Choisir plusieurs éléments", placeholder_text_single: "Choisir un élément", no_results_text: "Pas de résultat pour" })
 
-    <script type="text/javascript">
-        $(".chosen-select").chosen({ placeholder_text_multiple: "Choisir plusieurs éléments", placeholder_text_single: "Choisir un élément", no_results_text: "Pas de résultat pour" })
-
-        $('form').validate({
-            ignore: []
-        });
+            $('form').validate({
+                ignore: []
+            });
 
 
-    </script>
+        </script>
 
+    }
 }

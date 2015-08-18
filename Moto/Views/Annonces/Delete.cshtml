@@ -1,22 +1,17 @@
-﻿@model Motonet.Models.Annonce
-
-@{
-    ViewBag.Title = "Delete";
+﻿@if (ViewBag.supprimee == false)
+{
+    Html.RenderPartial("~/Views/Annonces/PasswordForm.cshtml");
 }
-
-<h2>Delete</h2>
-
-<h3>Êtes-vous sûr de vouloir supprimer cette annonce?</h3>
-<div>
-    <h4>@Html.DisplayFor(model => model.Titre)</h4>
+else
+{
+    ViewBag.Title = "Delete";
     
+    <h2>Suppression</h2>
 
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
+    <h3>L'annonce a bien été supprimée!</h3>
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Supprimer" class="btn btn-default" /> |
-            @Html.ActionLink("Annuler", "Index")
-        </div>
-    }
-</div>
+    <div>
+        @Html.ActionLink("Revenir à la liste des annonces", "Index")
+    </div>
+
+}

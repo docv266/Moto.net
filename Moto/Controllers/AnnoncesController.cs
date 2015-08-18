@@ -19,7 +19,7 @@ namespace Motonet.Controllers
     {
         private MotoContext db = new MotoContext();
 
-        // Liste toutes les annonces autorisée et validées
+        // Liste toutes les annonces autorisées et validées
         [AllowAnonymous]
         public ActionResult Index(string sortOrder, int? page)
         {
@@ -32,6 +32,8 @@ namespace Motonet.Controllers
             
             var annonces = from s in db.Annonces
                         select s;
+
+            annonces = annonces.Where(s => s.Autorisee == true && s.Validee == true);
                         
             switch (sortOrder)
             {
@@ -64,6 +66,52 @@ namespace Motonet.Controllers
             int pageSize = int.Parse(ConfigurationManager.AppSettings["pageSize"]);
             int pageNumber = (page ?? 1);
             return View(annonces.ToPagedList(pageNumber, pageSize));
+        }
+
+        // Liste toutes les annonces non autorisées et validées
+        public ActionResult IndexAdmin(string sortOrder)
+        {
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewBag.PrixSortParm = sortOrder == "prix" ? "prix_desc" : "prix";
+            ViewBag.CylindreeSortParm = sortOrder == "cylindree" ? "cylindree_desc" : "cylindree";
+            ViewBag.KilometrageSortParm = sortOrder == "kilometrage" ? "kilometrage_desc" : "kilometrage";
+
+
+            var annonces = from s in db.Annonces
+                           select s;
+
+            annonces = annonces.Where(s => s.Autorisee == false && s.Validee == true);
+
+            switch (sortOrder)
+            {
+                case "date_desc":
+                    annonces = annonces.OrderByDescending(s => s.Date);
+                    break;
+                case "cylindree":
+                    annonces = annonces.OrderBy(s => s.MotoProposee.Cylindree);
+                    break;
+                case "cylindree_desc":
+                    annonces = annonces.OrderByDescending(s => s.MotoProposee.Cylindree);
+                    break;
+                case "prix":
+                    annonces = annonces.OrderBy(s => s.Prix);
+                    break;
+                case "prix_desc":
+                    annonces = annonces.OrderByDescending(s => s.Prix);
+                    break;
+                case "kilometrage":
+                    annonces = annonces.OrderBy(s => s.Kilometrage);
+                    break;
+                case "kilometrage_desc":
+                    annonces = annonces.OrderByDescending(s => s.Kilometrage);
+                    break;
+                default:
+                    annonces = annonces.OrderBy(s => s.Date);
+                    break;
+            }
+
+            return View(annonces);
         }
 
         // Affiche les détails d'une annonce en particulier

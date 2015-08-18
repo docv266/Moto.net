@@ -25,9 +25,36 @@ namespace Motonet.Models
         {
         }
 
+        static ApplicationDbContext()
+        {
+            // Set the database intializer which is run once during application start
+            // This seeds the database with admin user credentials and admin role
+            Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());
+        }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+
+        // This is useful if you do not want to tear down the database each time you run the application.
+        // public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
+        // This example shows you how to create a new database if the Model changes
+        public class ApplicationDbInitializer : DropCreateDatabaseIfModelChanges<ApplicationDbContext>
+        {
+            protected override void Seed(ApplicationDbContext context)
+            {
+                
+                var store = new UserStore<ApplicationUser>(context);
+                var manager = new UserManager<ApplicationUser>(store);
+                var user = new ApplicationUser { UserName = "admin@admin.com", Email = "admin@admin.com" };
+
+                manager.Create(user, "Admin15++");
+
+                
+                base.Seed(context);
+            }
+
         }
 
     }

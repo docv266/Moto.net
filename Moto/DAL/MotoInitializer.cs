@@ -201,6 +201,7 @@ namespace Motonet.DAL
                 new Moto{Modele="Duke", Cylindree=390, MarqueID=marques.Find(r => r.Nom.Equals("KTM")).ID, GenreID=genres.Find(r => r.Nom.Equals("Roadster")).ID},
                 new Moto{Modele="Duke", Cylindree=125, MarqueID=marques.Find(r => r.Nom.Equals("KTM")).ID, GenreID=genres.Find(r => r.Nom.Equals("Roadster")).ID},
                 new Moto{Modele="Super Duke R", Cylindree=1290, MarqueID=marques.Find(r => r.Nom.Equals("KTM")).ID, GenreID=genres.Find(r => r.Nom.Equals("Roadster")).ID},
+                new Moto{Modele="VFR", Cylindree=1200, MarqueID=marques.Find(r => r.Nom.Equals("Honda")).ID, GenreID=genres.Find(r => r.Nom.Equals("Routière")).ID},
             };
             motos.ForEach(s => context.Motos.Add(s));
             context.SaveChanges();

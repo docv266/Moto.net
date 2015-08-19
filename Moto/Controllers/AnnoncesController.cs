@@ -68,9 +68,33 @@ namespace Motonet.Controllers
             return View(annonces.ToPagedList(pageNumber, pageSize));
         }
 
-        // Liste toutes les annonces non autorisées et validées
-        public ActionResult IndexAdmin(string sortOrder)
+        // Liste toutes les annonces non validées
+        public ActionResult AnnoncesAValider(string sortOrder, int? id)
         {
+            var annonces = from s in db.Annonces
+                           select s;
+
+            annonces = annonces.Where(s => s.Autorisee == false && s.Validee == false);
+
+            if (id != null)
+            {
+                if (id != -1)
+                {
+                    Annonce annonceAValider = db.Annonces.Find(id);
+                    annonceAValider.ConfirmerMotDePasse = annonceAValider.MotDePasse;
+                    annonceAValider.Validee = true;
+                }
+                else
+                {
+                    foreach (Annonce annonceAValider in annonces)
+                    {
+                        annonceAValider.ConfirmerMotDePasse = annonceAValider.MotDePasse;
+                        annonceAValider.Validee = true;
+                    }
+                }
+                db.SaveChanges();
+            }
+
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
             ViewBag.PrixSortParm = sortOrder == "prix" ? "prix_desc" : "prix";
@@ -78,10 +102,72 @@ namespace Motonet.Controllers
             ViewBag.KilometrageSortParm = sortOrder == "kilometrage" ? "kilometrage_desc" : "kilometrage";
 
 
+
+            switch (sortOrder)
+            {
+                case "date_desc":
+                    annonces = annonces.OrderByDescending(s => s.Date);
+                    break;
+                case "cylindree":
+                    annonces = annonces.OrderBy(s => s.MotoProposee.Cylindree);
+                    break;
+                case "cylindree_desc":
+                    annonces = annonces.OrderByDescending(s => s.MotoProposee.Cylindree);
+                    break;
+                case "prix":
+                    annonces = annonces.OrderBy(s => s.Prix);
+                    break;
+                case "prix_desc":
+                    annonces = annonces.OrderByDescending(s => s.Prix);
+                    break;
+                case "kilometrage":
+                    annonces = annonces.OrderBy(s => s.Kilometrage);
+                    break;
+                case "kilometrage_desc":
+                    annonces = annonces.OrderByDescending(s => s.Kilometrage);
+                    break;
+                default:
+                    annonces = annonces.OrderBy(s => s.Date);
+                    break;
+            }
+
+            return View(annonces);
+        }
+
+        // Liste toutes les annonces non autorisées et validées
+        public ActionResult AnnoncesAAutoriser(string sortOrder, int? id)
+        {
             var annonces = from s in db.Annonces
                            select s;
 
             annonces = annonces.Where(s => s.Autorisee == false && s.Validee == true);
+
+            if (id != null)
+            {
+                if (id != -1)
+                {
+                    Annonce annonceAAutoriser = db.Annonces.Find(id);
+                    annonceAAutoriser.ConfirmerMotDePasse = annonceAAutoriser.MotDePasse;
+                    annonceAAutoriser.Autorisee = true;
+                }
+                else
+                {
+                    foreach (Annonce annonceAAutoriser in annonces)
+                    {
+                        annonceAAutoriser.ConfirmerMotDePasse = annonceAAutoriser.MotDePasse;
+                        annonceAAutoriser.Autorisee = true;
+                    }
+                }
+                db.SaveChanges();
+            }
+
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewBag.PrixSortParm = sortOrder == "prix" ? "prix_desc" : "prix";
+            ViewBag.CylindreeSortParm = sortOrder == "cylindree" ? "cylindree_desc" : "cylindree";
+            ViewBag.KilometrageSortParm = sortOrder == "kilometrage" ? "kilometrage_desc" : "kilometrage";
+
+               
 
             switch (sortOrder)
             {

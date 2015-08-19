@@ -4,7 +4,7 @@
     ViewBag.Title = "Index admin";
 }
 
-<h2>Annonces validée</h2>
+<h2>Annonces validées</h2>
 
 
 <table class="table">
@@ -19,16 +19,19 @@
             Photo principale
         </th>
         <th>
-            @Html.ActionLink("Année", "IndexAdmin", new { sortOrder = ViewBag.AnneeSortParm })
+            @Html.ActionLink("Année", "AnnoncesAAutoriser", new { sortOrder = ViewBag.AnneeSortParm })
         </th>
         <th>
-            @Html.ActionLink("Kilométrage", "IndexAdmin", new { sortOrder = ViewBag.KilometrageSortParm })
+            @Html.ActionLink("Kilométrage", "AnnoncesAAutoriser", new { sortOrder = ViewBag.KilometrageSortParm })
         </th>
         <th>
-            @Html.ActionLink("Prix", "IndexAdmin", new { sortOrder = ViewBag.PrixSortParm })
+            @Html.ActionLink("Prix", "AnnoncesAAutoriser", new { sortOrder = ViewBag.PrixSortParm })
         </th>
         <th>
-            @Html.ActionLink("Date", "IndexAdmin", new { sortOrder = ViewBag.DateSortParm })
+            @Html.ActionLink("Date", "AnnoncesAAutoriser", new { sortOrder = ViewBag.DateSortParm })
+        </th>
+        <th>
+
         </th>
     </tr>
 
@@ -59,7 +62,20 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
+            <td>
+                <div class="form-group">
+                                        
+                    <a class="btn btn-default" href=@Url.Action("AnnoncesAAutoriser", "Annonces", new { sortOrder = ViewBag.CurrentSort, id = item.ID }) role="button">Autoriser</a>
+                    
+                </div>
+            </td>
         </tr>
     }
 
 </table>
+
+<div class="form-group">
+
+    <a class="btn btn-default" href=@Url.Action("AnnoncesAAutoriser", "Annonces", new { sortOrder = ViewBag.CurrentSort, id = -1 }) role="button">Autoriser tout</a>
+
+</div>

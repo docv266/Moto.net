@@ -98,7 +98,7 @@ namespace Motonet.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Annonces");
         }
 
         protected override void Dispose(bool disposing)
@@ -147,7 +147,7 @@ namespace Motonet.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Annonces");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

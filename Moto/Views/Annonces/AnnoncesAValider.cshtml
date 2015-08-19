@@ -1,0 +1,81 @@
+﻿@model IEnumerable<Motonet.Models.Annonce>
+
+@{
+    ViewBag.Title = "Index admin";
+}
+
+<h2>Annonces postées</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            Titre
+        </th>
+        <th>
+            Modèle
+        </th>
+        <th>
+            Photo principale
+        </th>
+        <th>
+            @Html.ActionLink("Année", "AnnoncesAValider", new { sortOrder = ViewBag.AnneeSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Kilométrage", "AnnoncesAValider", new { sortOrder = ViewBag.KilometrageSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Prix", "AnnoncesAValider", new { sortOrder = ViewBag.PrixSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Date", "AnnoncesAValider", new { sortOrder = ViewBag.DateSortParm })
+        </th>
+        <th>
+
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(item.Titre, "Details", new { id = item.ID })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MotoProposee.Identification)
+            </td>
+            <td>
+                @if (item.Photos.Count > 0)
+                {
+                    <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature).ID" alt="Photo non disponible" />
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Annee)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.KilometrageAvecUnite)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PrixAvecUnite)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                <div class="form-group">
+
+                    <a class="btn btn-default" href=@Url.Action("AnnoncesAValider", "Annonces", new { sortOrder = ViewBag.CurrentSort, id = item.ID }) role="button">Valider</a>
+
+                </div>
+            </td>
+        </tr>
+    }
+
+</table>
+
+<div class="form-group">
+
+    <a class="btn btn-default" href=@Url.Action("AnnoncesAValider", "Annonces", new { sortOrder = ViewBag.CurrentSort, id = -1 }) role="button">Valider tout</a>
+
+</div>

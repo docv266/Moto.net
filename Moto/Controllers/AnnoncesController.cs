@@ -142,6 +142,9 @@ namespace Motonet.Controllers
 
             annonces = annonces.Where(s => s.Autorisee == false && s.Validee == true);
 
+            // La liste qui contiendra les mails à envoyer
+            List<MailAnnonceAutorisee> listeMails = new List<MailAnnonceAutorisee>();
+
             if (id != null)
             {
                 if (id != -1)
@@ -149,6 +152,13 @@ namespace Motonet.Controllers
                     Annonce annonceAAutoriser = db.Annonces.Find(id);
                     annonceAAutoriser.ConfirmerMotDePasse = annonceAAutoriser.MotDePasse;
                     annonceAAutoriser.Autorisee = true;
+
+                    listeMails.Add(new MailAnnonceAutorisee
+                    {
+                        Destinataire = annonceAAutoriser.Mail,
+                        Nom = annonceAAutoriser.Nom,
+                        Lien = Url.Action("Details", "Annonces", new { id = annonceAAutoriser.ID.ToString() }, Request.Url.Scheme)
+                    });
                 }
                 else
                 {
@@ -156,10 +166,23 @@ namespace Motonet.Controllers
                     {
                         annonceAAutoriser.ConfirmerMotDePasse = annonceAAutoriser.MotDePasse;
                         annonceAAutoriser.Autorisee = true;
+
+                        listeMails.Add(new MailAnnonceAutorisee
+                        {
+                            Destinataire = annonceAAutoriser.Mail,
+                            Nom = annonceAAutoriser.Nom,
+                            Lien = Url.Action("Details", "Annonces", new { id = annonceAAutoriser.ID.ToString() }, Request.Url.Scheme)
+                        });
                     }
                 }
                 db.SaveChanges();
             }
+
+            foreach (MailAnnonceAutorisee mail in listeMails)
+            {
+                mail.Send();
+            }
+
 
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
@@ -301,7 +324,7 @@ namespace Motonet.Controllers
                 db.SaveChanges();
                 
                 // On envoie un mail pour valider l'adresse
-                var email = new MailValiderAdresse
+                MailValiderAdresse email = new MailValiderAdresse
                 {
                     Destinataire = annonce.Mail,
                     Nom = annonce.Nom,
@@ -310,7 +333,7 @@ namespace Motonet.Controllers
                 
                 email.Send();
 
-                return RedirectToAction("Index");
+                return RedirectToAction("ConfirmationAnnoncePostee");
                 
             }
 
@@ -633,6 +656,13 @@ namespace Motonet.Controllers
 
             db.SaveChanges();
             
+            return View();
+        }
+
+        // Affiche la page de confirmation après avoir posté une annonce
+        [AllowAnonymous]
+        public ActionResult ConfirmationAnnoncePostee()
+        {
             return View();
         }
 

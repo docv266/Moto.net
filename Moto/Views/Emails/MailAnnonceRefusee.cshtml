@@ -1,4 +1,4 @@
-﻿@model Motonet.Models.MailAnnonceAutorisee
+﻿@model Motonet.Models.MailAnnonceRefusee
 To: @Model.Destinataire
 From: admin@motonet.com
 Subject: Annonce refusée
@@ -6,6 +6,6 @@ Subject: Annonce refusée
 Bonjour @Model.Nom.
 Votre annonce ne peut être mise en ligne pour la raison suivante:
 
-Model.Raison
+@Model.Raison
 
 L'équipe MotoNet

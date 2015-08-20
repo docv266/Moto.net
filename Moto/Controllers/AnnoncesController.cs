@@ -233,61 +233,60 @@ namespace Motonet.Controllers
             annonces = annonces.Where(s => s.Autorisee == false && s.Validee == true);
 
             // La liste qui contiendra les mails à envoyer
-            List<MailAnnonceRefusee> listeMails = new List<MailAnnonceRefusee>();
+            List<Email> listeMails = new List<Email>();
 
-            //if (idAutoriser != null)
-            //{
-            //    if (idAutoriser != -1)
-            //    {
-            //        Annonce annonceAAutoriser = db.Annonces.Find(idAutoriser);
-            //        annonceAAutoriser.ConfirmerMotDePasse = annonceAAutoriser.MotDePasse;
-            //        annonceAAutoriser.Autorisee = true;
+            if (idAutoriser != null)
+            {
+                if (idAutoriser != -1)
+                {
+                    Annonce annonceAAutoriser = db.Annonces.Find(idAutoriser);
+                    annonceAAutoriser.ConfirmerMotDePasse = annonceAAutoriser.MotDePasse;
+                    annonceAAutoriser.Autorisee = true;
 
-            //        listeMails.Add(new MailAnnonceAutorisee
-            //        {
-            //            Destinataire = annonceAAutoriser.Mail,
-            //            Nom = annonceAAutoriser.Nom,
-            //            Lien = Url.Action("Details", "Annonces", new { id = annonceAAutoriser.ID.ToString() }, Request.Url.Scheme)
-            //        });
-            //    }
-            //    else
-            //    {
-            //        foreach (Annonce annonceAAutoriser in annonces)
-            //        {
-            //            annonceAAutoriser.ConfirmerMotDePasse = annonceAAutoriser.MotDePasse;
-            //            annonceAAutoriser.Autorisee = true;
+                    listeMails.Add(new MailAnnonceAutorisee
+                    {
+                        Destinataire = annonceAAutoriser.Mail,
+                        Nom = annonceAAutoriser.Nom,
+                        Lien = Url.Action("Details", "Annonces", new { id = annonceAAutoriser.ID.ToString() }, Request.Url.Scheme)
+                    });
+                }
+                else
+                {
+                    foreach (Annonce annonceAAutoriser in annonces)
+                    {
+                        annonceAAutoriser.ConfirmerMotDePasse = annonceAAutoriser.MotDePasse;
+                        annonceAAutoriser.Autorisee = true;
 
-            //            listeMails.Add(new MailAnnonceAutorisee
-            //            {
-            //                Destinataire = annonceAAutoriser.Mail,
-            //                Nom = annonceAAutoriser.Nom,
-            //                Lien = Url.Action("Details", "Annonces", new { id = annonceAAutoriser.ID.ToString() }, Request.Url.Scheme)
-            //            });
-            //        }
-            //    }
-            //    db.SaveChanges();
-            //}
-            
-            if (idRefuser != null)
+                        listeMails.Add(new MailAnnonceAutorisee
+                        {
+                            Destinataire = annonceAAutoriser.Mail,
+                            Nom = annonceAAutoriser.Nom,
+                            Lien = Url.Action("Details", "Annonces", new { id = annonceAAutoriser.ID.ToString() }, Request.Url.Scheme)
+                        });
+                    }
+                }
+                db.SaveChanges();
+            }
+            else if (idRefuser != null)
             {
                 // On supprime l'annonce
                 Annonce annonceASupprimer = db.Annonces.Find(idRefuser);
 
-                new MailAnnonceRefusee
+                listeMails.Add(new MailAnnonceRefusee
                 {
                     Destinataire = annonceASupprimer.Mail,
                     Nom = annonceASupprimer.Nom,
                     Raison = "Incorrect"
-                }.Send();
+                });
 
                 db.Annonces.Remove(annonceASupprimer);
                 db.SaveChanges();
             }
 
-            //foreach (MailAnnonceRefusee mail in listeMails)
-            //{
-            //    mail.Send();
-            //}
+            foreach (Email mail in listeMails)
+            {
+                mail.Send();
+            }
 
 
             ViewBag.CurrentSort = sortOrder;

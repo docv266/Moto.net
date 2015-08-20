@@ -1,11 +1,18 @@
-﻿@model IEnumerable<Motonet.Models.Annonce>
+﻿@model PagedList.IPagedList<Motonet.Models.Annonce>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "Index admin";
+    ViewBag.Title = "Annonces compatibles";
 }
 
-<h2>Annonces postées</h2>
+<h2>Annonces compatibles</h2>
 
+
+<br />
+@Html.PagedListPager(Model, page => Url.Action("AnnoncesCompatibles",
+    new { page, sortOrder = ViewBag.CurrentSort }))
+<br />
 
 <table class="table">
     <tr>
@@ -19,19 +26,16 @@
             Photo principale
         </th>
         <th>
-            @Html.ActionLink("Année", "AnnoncesAValider", new { sortOrder = ViewBag.AnneeSortParm })
+            @Html.ActionLink("Année", "AnnoncesCompatibles", new { sortOrder = ViewBag.AnneeSortParm })
         </th>
         <th>
-            @Html.ActionLink("Kilométrage", "AnnoncesAValider", new { sortOrder = ViewBag.KilometrageSortParm })
+            @Html.ActionLink("Kilométrage", "AnnoncesCompatibles", new { sortOrder = ViewBag.KilometrageSortParm })
         </th>
         <th>
-            @Html.ActionLink("Prix", "AnnoncesAValider", new { sortOrder = ViewBag.PrixSortParm })
+            @Html.ActionLink("Prix", "AnnoncesCompatibles", new { sortOrder = ViewBag.PrixSortParm })
         </th>
         <th>
-            @Html.ActionLink("Date", "AnnoncesAValider", new { sortOrder = ViewBag.DateSortParm })
-        </th>
-        <th>
-
+            @Html.ActionLink("Date", "AnnoncesCompatibles", new { sortOrder = ViewBag.DateSortParm })
         </th>
     </tr>
 
@@ -62,21 +66,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
-            <td>
-                <div class="form-group">
-
-                    <a class="btn btn-default" href=@Url.Action("AnnoncesAValider", "Annonces", new { sortOrder = ViewBag.CurrentSort, id = item.ID }) role="button">Valider</a>
-
-                </div>
-            </td>
         </tr>
     }
 
 </table>
 
-<div class="form-group">
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-    <a class="btn btn-default" href=@Url.Action("AnnoncesAValider", "Annonces", new { sortOrder = ViewBag.CurrentSort, id = -1 }) role="button">Valider tout</a>
-    <a class="btn btn-default" href=@Url.Action("AnnoncesAValider", "Annonces", new { sortOrder = ViewBag.CurrentSort, id = -2 }) role="button">Supprimer les annonces datant de plus d'une semaine</a>
-
-</div>
+@Html.PagedListPager(Model, page => Url.Action("AnnoncesCompatibles",
+    new { page, sortOrder = ViewBag.CurrentSort }))

@@ -65,7 +65,8 @@
             <td>
                 <div class="form-group">
                                         
-                    <a class="btn btn-default" href=@Url.Action("AnnoncesAAutoriser", "Annonces", new { sortOrder = ViewBag.CurrentSort, id = item.ID }) role="button">Autoriser</a>
+                    <a class="btn btn-default" href=@Url.Action("AnnoncesAAutoriser", "Annonces", new { sortOrder = ViewBag.CurrentSort, idAutoriser = item.ID }) role="button">Autoriser</a>
+                    <a class="btn btn-default" href=@Url.Action("AnnoncesAAutoriser", "Annonces", new { sortOrder = ViewBag.CurrentSort, idRefuser = item.ID }) role="button">Refuser</a>
                     
                 </div>
             </td>

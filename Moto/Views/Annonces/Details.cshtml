@@ -201,7 +201,8 @@
 <p>
     @Html.ActionLink("Modifier", "Edit", new { id = Model.ID }) |
     @Html.ActionLink("Supprimer", "Delete", new { id = Model.ID }) |
-    @Html.ActionLink("Revenir à la liste des annonces", "Index")
+    @Html.ActionLink("Revenir à la liste des annonces", "Index") |
+    @Html.ActionLink("Voir les annonces compatibles", "AnnoncesCompatibles", new { id = Model.ID })
 </p>
 
 @section Scripts{

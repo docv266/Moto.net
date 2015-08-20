@@ -1,6 +1,7 @@
 ﻿using Motonet.DAL;
 using Motonet.Models;
 using PagedList;
+using Postal;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -68,6 +69,82 @@ namespace Motonet.Controllers
             return View(annonces.ToPagedList(pageNumber, pageSize));
         }
 
+        // Liste toutes les annonces compatibles avec une annonce donnée
+        [AllowAnonymous]
+        public ActionResult AnnoncesCompatibles(int id, string sortOrder, int? page)
+        {
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewBag.PrixSortParm = sortOrder == "prix" ? "prix_desc" : "prix";
+            ViewBag.CylindreeSortParm = sortOrder == "cylindree" ? "cylindree_desc" : "cylindree";
+            ViewBag.KilometrageSortParm = sortOrder == "kilometrage" ? "kilometrage_desc" : "kilometrage";
+
+            //var annonces = from s in db.Annonces select s;
+            Annonce b = db.Annonces.Find(id);
+
+            var annonces = db.Annonces.ToList().Where
+            (a =>
+                (
+                    a.Autorisee == true && a.Validee == true
+                )
+                &&
+                (
+                    a.MotosAcceptees.Contains(b.MotoProposee)
+                    ||
+                    (
+                        a.MarquesAcceptees.Contains(b.MotoProposee.Marque)
+                        &&
+                        a.GenresAcceptes.Contains(b.MotoProposee.Genre)
+                    )
+                )
+                &&
+                (
+                    b.MotosAcceptees.Contains(a.MotoProposee)
+                    ||
+                    (
+                        b.MarquesAcceptees.Contains(a.MotoProposee.Marque)
+                        &&
+                        b.GenresAcceptes.Contains(a.MotoProposee.Genre)
+                    )
+                )
+            );
+
+
+
+            switch (sortOrder)
+            {
+                case "date_desc":
+                    annonces = annonces.OrderByDescending(s => s.Date);
+                    break;
+                case "cylindree":
+                    annonces = annonces.OrderBy(s => s.MotoProposee.Cylindree);
+                    break;
+                case "cylindree_desc":
+                    annonces = annonces.OrderByDescending(s => s.MotoProposee.Cylindree);
+                    break;
+                case "prix":
+                    annonces = annonces.OrderBy(s => s.Prix);
+                    break;
+                case "prix_desc":
+                    annonces = annonces.OrderByDescending(s => s.Prix);
+                    break;
+                case "kilometrage":
+                    annonces = annonces.OrderBy(s => s.Kilometrage);
+                    break;
+                case "kilometrage_desc":
+                    annonces = annonces.OrderByDescending(s => s.Kilometrage);
+                    break;
+                default:
+                    annonces = annonces.OrderBy(s => s.Date);
+                    break;
+            }
+
+            
+            int pageSize = int.Parse(ConfigurationManager.AppSettings["pageSize"]);
+            int pageNumber = (page ?? 1);
+            return View(annonces.ToPagedList(pageNumber, pageSize));
+        }
+
         // Liste toutes les annonces non validées
         public ActionResult AnnoncesAValider(string sortOrder, int? id)
         {
@@ -78,14 +155,27 @@ namespace Motonet.Controllers
 
             if (id != null)
             {
-                if (id != -1)
+                if (id == -2)
                 {
+                    // On supprime les annonces non validées datant de plus de 7 jours
+                    db.Annonces.RemoveRange(db.Annonces.ToList().Where(
+                    a => a.Validee == false
+                    &&
+                    a.Autorisee == false
+                    &&
+                    a.Date.CompareTo(DateTime.Today.AddDays(-7)) < 0
+                    ));
+                }
+                else if (id != -1)
+                {
+                    // On valide l'annonce donnée
                     Annonce annonceAValider = db.Annonces.Find(id);
                     annonceAValider.ConfirmerMotDePasse = annonceAValider.MotDePasse;
                     annonceAValider.Validee = true;
                 }
                 else
                 {
+                    // On valide toutes les annonces non validées
                     foreach (Annonce annonceAValider in annonces)
                     {
                         annonceAValider.ConfirmerMotDePasse = annonceAValider.MotDePasse;
@@ -135,7 +225,7 @@ namespace Motonet.Controllers
         }
 
         // Liste toutes les annonces non autorisées et validées
-        public ActionResult AnnoncesAAutoriser(string sortOrder, int? id)
+        public ActionResult AnnoncesAAutoriser(string sortOrder, int? idAutoriser, int? idRefuser)
         {
             var annonces = from s in db.Annonces
                            select s;
@@ -143,45 +233,61 @@ namespace Motonet.Controllers
             annonces = annonces.Where(s => s.Autorisee == false && s.Validee == true);
 
             // La liste qui contiendra les mails à envoyer
-            List<MailAnnonceAutorisee> listeMails = new List<MailAnnonceAutorisee>();
+            List<MailAnnonceRefusee> listeMails = new List<MailAnnonceRefusee>();
 
-            if (id != null)
+            //if (idAutoriser != null)
+            //{
+            //    if (idAutoriser != -1)
+            //    {
+            //        Annonce annonceAAutoriser = db.Annonces.Find(idAutoriser);
+            //        annonceAAutoriser.ConfirmerMotDePasse = annonceAAutoriser.MotDePasse;
+            //        annonceAAutoriser.Autorisee = true;
+
+            //        listeMails.Add(new MailAnnonceAutorisee
+            //        {
+            //            Destinataire = annonceAAutoriser.Mail,
+            //            Nom = annonceAAutoriser.Nom,
+            //            Lien = Url.Action("Details", "Annonces", new { id = annonceAAutoriser.ID.ToString() }, Request.Url.Scheme)
+            //        });
+            //    }
+            //    else
+            //    {
+            //        foreach (Annonce annonceAAutoriser in annonces)
+            //        {
+            //            annonceAAutoriser.ConfirmerMotDePasse = annonceAAutoriser.MotDePasse;
+            //            annonceAAutoriser.Autorisee = true;
+
+            //            listeMails.Add(new MailAnnonceAutorisee
+            //            {
+            //                Destinataire = annonceAAutoriser.Mail,
+            //                Nom = annonceAAutoriser.Nom,
+            //                Lien = Url.Action("Details", "Annonces", new { id = annonceAAutoriser.ID.ToString() }, Request.Url.Scheme)
+            //            });
+            //        }
+            //    }
+            //    db.SaveChanges();
+            //}
+            
+            if (idRefuser != null)
             {
-                if (id != -1)
-                {
-                    Annonce annonceAAutoriser = db.Annonces.Find(id);
-                    annonceAAutoriser.ConfirmerMotDePasse = annonceAAutoriser.MotDePasse;
-                    annonceAAutoriser.Autorisee = true;
+                // On supprime l'annonce
+                Annonce annonceASupprimer = db.Annonces.Find(idRefuser);
 
-                    listeMails.Add(new MailAnnonceAutorisee
-                    {
-                        Destinataire = annonceAAutoriser.Mail,
-                        Nom = annonceAAutoriser.Nom,
-                        Lien = Url.Action("Details", "Annonces", new { id = annonceAAutoriser.ID.ToString() }, Request.Url.Scheme)
-                    });
-                }
-                else
+                new MailAnnonceRefusee
                 {
-                    foreach (Annonce annonceAAutoriser in annonces)
-                    {
-                        annonceAAutoriser.ConfirmerMotDePasse = annonceAAutoriser.MotDePasse;
-                        annonceAAutoriser.Autorisee = true;
+                    Destinataire = annonceASupprimer.Mail,
+                    Nom = annonceASupprimer.Nom,
+                    Raison = "Incorrect"
+                }.Send();
 
-                        listeMails.Add(new MailAnnonceAutorisee
-                        {
-                            Destinataire = annonceAAutoriser.Mail,
-                            Nom = annonceAAutoriser.Nom,
-                            Lien = Url.Action("Details", "Annonces", new { id = annonceAAutoriser.ID.ToString() }, Request.Url.Scheme)
-                        });
-                    }
-                }
+                db.Annonces.Remove(annonceASupprimer);
                 db.SaveChanges();
             }
 
-            foreach (MailAnnonceAutorisee mail in listeMails)
-            {
-                mail.Send();
-            }
+            //foreach (MailAnnonceRefusee mail in listeMails)
+            //{
+            //    mail.Send();
+            //}
 
 
             ViewBag.CurrentSort = sortOrder;

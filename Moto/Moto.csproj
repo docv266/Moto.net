@@ -191,6 +191,7 @@
     <Compile Include="Models\Genre.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\MailAnnonceAutorisee.cs" />
+    <Compile Include="Models\MailAnnonceRefusee.cs" />
     <Compile Include="Models\MailValiderAdresse.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Marque.cs" />
@@ -306,6 +307,8 @@
     <Content Include="Views\Annonces\AnnoncesAValider.cshtml" />
     <Content Include="Views\Annonces\ConfirmationAnnoncePostee.cshtml" />
     <Content Include="Views\Emails\MailAnnonceAutorisee.cshtml" />
+    <Content Include="Views\Annonces\AnnoncesCompatibles.cshtml" />
+    <Content Include="Views\Emails\MailAnnonceRefusee.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

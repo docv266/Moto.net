@@ -42,7 +42,15 @@ namespace Motonet.Models
         {
             get
             {
-                return Marque.Nom + " " + Modele + " " + Cylindree;
+                return Marque.Nom + " " + Modele;
+            }
+        }
+
+        public string IdentificationSuite
+        {
+            get
+            {
+                return Cylindree.ToString() + " cm3";
             }
         }
     }

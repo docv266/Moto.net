@@ -33,6 +33,9 @@
         <th>
 
         </th>
+        <th>
+
+        </th>
     </tr>
 
     @foreach (var item in Model)
@@ -64,11 +67,17 @@
             </td>
             <td>
                 <div class="form-group">
-                                        
                     <a class="btn btn-default" href=@Url.Action("AnnoncesAAutoriser", "Annonces", new { sortOrder = ViewBag.CurrentSort, idAutoriser = item.ID }) role="button">Autoriser</a>
-                    <a class="btn btn-default" href=@Url.Action("AnnoncesAAutoriser", "Annonces", new { sortOrder = ViewBag.CurrentSort, idRefuser = item.ID }) role="button">Refuser</a>
-                    
                 </div>
+            </td>
+            <td>
+                @using (Html.BeginForm("AnnoncesAAutoriser", "Annonces", FormMethod.Get))
+                {
+                    <input type="hidden" name="idRefuser" value=@item.ID>
+                    <input type="hidden" name="sortOrder" value=@ViewBag.CurrentSort>
+                    <input type="text" name="raison" class="form-control" />
+                    <input type="submit" value="Refuser" class="btn btn-default" />
+                }
             </td>
         </tr>
     }

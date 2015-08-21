@@ -8,7 +8,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Motonet.DAL
 {
-    public class MotoInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<MotoContext>
+    public class MotoInitializer : System.Data.Entity.DropCreateDatabaseAlways<MotoContext>
     {
         protected override void Seed(MotoContext context)
         {
@@ -735,6 +735,94 @@ namespace Motonet.DAL
 
             };
             motos.ForEach(s => context.Motos.Add(s));
+            context.SaveChanges();
+
+            string pass = Annonce.HashPassword("ppp");
+
+            var annonces = new List<Annonce>
+            {
+                new Annonce
+                {
+                    Titre="Hypermotard",
+                    Description="Blabla",
+                    MotoProposeeID=motos.Find(r => r.Modele.Equals("Hypermotard 1100")).ID,
+                    Annee=2000,
+                    Kilometrage=2000,
+                    Prix=2000,
+                    Nom="doc",
+                    Mail="doc@gmail.com",
+                    DepartementID=departements.Find(r => r.Nom.Equals("Manche")).ID,
+                    MotDePasse=pass,
+                    ConfirmerMotDePasse=pass,
+                    Date=DateTime.Today,
+                    MotosAcceptees=new List<Moto>(){motos.Find(r => r.Modele.Equals("CBF 1000 ABS")), motos.Find(r => r.Modele.Equals("Tiger 1050"))},
+                    Validee=true,
+                    Autorisee=true
+                },
+
+                new Annonce
+                {
+                    Titre="CBF 1000",
+                    Description="Blabla",
+                    MotoProposeeID=motos.Find(r => r.Modele.Equals("CBF 1000 ABS")).ID,
+                    Annee=2000,
+                    Kilometrage=2000,
+                    Prix=2000,
+                    Nom="doc",
+                    Mail="doc@gmail.com",
+                    DepartementID=departements.Find(r => r.Nom.Equals("Manche")).ID,
+                    MotDePasse=pass,
+                    ConfirmerMotDePasse=pass,
+                    Date=DateTime.Today,
+                    MotosAcceptees=new List<Moto>(){motos.Find(r => r.Modele.Equals("Hypermotard 1100"))},
+                    MarquesAcceptees=new List<Marque>(){marques.Find(r => r.Nom.Equals("BMW"))},
+                    GenresAcceptes=genres,
+                    Validee=true,
+                    Autorisee=true
+                },
+
+                new Annonce
+                {
+                    Titre="Tiger",
+                    Description="Blabla",
+                    MotoProposeeID=motos.Find(r => r.Modele.Equals("Tiger 1050")).ID,
+                    Annee=2000,
+                    Kilometrage=2000,
+                    Prix=2000,
+                    Nom="doc",
+                    Mail="doc@gmail.com",
+                    DepartementID=departements.Find(r => r.Nom.Equals("Manche")).ID,
+                    MotDePasse=pass,
+                    ConfirmerMotDePasse=pass,
+                    Date=DateTime.Today,
+                    GenresAcceptes=new List<Genre>(){genres.Find(r => r.Nom.Equals("Trail"))},
+                    MarquesAcceptees=marques,
+                    Validee=true,
+                    Autorisee=true
+                },
+
+                new Annonce
+                {
+                    Titre="1200 GS",
+                    Description="Blabla",
+                    MotoProposeeID=motos.Find(r => r.Modele.Equals("R 1200 GS")).ID,
+                    Annee=2000,
+                    Kilometrage=2000,
+                    Prix=2000,
+                    Nom="doc",
+                    Mail="doc@gmail.com",
+                    DepartementID=departements.Find(r => r.Nom.Equals("Manche")).ID,
+                    MotDePasse=pass,
+                    ConfirmerMotDePasse=pass,
+                    Date=DateTime.Today,
+                    MarquesAcceptees=new List<Marque>(){marques.Find(r => r.Nom.Equals("HONDA"))},
+                    GenresAcceptes=genres,
+                    Validee=true,
+                    Autorisee=true
+                },
+                
+            };
+            annonces.ForEach(s => context.Annonces.Add(s));
             context.SaveChanges();
         }
     }

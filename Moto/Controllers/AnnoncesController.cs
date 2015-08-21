@@ -139,6 +139,7 @@ namespace Motonet.Controllers
                     break;
             }
 
+            ViewBag.annonceSourceId = id;
             
             int pageSize = int.Parse(ConfigurationManager.AppSettings["pageSize"]);
             int pageNumber = (page ?? 1);
@@ -225,7 +226,7 @@ namespace Motonet.Controllers
         }
 
         // Liste toutes les annonces non autorisées et validées
-        public ActionResult AnnoncesAAutoriser(string sortOrder, int? idAutoriser, int? idRefuser)
+        public ActionResult AnnoncesAAutoriser(string sortOrder, int? idAutoriser, int? idRefuser, string raison)
         {
             var annonces = from s in db.Annonces
                            select s;
@@ -272,11 +273,16 @@ namespace Motonet.Controllers
                 // On supprime l'annonce
                 Annonce annonceASupprimer = db.Annonces.Find(idRefuser);
 
+                if (String.IsNullOrEmpty(raison))
+                {
+                    raison = "Pas de précision.";
+                }
+
                 listeMails.Add(new MailAnnonceRefusee
                 {
                     Destinataire = annonceASupprimer.Mail,
                     Nom = annonceASupprimer.Nom,
-                    Raison = "Incorrect"
+                    Raison = raison
                 });
 
                 db.Annonces.Remove(annonceASupprimer);
@@ -341,6 +347,10 @@ namespace Motonet.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.ToutesMarques = annonce.MarquesAcceptees.Count() == db.Marques.Count();
+            ViewBag.TousGenres = annonce.GenresAcceptes.Count() == db.Genres.Count();
+
             return View(annonce);
         }
 
@@ -421,7 +431,7 @@ namespace Motonet.Controllers
 
                 // L'annonce est faite à la date du jour
                 annonce.Date = DateTime.Today;
-
+                                
                 // On ajoute les modèles, marques et genres acceptés
                 ProcessManyToManyRelationships(annonce);
 
@@ -824,7 +834,6 @@ namespace Motonet.Controllers
         // Rempli les listes des paramètres virtuels concernant les relations many-many
         private void ProcessManyToManyRelationships(Annonce annonce)
         {
-            
             annonce.MotosAcceptees.Clear();
             foreach (int motoID in annonce.MotosAccepteesID)
             {
@@ -841,6 +850,18 @@ namespace Motonet.Controllers
             foreach (int genreID in annonce.GenresAcceptesID)
             {
                 annonce.GenresAcceptes.Add(db.Genres.Find(genreID));
+            }
+
+            // On affine les listes
+            // S'il y a des marques mais pas de genres, on considère que tous les genres sont acceptés.
+            // Et inversement
+            if (annonce.MarquesAcceptees.Any() && !annonce.GenresAcceptes.Any())
+            {
+                annonce.GenresAcceptes.AddRange(db.Genres.ToList());
+            }
+            if (!annonce.MarquesAcceptees.Any() && annonce.GenresAcceptes.Any())
+            {
+                annonce.MarquesAcceptees.AddRange(db.Marques.ToList());
             }
             
         }

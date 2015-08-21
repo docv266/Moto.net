@@ -71,6 +71,7 @@ namespace Motonet.Models
 
         [DataType(DataType.PhoneNumber)]
         [DisplayAttribute(Name = "Téléphone")]
+        [DisplayFormat(NullDisplayText = "Non renseigné")]
         public string Telephone { get; set; }
 
         [Required]

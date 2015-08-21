@@ -22,8 +22,9 @@
                 <dt>
                     @Html.DisplayNameFor(model => model.MotoProposee.Modele)
                 </dt>
-                <dd>
+                <dd class="toolTipInfos">
                     @Html.DisplayFor(model => model.MotoProposee.Identification)
+                    <div class="toolTipContent dn">@Model.MotoProposee.IdentificationSuite</div>
                 </dd>
                 <dt>
                     @Html.DisplayNameFor(model => model.Annee)
@@ -80,18 +81,6 @@
                 <dd>
                     @Html.DisplayFor(model => model.Telephone)
                 </dd>
-                <dt>
-                    @Html.DisplayNameFor(model => model.Validee)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.Validee)
-                </dd>
-                <dt>
-                    @Html.DisplayNameFor(model => model.Autorisee)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.Autorisee)
-                </dd>
 
             </dl>
         </fieldset>
@@ -114,7 +103,9 @@
                             <ul>
                                 @foreach (Moto moto in Model.MotosAcceptees)
                                 {
-                                    <li>@moto.Identification</li>
+                                    <li class="toolTipInfos">@moto.Identification
+                                        <div class="toolTipContent dn">@moto.IdentificationSuite</div>
+                                    </li>
                                 }
                             </ul>
                         </dd>
@@ -127,9 +118,16 @@
                         </dt>
                         <dd>
                             <ul>
-                                @foreach (Marque marque in Model.MarquesAcceptees)
+                                @if (ViewBag.ToutesMarques)
                                 {
-                                    <li>@marque.Nom</li>
+                                    <li>Toutes</li>
+                                }
+                                else
+                                {
+                                    foreach (Marque marque in Model.MarquesAcceptees)
+                                    {
+                                        <li>@marque.Nom</li>
+                                    }
                                 }
                             </ul>
                         </dd>
@@ -142,9 +140,16 @@
                         </dt>
                         <dd>
                             <ul>
-                                @foreach (Genre genre in Model.GenresAcceptes)
+                                @if (ViewBag.TousGenres)
                                 {
-                                    <li>@genre.Nom</li>
+                                    <li>Tous</li>
+                                }
+                                else
+                                {
+                                    foreach (Genre genre in Model.GenresAcceptes)
+                                    {
+                                        <li>@genre.Nom</li>
+                                    }
                                 }
                             </ul>
                         </dd>

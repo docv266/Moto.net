@@ -12,7 +12,7 @@ namespace Motonet.DAL
     {
 
         public MotoContext()
-            : base("MotoNetConnection")
+            : base("ObjectsConnection")
         {
         }
         

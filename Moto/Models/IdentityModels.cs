@@ -21,7 +21,7 @@ namespace Motonet.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("IdentityConnection", throwIfV1Schema: false)
+            : base("UsersConnection", throwIfV1Schema: false)
         {
         }
 

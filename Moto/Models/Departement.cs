@@ -16,5 +16,13 @@ namespace Motonet.Models
         public virtual Region Region { get; set; }
 
         public virtual List<Annonce> Annonces { get; set; }
+
+        public string Identification
+        {
+            get
+            {
+                return Nom + " (" + CP + ")";
+            }
+        }
     }
 }

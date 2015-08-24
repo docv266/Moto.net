@@ -64,13 +64,24 @@ else
                 {
                     <div class="form-group">
                         <label class="control-label col-md-2">
-                            Photos actuelles
+                            Photos actuelles - Choisir la photo principale
                         </label>
 
                         <div class="col-md-10">
-                            @foreach (Photo photo in Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Miniature))
+
+                            <label class="imageRadio">
+                                <input type="radio" name="photoPrincipale" value=0 checked="checked" />
+                                <img src="~/Photo?id=@Model.Photos.ElementAt(0).ID" alt="Photo non disponible" />
+                            </label>
+
+                            @for (int i = 2; i< Model.Photos.Count(); i = i + 2)
                             {
-                                <img src="~/Photo?id=@photo.ID" alt="Photo non disponible" />
+                                
+                                <label class="imageRadio">
+                                    <input type="radio" name="photoPrincipale" value=@i />
+                                    <img src="~/Photo?id=@Model.Photos.ElementAt(i).ID" alt="Photo non disponible" />
+                                </label>
+                                
                             }
                         </div>
                     </div>

@@ -425,6 +425,11 @@ namespace Motonet.Controllers
                     }
                 }
 
+                // On défini la photo principale (la première de la liste)
+                annonce.Photos.ElementAt(0).Principale = true;
+                // Et la vignette correspondante
+                annonce.Photos.ElementAt(1).Principale = true;
+
                 // On hash le mot de passe
                 annonce.MotDePasse = Annonce.HashPassword(annonce.MotDePasse);
                 annonce.ConfirmerMotDePasse = annonce.MotDePasse;
@@ -564,7 +569,7 @@ namespace Motonet.Controllers
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
-        public ActionResult EditPost(int? id, string password, IEnumerable<HttpPostedFileBase> photos)
+        public ActionResult EditPost(int? id, int? photoPrincipale, string password, IEnumerable<HttpPostedFileBase> photos)
         {
 
             int tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]);
@@ -637,6 +642,16 @@ namespace Motonet.Controllers
                                 annonceToUpdate.Photos.Add(photoVignette);
                             }
                         }
+                    }
+
+                    // On change de photo principale s'il y a des photos et s'il y a un changement de photo principale
+                    if (photoPrincipale != null && photoPrincipale != 0)
+                    {
+                        annonceToUpdate.Photos.Insert(0, annonceToUpdate.Photos.ElementAt((int)photoPrincipale));
+                        annonceToUpdate.Photos.Insert(1, annonceToUpdate.Photos.ElementAt((int)photoPrincipale+2));
+
+                        annonceToUpdate.Photos.RemoveAt((int)photoPrincipale + 2);
+                        annonceToUpdate.Photos.RemoveAt((int)photoPrincipale + 2);
                     }
 
 

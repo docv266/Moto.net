@@ -171,24 +171,34 @@
             <fieldset style="text-align: center;">
 
                 <div id="0" name="Vignette" style="display: block;">
-                    <img src="~/Photo?id=@Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Vignette).ElementAt(0).ID" alt="Photo non disponible" />
+                    <img src="~/Photo?id=@Model.Photos.Find(x => x.Taille == Photo.TypeTaille.Vignette && x.Principale == true).ID" alt="Photo non disponible" />
                 </div>
-
-                @for (int i = 1; i < Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Vignette).Count(); i++)
-                {
-                    <div id="@i" name="Vignette" style="display: none;">
-                        <img src="~/Photo?id=@Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Vignette).ElementAt(i).ID" alt="Photo non disponible" />
-                    </div>
+                @{
+                    int compteur = 0;
+                    foreach (Photo photo in Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Vignette && x.Principale == false))
+                    {
+                        compteur++;
+                        <div id="@compteur" name="Vignette" style="display: none;">
+                            <img src="~/Photo?id=@photo.ID" alt="Photo non disponible" />
+                        </div>
+                    }
                 }
 
                 <br />
             
+                <a href="javascript: gestionAffichageImages(0)">
+                    <img src="~/Photo?id=@Model.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature && x.Principale == true).ID" alt=" photo non disponible" />
+                </a>
             
-                @for (int i = 0; i < Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Miniature).Count(); i++)
-                {
-                    <a href="javascript: gestionAffichageImages(@i)">
-                        <img src="~/Photo?id=@Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Miniature).ElementAt(i).ID" alt=" photo non disponible" />
-                    </a>
+                @{
+                    int compteur2 = 0;
+                    foreach (Photo photo in Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Miniature && x.Principale == false))
+                    {
+                        compteur2++;
+                        <a href="javascript: gestionAffichageImages(@compteur2)">
+                            <img src="~/Photo?id=@photo.ID" alt=" photo non disponible" />
+                        </a>
+                    }
                 }
 
             </fieldset>

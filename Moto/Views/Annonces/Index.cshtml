@@ -6,7 +6,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Moto échange</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -38,6 +38,9 @@
             @Html.ActionLink("Prix", "Index", new { sortOrder = ViewBag.PrixSortParm })
         </th>
         <th>
+            Département
+        </th>
+        <th>
             @Html.ActionLink("Date", "Index", new { sortOrder = ViewBag.DateSortParm })
         </th>
     </tr>
@@ -64,6 +67,9 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.PrixAvecUnite)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Departement.Identification)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Date)

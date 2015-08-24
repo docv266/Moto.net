@@ -45,3 +45,16 @@ textarea,
 .dn {
     display:none;
 }
+
+label.imageRadio input{ /* HIDE RADIO */
+  display:none;
+}
+
+label.imageRadio > input + img{ /* IMAGE STYLES */
+  cursor:pointer;
+  border:2px solid transparent;
+}
+
+label.imageRadio > input:checked + img{ /* (CHECKED) IMAGE STYLES */
+  border:2px solid #f00;
+}

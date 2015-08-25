@@ -23,7 +23,7 @@ namespace Motonet.Models
 
         [Required]
         [DataType(DataType.MultilineText)]
-        [StringLength(500, MinimumLength = 3)]
+        [StringLength(10000, MinimumLength = 3)]
         public string Description { get; set; }
         
         [Required]

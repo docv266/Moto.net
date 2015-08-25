@@ -715,8 +715,9 @@ namespace Motonet.Controllers
             ViewBag.nombreMaxdePhotos = nombreMaxdePhotos;
             ViewBag.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
 
+            ViewBag.password = password;
 
-            return View(annonceToUpdate);
+            return View("Edit", annonceToUpdate);
 
         }
 

@@ -24,7 +24,6 @@ else
         @Html.AntiForgeryToken();
     
         <div class="form-horizontal">
-            <h4>Nouvelle annonce</h4>
             <hr />
 
             <fieldset>
@@ -47,7 +46,7 @@ else
                 <div class="form-group">
                     @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", rows = 10 } })
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", rows = 10, maxLength = @ViewBag.nombreMaxCaracteresDescription } })
                         @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -119,7 +118,7 @@ else
                     </div>
                 </div>
 
-    </fieldset>
+            </fieldset>
 
             <fieldset>
 
@@ -189,18 +188,20 @@ else
 
             </fieldset>
 
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Valider les modifications" class="btn btn-default" />
-                </div>
+            
+            <div>
+                <input type="submit" value="Valider les modifications" class="btn btn-primary" />
             </div>
 
-        </div>
-    }
 
+            </div>
+    }
+    <br />
     <div>
-        @Html.ActionLink("Revenir à la liste des annonces", "Index")
+        <a class="btn btn-warning" href="@Url.Content("~/Annonces/Details/" + Model.ID)">< Revenir à l'annonce</a>
     </div>
+
+
 
     @section Scripts {
         @Scripts.Render("~/bundles/jqueryval")

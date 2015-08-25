@@ -9,14 +9,13 @@
     ViewBag.Title = "Ajouter une annonce";
 }
 
-<h2>Ajouter une annonce</h2>
+<h2>Mon annonce</h2>
 
 @using (Html.BeginForm("Create", "Annonces", null, FormMethod.Post, new { enctype = "multipart/form-data" })) 
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Nouvelle annonce</h4>
         <hr />
 
         <fieldset>
@@ -101,15 +100,15 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.MarquesAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownList("MarquesAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control" })
-                    @Html.ValidationMessageFor(model => model.MarquesAccepteesID, "", new { @class = "text-danger" })
+                    @Html.DropDownList("MarquesAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control", data_toggle="tooltip", title="Renseignez le genre et laissez ce champ vide si toutes les marques vous conviennent" })
+                    @Html.ValidationMessageFor(model => model.MarquesAccepteesID, "", new { @class = "text-danger" }) 
                 </div>
             </div>
                         
             <div class="form-group">
                 @Html.LabelFor(model => model.GenresAcceptesID, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownList("GenresAcceptesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control" })
+                    @Html.DropDownList("GenresAcceptesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control", data_toggle = "tooltip", title = "Renseignez la marque et laissez ce champ vide si toutes les genres vous conviennent" })
                     @Html.ValidationMessageFor(model => model.GenresAcceptesID, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -172,16 +171,13 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Créer l'annonce" class="btn btn-default" />
+                <input type="submit" value="Créer l'annonce" class="btn btn-success" />
             </div>
         </div>
 
 </div>
 }
 
-<div>
-    @Html.ActionLink("Revenir à la liste des annonces", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -194,7 +190,11 @@
 
         $('form').validate({
             ignore: []
-        });     
+        });
+
+        
+
+        $('.chosen-container').tooltip({ placement: 'right' });
         
 
     </script>

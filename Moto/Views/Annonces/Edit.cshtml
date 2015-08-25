@@ -70,16 +70,16 @@ else
                         <div class="col-md-10">
 
                             <label class="imageRadio">
-                                <input type="radio" name="photoPrincipale" value=0 checked="checked" />
-                                <img src="~/Photo?id=@Model.Photos.ElementAt(0).ID" alt="Photo non disponible" />
+                                <input type="radio" name="photoPrincipale" value=@Model.Photos.Find(p => p.Taille == Photo.TypeTaille.Miniature && p.Principale == true).ID checked="checked" />
+                                <img src="~/Photo?id=@Model.Photos.Find(p => p.Taille == Photo.TypeTaille.Miniature && p.Principale == true).ID" alt="Photo non disponible" />
                             </label>
 
-                            @for (int i = 2; i< Model.Photos.Count(); i = i + 2)
+                            @foreach (Photo photo in Model.Photos.FindAll(p => p.Taille == Photo.TypeTaille.Miniature && p.Principale == false))
                             {
                                 
                                 <label class="imageRadio">
-                                    <input type="radio" name="photoPrincipale" value=@i />
-                                    <img src="~/Photo?id=@Model.Photos.ElementAt(i).ID" alt="Photo non disponible" />
+                                    <input type="radio" name="photoPrincipale" value=@photo.ID />
+                                    <img src="~/Photo?id=@photo.ID" alt="Photo non disponible" />
                                 </label>
                                 
                             }

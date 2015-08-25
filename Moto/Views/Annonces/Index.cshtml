@@ -6,11 +6,6 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Moto échange</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 
 <br />
 @Html.PagedListPager(Model, page => Url.Action("Index",
@@ -56,7 +51,7 @@
         <td>
             @if (item.Photos.Count > 0)
             {
-                <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature).ID" alt="Photo non disponible" />
+                <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature && x.Principale == true).ID" alt="Photo non disponible" />
             }
         </td>
         <td>
@@ -78,6 +73,7 @@
 }
 
 </table>
+
 
 <br />
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount

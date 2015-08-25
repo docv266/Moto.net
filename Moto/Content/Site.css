@@ -25,27 +25,6 @@ textarea,
     max-width: 400px;
 }
 
-.toolTipInfos {
-    position:relative;
-}
-
-.toolTipInfos:hover .toolTipContent {
-    display: block;
-}
-
-.toolTipContent {
-    position:absolute;
-    top:-20px;
-    border-radius:5px;
-    border:1px solid #ccc;
-    padding:0 5px;
-    background: #f4fbb5;
-}
-
-.dn {
-    display:none;
-}
-
 label.imageRadio input{ /* HIDE RADIO */
   display:none;
 }
@@ -57,4 +36,9 @@ label.imageRadio > input + img{ /* IMAGE STYLES */
 
 label.imageRadio > input:checked + img{ /* (CHECKED) IMAGE STYLES */
   border:2px solid #f00;
+}
+
+.tooltip{
+    min-width:80px;
+    white-space:pre-wrap;
 }

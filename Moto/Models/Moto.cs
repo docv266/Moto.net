@@ -50,7 +50,7 @@ namespace Motonet.Models
         {
             get
             {
-                return Cylindree.ToString() + " cm3";
+                return Genre.Nom + "<br>" + Cylindree.ToString() + " cm3";
             }
         }
     }

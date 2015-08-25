@@ -22,9 +22,8 @@
                 <dt>
                     @Html.DisplayNameFor(model => model.MotoProposee.Modele)
                 </dt>
-                <dd class="toolTipInfos">
+                <dd data-toggle="tooltip" data-html="true" title="@Model.MotoProposee.IdentificationSuite" data-placement="right">
                     @Html.DisplayFor(model => model.MotoProposee.Identification)
-                    <div class="toolTipContent dn">@Model.MotoProposee.IdentificationSuite</div>
                 </dd>
                 <dt>
                     @Html.DisplayNameFor(model => model.Annee)
@@ -103,9 +102,7 @@
                             <ul>
                                 @foreach (Moto moto in Model.MotosAcceptees)
                                 {
-                                    <li class="toolTipInfos">@moto.Identification
-                                        <div class="toolTipContent dn">@moto.IdentificationSuite</div>
-                                    </li>
+                                    <li data-toggle="tooltip" data-html="true" title="@moto.IdentificationSuite" data-placement="right">@moto.Identification</li>
                                 }
                             </ul>
                         </dd>
@@ -157,8 +154,21 @@
 
                 </dl>
             </fieldset>
-            
+
         }
+        
+        <fieldset>
+
+            <p>@Html.ActionLink("Modifier", "Edit", new { id = Model.ID })</p>
+            <p>@Html.ActionLink("Supprimer", "Delete", new { id = Model.ID })</p>
+            @if (Model.MotosAcceptees.Any() || Model.MarquesAcceptees.Any() || Model.GenresAcceptes.Any())
+            {
+                <p>@Html.ActionLink("Voir les annonces compatibles", "AnnoncesCompatibles", new { id = Model.ID })</p>
+            }
+
+        </fieldset>
+
+
 
     </div>
 
@@ -209,16 +219,10 @@
 
         <pre>@Html.DisplayFor(model => model.Description)</pre>
 
-
 </div>
     </div>
 
-<p>
-    @Html.ActionLink("Modifier", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Supprimer", "Delete", new { id = Model.ID }) |
-    @Html.ActionLink("Revenir à la liste des annonces", "Index") |
-    @Html.ActionLink("Voir les annonces compatibles", "AnnoncesCompatibles", new { id = Model.ID })
-</p>
+
 
 @section Scripts{
     @Scripts.Render("~/bundles/jqueryval")
@@ -236,6 +240,10 @@
             document.getElementById(indexVignette).style.display = 'block';
             
         }
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
 
 
     </script>

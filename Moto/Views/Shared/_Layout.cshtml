@@ -19,7 +19,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Motonet", "Index", "Annonces", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Accueil", "Index", "Annonces", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -31,8 +31,7 @@
                         <li>@Html.ActionLink("Marques", "Index", "Marques")</li>
                         <li>@Html.ActionLink("Genres", "Index", "Genres")</li>
                     }
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("A propos", "About", "Home")</li>
+                    <li>@Html.ActionLink("Créer mon annonce", "Create", "Annonces")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -43,6 +42,8 @@
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - Motonet</p>
+            @Html.ActionLink("Contact", "Contact", "Home") |
+            @Html.ActionLink("A propos", "About", "Home")
         </footer>
     </div>
 

@@ -422,13 +422,18 @@ namespace Motonet.Controllers
                         };
 
                         annonce.Photos.Add(photoVignette);
+
                     }
                 }
 
-                // On défini la photo principale (la première de la liste)
-                annonce.Photos.ElementAt(0).Principale = true;
-                // Et la vignette correspondante
-                annonce.Photos.ElementAt(1).Principale = true;
+                if (annonce.Photos.Count() >= 2)
+                {
+                    // On défini la photo principale (la première de la liste)
+                    annonce.Photos.ElementAt(0).Principale = true;
+                    // Et la vignette correspondante
+                    annonce.Photos.ElementAt(1).Principale = true;
+                }
+
 
                 // On hash le mot de passe
                 annonce.MotDePasse = Annonce.HashPassword(annonce.MotDePasse);
@@ -574,6 +579,7 @@ namespace Motonet.Controllers
 
             int tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]);
             int nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
+            int nombrePhotosAjoutees = 0;
 
             if (id == null)
             {
@@ -640,18 +646,29 @@ namespace Motonet.Controllers
                                 };
 
                                 annonceToUpdate.Photos.Add(photoVignette);
+                                nombrePhotosAjoutees++;
                             }
                         }
                     }
 
-                    // On change de photo principale s'il y a des photos et s'il y a un changement de photo principale
-                    if (photoPrincipale != null && photoPrincipale != 0)
+                    if (nombrePhotosAjoutees >= 1)
                     {
-                        annonceToUpdate.Photos.Insert(0, annonceToUpdate.Photos.ElementAt((int)photoPrincipale));
-                        annonceToUpdate.Photos.Insert(1, annonceToUpdate.Photos.ElementAt((int)photoPrincipale+2));
+                        // On défini la photo principale (la première de la liste)
+                        annonceToUpdate.Photos.ElementAt(0).Principale = true;
+                        // Et la vignette correspondante
+                        annonceToUpdate.Photos.ElementAt(1).Principale = true;
+                    }
+                    else if (photoPrincipale != null && photoPrincipale != 0)
+                    {
+                        // On change de photo principale s'il y a des photos et s'il y a un changement de photo principale
+                        foreach (Photo photoP in annonceToUpdate.Photos)
+                        {
+                            photoP.Principale = false;
+                        }
 
-                        annonceToUpdate.Photos.RemoveAt((int)photoPrincipale + 2);
-                        annonceToUpdate.Photos.RemoveAt((int)photoPrincipale + 2);
+                        Photo photoPr = annonceToUpdate.Photos.Find(p => p.ID == photoPrincipale);
+                        photoPr.Principale = true;
+                        annonceToUpdate.Photos.ElementAt(annonceToUpdate.Photos.IndexOf(photoPr) + 1).Principale = true;
                     }
 
 

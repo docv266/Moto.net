@@ -1,16 +1,88 @@
 ﻿@model PagedList.IPagedList<Motonet.Models.Annonce>
 @using PagedList.Mvc;
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
-@{
-    ViewBag.Title = "Index";
+
+@section Styles {
+    <link href="~/Content/chosen.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-fileinput/css/fileinput.css" rel="stylesheet" />
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 }
 
+@{
+    ViewBag.Title = "Annonces";
+}
 
 <br />
-@Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort }))
-<br />
+
+<fieldset>
+    @using (Html.BeginForm("Index", "Annonces", FormMethod.Get))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            <div class="form-group">
+                
+                <div class="col-md-4">
+                    @Html.TextBox("SearchString", "", new { @class = "form-control", placeholder = "Titre de l'annonce" })
+                </div>
+            
+                <div class="col-md-4">
+                    @Html.TextBox("SearchString", "", new { @class = "form-control", placeholder = "Marque ou modèle" })
+                </div>
+
+                <div class="col-md-4">
+                    @Html.DropDownList("RegionDepartementID", null, String.Empty, new { @class = "chosen-select form-control", data_placeholder = "Région" })
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <div class="col-md-3">
+                    @Html.TextBox("SearchString", "", new { @class = "form-control", type = "number", placeholder = "Année minimum" })
+                </div>
+
+                <div class="col-md-3">
+                    @Html.TextBox("SearchString", "", new { @class = "form-control", type = "number", placeholder = "Année maximum" })
+                </div>
+
+                <div class="col-md-3">
+                    @Html.TextBox("SearchString", "", new { @class = "form-control", type = "number", placeholder = "Kilomètrage minimum" })
+                </div>
+
+                <div class="col-md-3">
+                    @Html.TextBox("SearchString", "", new { @class = "form-control", type = "number", placeholder = "Kilomètrage maximum" })
+                </div>
+
+            </div>
+
+            
+            <div class="form-group">
+                
+                <div class="col-md-3">
+                    @Html.TextBox("SearchString", "", new { @class = "form-control", type = "number", placeholder = "Prix minimum" })
+                </div>
+
+                <div class="col-md-3">
+                    @Html.TextBox("SearchString", "", new { @class = "form-control", type = "number", placeholder = "Prix maximum" })
+                </div>
+
+                <div class="col-md-3">
+                    @Html.TextBox("SearchString", "", new { @class = "form-control", type = "number", placeholder = "Cylindrée minimum" })
+                </div>
+
+                <div class="col-md-3">
+                    @Html.TextBox("SearchString", "", new { @class = "form-control", type = "number", placeholder = "Cylindrée maximum" })
+                </div>
+            </div>
+        
+
+            <input type="submit" value="Filtrer" class="btn btn-sm btn-default bt" />
+        </div>
+    }
+</fieldset>
+
 
 <table class="table">
     <tr>
@@ -80,3 +152,21 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
 
 @Html.PagedListPager(Model, page => Url.Action("Index",
     new { page, sortOrder = ViewBag.CurrentSort }))
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/chosen.jquery.js"></script>
+    <script src="~/Scripts/fileinput.js"></script>
+    <script src="~/Scripts/fileinput_locale_fr.js"></script>
+
+    <script type="text/javascript">
+        $(".chosen-select").chosen({ no_results_text: "Pas de résultat pour" })
+
+        $('form').validate({
+            ignore: []
+        });
+
+    </script>
+
+
+}

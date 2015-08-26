@@ -66,6 +66,9 @@ namespace Motonet.Controllers
 
             int pageSize = int.Parse(ConfigurationManager.AppSettings["pageSize"]);
             int pageNumber = (page ?? 1);
+
+            PopulateRegionsDepartementsDropDownList();
+
             return View(annonces.ToPagedList(pageNumber, pageSize));
         }
 
@@ -905,6 +908,22 @@ namespace Motonet.Controllers
                                select d;
 
             ViewBag.DepartementID = new SelectList(departementsQuery, "ID", "Nom", selectedDepartement);
+        }
+
+        // Peuple la liste déroulante des régions
+        private void PopulateRegionsDepartementsDropDownList(object selectedRegionDepartement = null)
+        {
+            var regionsQuery = from d in db.Regions
+                                    orderby d.Nom
+                                    select d.Nom;
+
+            var departementsQuery = from d in db.Departements
+                                           orderby d.Nom
+                                           select d.Nom;
+
+            var regionsDepartementsQuery = regionsQuery.Union(departementsQuery);
+
+            ViewBag.RegionDepartementID = new SelectList(regionsDepartementsQuery, "ID", "Nom", selectedRegionDepartement);
         }
 
         // Rempli les listes des paramètres virtuels concernant les relations many-many

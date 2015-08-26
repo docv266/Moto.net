@@ -1,0 +1,67 @@
+﻿@model Motonet.Models.Annonce
+
+@{
+    ViewBag.Title = "Envoyer un message";
+}
+
+
+
+<h2>Envoyer un message au propriétaire</h2>
+
+<hr />
+
+    <div>
+        @using (Html.BeginForm("EnvoyerMailAnnonce", "Annonces", FormMethod.Post))
+        {
+            <div class="form-horizontal">
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                @if (!String.IsNullOrEmpty(ViewBag.MessageErreur))
+                {
+                    <div class="form-group">
+                        <div class="control-label col-md-2">
+                        </div>
+                        <div class="col-md-3">
+                            <div class="alert alert-danger" role="alert">@ViewBag.MessageErreur</div>
+                        </div>
+                    </div>
+                }
+
+
+                <input type="hidden" name="annonceID" value=@Model.ID>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">
+                        Votre adresse mail
+                    </label>
+                    <div class="col-md-10">
+
+                        <input type="email" name="mailExpediteur" autofocus="autofocus" class="form-control" />
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">
+                        Message
+                    </label>
+                    <div class="col-md-10">
+
+                        <textarea class="form-control text-box multi-line" data-val="true" id="message" maxlength="800" name="message" rows="10"></textarea>
+
+                    </div>
+                </div>
+
+                <div>
+                    <input type="submit" value="Envoyer" class="btn btn-default" />
+                </div>
+
+            </div>
+        }
+    </div>
+    <br />
+    <div>
+        <a class="btn btn-primary" href="@Url.Content("~/Annonces/Details/" + Model.ID)">< Revenir à l'annonce</a>
+    </div>
+

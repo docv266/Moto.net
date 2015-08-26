@@ -72,7 +72,7 @@
                     @Html.DisplayNameFor(model => model.Mail)
                 </dt>
                 <dd>
-                    <a href="mailto:@Model.Mail">@Model.Mail</a>
+                    @Html.ActionLink("Envoyer un message", "EnvoyerMailAnnonce", new { id = Model.ID })
                 </dd>
                 <dt>
                     @Html.DisplayNameFor(model => model.Telephone)

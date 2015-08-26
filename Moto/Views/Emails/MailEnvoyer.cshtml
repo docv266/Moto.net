@@ -1,0 +1,11 @@
+﻿@model Motonet.Models.MailEnvoyer
+To: @Model.Destinataire
+From: @Model.Expediteur
+Subject: Vous avez reçu un message!
+
+Bonjour,
+Vous avez reçu un message concernant votre annonce:
+@Model.TitreAnnonce
+
+Message:
+@Html.Raw(Model.Message)

@@ -814,6 +814,49 @@ namespace Motonet.Controllers
             return View();
         }
 
+        // Permet d'envoyer un mail à une annonce en passant par le site
+        [AllowAnonymous]
+        public ActionResult EnvoyerMailAnnonce(int id)
+        {
+            Annonce annonce = db.Annonces.Find(id);
+
+            return View(annonce);
+        }
+
+        [HttpPost, ActionName("EnvoyerMailAnnonce")]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public ActionResult EnvoyerMailAnnoncePost(int id, string mailExpediteur, string message)
+        {
+            Annonce annonce = db.Annonces.Find(id);
+
+            if (String.IsNullOrEmpty(mailExpediteur) || String.IsNullOrEmpty(message))
+            {
+                ViewBag.MessageErreur = "Les données sont incorrectes.";
+                return View(annonce);
+            }
+
+            // On envoie un mail pour valider l'adresse
+            MailEnvoyer email = new MailEnvoyer
+            {
+                Destinataire = annonce.Mail,
+                TitreAnnonce = annonce.Titre,
+                Expediteur = mailExpediteur,
+                Message = message
+            };
+
+            email.Send();
+
+            return RedirectToAction("MessageEnvoye");
+        }
+
+        // Affiche la page de confirmation après avoir envoyé un message
+        [AllowAnonymous]
+        public ActionResult MessageEnvoye()
+        {
+            return View();
+        }
+
         // Dispose
         protected override void Dispose(bool disposing)
         {

@@ -6,6 +6,7 @@
     <link href="~/Content/chosen.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-fileinput/css/fileinput.css" rel="stylesheet" />
     <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap-slider.css" rel="stylesheet" type="text/css" />
 }
 
 @{
@@ -14,138 +15,98 @@
 
 <br />
 
-<fieldset>
+
     @using (Html.BeginForm("Index", "Annonces", FormMethod.Get))
     {
         @Html.AntiForgeryToken()
 
-        <div class="form-horizontal">
+        
+        @Html.TextBox("SearchString", "", new { placeholder = "Titre" })
+        @Html.TextBox("SearchString", "", new { placeholder = "Marque ou modèle" })
 
-            <div class="form-group">
-                
-                <div class="col-md-4">
-                    @Html.TextBox("SearchString", "", new { @class = "form-control", placeholder = "Titre de l'annonce" })
-                </div>
-            
-                <div class="col-md-4">
-                    @Html.TextBox("SearchString", "", new { @class = "form-control", placeholder = "Marque ou modèle" })
-                </div>
-
-                <div class="col-md-4">
-                    @Html.DropDownList("RegionDepartementID", null, String.Empty, new { @class = "chosen-select form-control", data_placeholder = "Région" })
-                </div>
-
-            </div>
-
-            <div class="form-group">
-
-                <div class="col-md-3">
-                    @Html.TextBox("SearchString", "", new { @class = "form-control", type = "number", placeholder = "Année minimum" })
-                </div>
-
-                <div class="col-md-3">
-                    @Html.TextBox("SearchString", "", new { @class = "form-control", type = "number", placeholder = "Année maximum" })
-                </div>
-
-                <div class="col-md-3">
-                    @Html.TextBox("SearchString", "", new { @class = "form-control", type = "number", placeholder = "Kilomètrage minimum" })
-                </div>
-
-                <div class="col-md-3">
-                    @Html.TextBox("SearchString", "", new { @class = "form-control", type = "number", placeholder = "Kilomètrage maximum" })
-                </div>
-
-            </div>
-
-            
-            <div class="form-group">
-                
-                <div class="col-md-3">
-                    @Html.TextBox("SearchString", "", new { @class = "form-control", type = "number", placeholder = "Prix minimum" })
-                </div>
-
-                <div class="col-md-3">
-                    @Html.TextBox("SearchString", "", new { @class = "form-control", type = "number", placeholder = "Prix maximum" })
-                </div>
-
-                <div class="col-md-3">
-                    @Html.TextBox("SearchString", "", new { @class = "form-control", type = "number", placeholder = "Cylindrée minimum" })
-                </div>
-
-                <div class="col-md-3">
-                    @Html.TextBox("SearchString", "", new { @class = "form-control", type = "number", placeholder = "Cylindrée maximum" })
-                </div>
-            </div>
         
 
-            <input type="submit" value="Filtrer" class="btn btn-sm btn-default bt" />
-        </div>
+
+        @Html.TextBox("SearchString", "", new { type = "number", placeholder = "min" })
+        @Html.TextBox("SearchString", "", new { type = "number", placeholder = "max" })
+
+
+        @Html.TextBox("SearchString", "", new { type = "number", placeholder = "min" })
+        @Html.TextBox("SearchString", "", new { type = "number", placeholder = "max" })
+        
+        @Html.DropDownList("RegionDepartementID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select", data_placeholder = "Région" })
+
+
+        <input type="submit" value="Filtrer" />
+        
     }
-</fieldset>
+        
 
+    <table class="table">
+        <tr>
+            <th>
+                Titre
+            </th>
+            <th>
+                Modèle
+            </th>
+            <th>
+                Photo principale
+            </th>
+            <th>
+                Département
+            </th>
+            <th>
+                @Html.ActionLink("Année", "Index", new { sortOrder = ViewBag.AnneeSortParm })
+            </th>
+            <th>
+                @Html.ActionLink("Kilomètrage", "Index", new { sortOrder = ViewBag.KilometrageSortParm })
+            </th>
+            <th>
+                @Html.ActionLink("Prix", "Index", new { sortOrder = ViewBag.PrixSortParm })
+            </th>
+            <th>
+                @Html.ActionLink("Date", "Index", new { sortOrder = ViewBag.DateSortParm })
+            </th>
+            
+        </tr>
 
-<table class="table">
-    <tr>
-        <th>
-            Titre
-        </th>
-        <th>
-            Modèle
-        </th>
-        <th>
-            Photo principale
-        </th>
-        <th>
-            @Html.ActionLink("Année", "Index", new { sortOrder = ViewBag.AnneeSortParm })
-        </th>
-        <th>
-            @Html.ActionLink("Kilométrage", "Index", new { sortOrder = ViewBag.KilometrageSortParm })
-        </th>
-        <th>
-            @Html.ActionLink("Prix", "Index", new { sortOrder = ViewBag.PrixSortParm })
-        </th>
-        <th>
-            Département
-        </th>
-        <th>
-            @Html.ActionLink("Date", "Index", new { sortOrder = ViewBag.DateSortParm })
-        </th>
-    </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.Titre, "Details", new { id = item.ID })
+                </td>
+                <td data-toggle="tooltip" data-html="true" title="@item.MotoProposee.IdentificationSuite" data-placement="left" data-container="body">
+                    @Html.DisplayFor(modelItem => item.MotoProposee.Identification, new { sortOrder = ViewBag.PrixSortParm })
+                </td>
+                <td>
+                    @if (item.Photos.Count > 0)
+                    {
+                        <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature && x.Principale == true).ID" alt="Photo non disponible" />
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Departement.Identification)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Annee)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.KilometrageAvecUnite)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PrixAvecUnite)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+            </tr>
+        }
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.ActionLink(item.Titre, "Details", new { id = item.ID })
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MotoProposee.Identification)
-        </td>
-        <td>
-            @if (item.Photos.Count > 0)
-            {
-                <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature && x.Principale == true).ID" alt="Photo non disponible" />
-            }
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Annee)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.KilometrageAvecUnite)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PrixAvecUnite)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Departement.Identification)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date)
-        </td>
-    </tr>
-}
+    </table>
 
-</table>
-
+    
 
 <br />
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
@@ -158,12 +119,18 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
     <script src="~/Scripts/chosen.jquery.js"></script>
     <script src="~/Scripts/fileinput.js"></script>
     <script src="~/Scripts/fileinput_locale_fr.js"></script>
+    <script src="~/Scripts/bootstrap-slider.js"></script>
 
     <script type="text/javascript">
         $(".chosen-select").chosen({ no_results_text: "Pas de résultat pour" })
 
         $('form').validate({
             ignore: []
+        });
+
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
         });
 
     </script>

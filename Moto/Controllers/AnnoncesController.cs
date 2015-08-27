@@ -910,22 +910,25 @@ namespace Motonet.Controllers
             ViewBag.DepartementID = new SelectList(departementsQuery, "ID", "Nom", selectedDepartement);
         }
 
-        // Peuple la liste déroulante des régions
+        // Peuple la liste déroulante des départements avec région
         private void PopulateRegionsDepartementsDropDownList(object selectedRegionDepartement = null)
         {
-            var regionsQuery = from d in db.Regions
-                                    orderby d.Nom
-                                    select d.Nom;
+            var regionDepartementsQuery = (from d in db.Departements
+                                          join r in db.Regions on d.Region.ID equals r.ID
+                                          orderby d.Nom
+                                           select new
+                                            {
+                                                d.ID,
+                                                NomDepartement = d.Nom,
+                                                NomRegion = r.Nom
+                                            }).ToList();
 
-            var departementsQuery = from d in db.Departements
-                                           orderby d.Nom
-                                           select d.Nom;
 
-            var regionsDepartementsQuery = regionsQuery.Union(departementsQuery);
 
-            ViewBag.RegionDepartementID = new SelectList(regionsDepartementsQuery, "ID", "Nom", selectedRegionDepartement);
+
+            ViewBag.RegionDepartementID = new SelectList(regionDepartementsQuery, "ID", "NomDepartement", "NomRegion", selectedRegionDepartement, null);
         }
-
+        
         // Rempli les listes des paramètres virtuels concernant les relations many-many
         private void ProcessManyToManyRelationships(Annonce annonce)
         {

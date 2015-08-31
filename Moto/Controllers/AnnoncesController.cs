@@ -24,11 +24,11 @@ namespace Motonet.Controllers
         [AllowAnonymous]
         public ActionResult Index(string sortOrder, int? page, string currentFilterTitre,
             string currentFilterMoto, string currentFilterAnneeMin, string currentFilterAnneeMax,
-            string currentFilterKilometrageMin, string currentFilterKilometrageMax, string currentFilterDateMin,
-            string currentFilterDateMax, string currentFilterCylindreeMin, string currentFilterCylindreeMax, 
+            string currentFilterKilometrageMin, string currentFilterKilometrageMax, string currentFilterPrixMin,
+            string currentFilterPrixMax, string currentFilterCylindreeMin, string currentFilterCylindreeMax, 
             string FiltreTitre, string FiltreMoto, string FiltreAnneeMin, string FiltreAnneeMax,
-            string FiltreKilometrageMin, string FiltreKilometrageMax, string FiltreDateMin,
-            string FiltreDateMax, string FiltreCylindreeMin, string FiltreCylindreeMax)
+            string FiltreKilometrageMin, string FiltreKilometrageMax, string FiltrePrixMin,
+            string FiltrePrixMax, string FiltreCylindreeMin, string FiltreCylindreeMax)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
@@ -39,7 +39,7 @@ namespace Motonet.Controllers
 
             if (FiltreTitre != null || FiltreMoto != null || FiltreAnneeMin != null || FiltreAnneeMax != null ||
                 FiltreKilometrageMin != null || FiltreKilometrageMax != null ||
-                FiltreDateMin != null || FiltreDateMax != null ||
+                FiltrePrixMin != null || FiltrePrixMax != null ||
                 FiltreCylindreeMin != null || FiltreCylindreeMax != null)
             {
                 page = 1;
@@ -52,8 +52,8 @@ namespace Motonet.Controllers
                 FiltreAnneeMax = currentFilterAnneeMax;
                 FiltreKilometrageMin = currentFilterKilometrageMin;
                 FiltreKilometrageMax = currentFilterKilometrageMax;
-                FiltreDateMin = currentFilterDateMin;
-                FiltreDateMax = currentFilterDateMax;
+                FiltrePrixMin = currentFilterPrixMin;
+                FiltrePrixMax = currentFilterPrixMax;
                 FiltreCylindreeMin = currentFilterCylindreeMin;
                 FiltreCylindreeMax = currentFilterCylindreeMax;
             }
@@ -64,8 +64,8 @@ namespace Motonet.Controllers
             ViewBag.CurrentFilterAnneeMax = FiltreAnneeMax;
             ViewBag.CurrentFilterKilometrageMin = FiltreKilometrageMin;
             ViewBag.CurrentFilterKilometrageMax = FiltreKilometrageMax;
-            ViewBag.CurrentFilterDateMin = FiltreDateMin;
-            ViewBag.CurrentFilterDateMax = FiltreDateMax;
+            ViewBag.CurrentFilterPrixMin = FiltrePrixMin;
+            ViewBag.CurrentFilterPrixMax = FiltrePrixMax;
             ViewBag.CurrentFilterCylindreeMin = FiltreCylindreeMin;
             ViewBag.CurrentFilterCylindreeMax = FiltreCylindreeMax;
              
@@ -74,10 +74,64 @@ namespace Motonet.Controllers
 
             annonces = annonces.Where(s => s.Autorisee == true && s.Validee == true);
 
+            int intFiltreAnneeMin;
+            int intFiltreAnneeMax;
+            int intFiltreKilometrageMin;
+            int intFiltreKilometrageMax;
+            int intFiltrePrixMin;
+            int intFiltrePrixMax;
+            int intFiltreCylindreeMin;
+            int intFiltreCylindreeMax;
+
+
             if (!String.IsNullOrEmpty(FiltreTitre))
             {
+                annonces = annonces.Where(s => s.Titre.Contains(FiltreTitre));
+            }
 
+            if (!String.IsNullOrEmpty(FiltreMoto))
+            {
+                annonces = annonces.Where(s => s.MotoProposee.Modele.Contains(FiltreMoto) || s.MotoProposee.Marque.Nom.Contains(FiltreMoto));
+            }
 
+            if (!String.IsNullOrEmpty(FiltreAnneeMin) && int.TryParse(FiltreAnneeMin, out intFiltreAnneeMin))
+            {
+                annonces = annonces.Where(s => s.Annee >= intFiltreAnneeMin);
+            }
+
+            if (!String.IsNullOrEmpty(FiltreAnneeMax) && int.TryParse(FiltreAnneeMax, out intFiltreAnneeMax))
+            {
+                annonces = annonces.Where(s => s.Annee <= intFiltreAnneeMax);
+            }
+
+            if (!String.IsNullOrEmpty(FiltreKilometrageMin) && int.TryParse(FiltreKilometrageMin, out intFiltreKilometrageMin))
+            {
+                annonces = annonces.Where(s => s.Kilometrage >= intFiltreKilometrageMin);
+            }
+
+            if (!String.IsNullOrEmpty(FiltreKilometrageMax) && int.TryParse(FiltreKilometrageMax, out intFiltreKilometrageMax))
+            {
+                annonces = annonces.Where(s => s.Kilometrage <= intFiltreKilometrageMax);
+            }
+
+            if (!String.IsNullOrEmpty(FiltrePrixMin) && int.TryParse(FiltrePrixMin, out intFiltrePrixMin))
+            {
+                annonces = annonces.Where(s => s.Prix >= intFiltrePrixMin);
+            }
+
+            if (!String.IsNullOrEmpty(FiltrePrixMax) && int.TryParse(FiltrePrixMax, out intFiltrePrixMax))
+            {
+                annonces = annonces.Where(s => s.Prix <= intFiltrePrixMax);
+            }
+
+            if (!String.IsNullOrEmpty(FiltreCylindreeMin) && int.TryParse(FiltreCylindreeMin, out intFiltreCylindreeMin))
+            {
+                annonces = annonces.Where(s => s.MotoProposee.Cylindree >= intFiltreCylindreeMin);
+            }
+
+            if (!String.IsNullOrEmpty(FiltreCylindreeMax) && int.TryParse(FiltreCylindreeMax, out intFiltreCylindreeMax))
+            {
+                annonces = annonces.Where(s => s.MotoProposee.Cylindree <= intFiltreCylindreeMax);
             }
 
 

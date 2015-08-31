@@ -189,6 +189,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201508312041105_InitialCreate.cs" />
+    <Compile Include="Migrations\201508312041105_InitialCreate.Designer.cs">
+      <DependentUpon>201508312041105_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\ConfigurationUser.cs" />
+    <Compile Include="Migrations\ConfigurationMoto.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Annonce.cs" />
     <Compile Include="Models\Departement.cs" />
@@ -224,6 +230,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\PublishProfiles\OVH.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\chosen.jquery.min.js" />
@@ -328,6 +335,11 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201508312041105_InitialCreate.resx">
+      <DependentUpon>201508312041105_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

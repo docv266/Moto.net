@@ -108,7 +108,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.GenresAcceptesID, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownList("GenresAcceptesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control", data_toggle = "tooltip", title = "Renseignez la marque et laissez ce champ vide si toutes les genres vous conviennent" })
+                    @Html.DropDownList("GenresAcceptesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control", data_toggle = "tooltip", title = "Renseignez la marque et laissez ce champ vide si tous les genres vous conviennent" })
                     @Html.ValidationMessageFor(model => model.GenresAcceptesID, "", new { @class = "text-danger" })
                 </div>
             </div>

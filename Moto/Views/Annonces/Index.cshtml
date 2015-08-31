@@ -6,7 +6,6 @@
     <link href="~/Content/chosen.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-fileinput/css/fileinput.css" rel="stylesheet" />
     <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/bootstrap-slider.css" rel="stylesheet" type="text/css" />
 }
 
 @{
@@ -20,120 +19,136 @@
     {
         @Html.AntiForgeryToken()
 
-        
-        @Html.TextBox("SearchString", "", new { placeholder = "Titre" })
-        @Html.TextBox("SearchString", "", new { placeholder = "Marque ou modèle" })
+
+    <div class="form-group form-group-sm">
+        @Html.TextBox("FiltreTitre", ViewBag.CurrentFilterTitre as string, new { @class = "form-control", placeholder = "Titre" })
+        @Html.TextBox("FiltreMoto", ViewBag.CurrentFilterMoto as string, new { @class = "form-control", placeholder = "Marque ou modèle" })
+    </div>
+
+    <div class="form-group form-group-sm">
+        @Html.TextBox("FiltreAnneeMin", ViewBag.CurrentFilterAnneeMin as string, new { @class = "form-control", type = "number", placeholder = "Année min" })
+        @Html.TextBox("FiltreAnneeMax", ViewBag.CurrentFilterAnneeMax as string, new { @class = "form-control", type = "number", placeholder = "Année max" })
+    </div>
+
+    <div class="form-group form-group-sm">
+        @Html.TextBox("FiltreKilometrageMin", ViewBag.CurrentFilterKilometrageMin as string, new { @class = "form-control", type = "number", placeholder = "Kilomètrage min" })
+        @Html.TextBox("FiltreKilometrageMax", ViewBag.CurrentFilterKilometrageMax as string, new { @class = "form-control", type = "number", placeholder = "Kilomètrage max" })
+    </div>
+
+    <div class="form-group form-group-sm">
+        @Html.TextBox("FiltreDateMin", ViewBag.CurrentFilterDateMin as string, new { @class = "form-control", type = "number", placeholder = "Date min" })
+        @Html.TextBox("FiltreDateMax", ViewBag.CurrentFilterDateMax as string, new { @class = "form-control", type = "number", placeholder = "Date max" })
+    </div>
+
+    <div class="form-group form-group-sm">
+        @Html.TextBox("FiltreCylindreeMin", ViewBag.CurrentFilterCylindreeMin as string, new { @class = "form-control", type = "number", placeholder = "Cylindrée min" })
+        @Html.TextBox("FiltreCylindreeMax", ViewBag.CurrentFilterCylindreeMax as string, new { @class = "form-control", type = "number", placeholder = "Cylindrée max" })
+    </div>
+
+
+    <div class="form-group form-group-sm">
+        @Html.DropDownList("RegionDepartementID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control", data_placeholder = "Région" })
+        @Html.DropDownList("RegionDepartementID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control", data_placeholder = "Département" })
+
+        <input type="submit" value="Filtrer" class="btn btn-default" />
+
+    </div>
 
         
-
-
-        @Html.TextBox("SearchString", "", new { type = "number", placeholder = "min" })
-        @Html.TextBox("SearchString", "", new { type = "number", placeholder = "max" })
-
-
-        @Html.TextBox("SearchString", "", new { type = "number", placeholder = "min" })
-        @Html.TextBox("SearchString", "", new { type = "number", placeholder = "max" })
-        
-        @Html.DropDownList("RegionDepartementID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select", data_placeholder = "Région" })
-
-
-        <input type="submit" value="Filtrer" />
-        
-    }
-        
-
-    <table class="table">
-        <tr>
-            <th>
-                Titre
-            </th>
-            <th>
-                Modèle
-            </th>
-            <th>
-                Photo principale
-            </th>
-            <th>
-                Département
-            </th>
-            <th>
-                @Html.ActionLink("Année", "Index", new { sortOrder = ViewBag.AnneeSortParm })
-            </th>
-            <th>
-                @Html.ActionLink("Kilomètrage", "Index", new { sortOrder = ViewBag.KilometrageSortParm })
-            </th>
-            <th>
-                @Html.ActionLink("Prix", "Index", new { sortOrder = ViewBag.PrixSortParm })
-            </th>
-            <th>
-                @Html.ActionLink("Date", "Index", new { sortOrder = ViewBag.DateSortParm })
-            </th>
-            
-        </tr>
-
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.ActionLink(item.Titre, "Details", new { id = item.ID })
-                </td>
-                <td data-toggle="tooltip" data-html="true" title="@item.MotoProposee.IdentificationSuite" data-placement="left" data-container="body">
-                    @Html.DisplayFor(modelItem => item.MotoProposee.Identification, new { sortOrder = ViewBag.PrixSortParm })
-                </td>
-                <td>
-                    @if (item.Photos.Count > 0)
-                    {
-                        <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature && x.Principale == true).ID" alt="Photo non disponible" />
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Departement.Identification)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Annee)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.KilometrageAvecUnite)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PrixAvecUnite)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Date)
-                </td>
-            </tr>
-        }
-
-    </table>
-
     
 
-<br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    }
 
-@Html.PagedListPager(Model, page => Url.Action("Index",
+
+        <table class="table">
+            <tr>
+                <th>
+                    Titre
+                </th>
+                <th>
+                    Modèle
+                </th>
+                <th>
+                    Photo principale
+                </th>
+                <th>
+                    Département
+                </th>
+                <th>
+                    @Html.ActionLink("Année", "Index", new { sortOrder = ViewBag.AnneeSortParm })
+                </th>
+                <th>
+                    @Html.ActionLink("Kilomètrage", "Index", new { sortOrder = ViewBag.KilometrageSortParm })
+                </th>
+                <th>
+                    @Html.ActionLink("Prix", "Index", new { sortOrder = ViewBag.PrixSortParm })
+                </th>
+                <th>
+                    @Html.ActionLink("Date", "Index", new { sortOrder = ViewBag.DateSortParm })
+                </th>
+
+            </tr>
+
+            @foreach (var item in Model)
+        {
+                <tr>
+                    <td>
+                        @Html.ActionLink(item.Titre, "Details", new { id = item.ID })
+                    </td>
+                    <td data-toggle="tooltip" data-html="true" title="@item.MotoProposee.IdentificationSuite" data-placement="left" data-container="body">
+                        @Html.DisplayFor(modelItem => item.MotoProposee.Identification, new { sortOrder = ViewBag.PrixSortParm })
+                    </td>
+                    <td>
+                        @if (item.Photos.Count > 0)
+                    {
+                            <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature && x.Principale == true).ID" alt="Photo non disponible" />
+                    }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Departement.Identification)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Annee)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.KilometrageAvecUnite)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrixAvecUnite)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                </tr>
+        }
+
+        </table>
+
+
+
+        <br />
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index",
     new { page, sortOrder = ViewBag.CurrentSort }))
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    <script src="~/Scripts/chosen.jquery.js"></script>
-    <script src="~/Scripts/fileinput.js"></script>
-    <script src="~/Scripts/fileinput_locale_fr.js"></script>
-    <script src="~/Scripts/bootstrap-slider.js"></script>
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+            <script src="~/Scripts/chosen.jquery.js"></script>
+            <script src="~/Scripts/fileinput.js"></script>
+            <script src="~/Scripts/fileinput_locale_fr.js"></script>
 
-    <script type="text/javascript">
-        $(".chosen-select").chosen({ no_results_text: "Pas de résultat pour" })
+            <script type="text/javascript">
+                $(".chosen-select").chosen({ no_results_text: "Pas de résultat pour" })
 
-        $('form').validate({
-            ignore: []
-        });
-
-
-        $(document).ready(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-
-    </script>
+                $('form').validate({
+                    ignore: []
+                });
 
 
-}
+                $(document).ready(function () {
+                    $('[data-toggle="tooltip"]').tooltip();
+                });
+
+            </script>
+        }

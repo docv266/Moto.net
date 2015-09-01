@@ -18,38 +18,38 @@ namespace Motonet.Models
         }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class UserContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext()
+        public UserContext()
             : base("UsersConnection", throwIfV1Schema: false)
         {
         }
 
-        static ApplicationDbContext()
+        static UserContext()
         {
             // Set the database intializer which is run once during application start
             // This seeds the database with admin user credentials and admin role
-            Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());
+            Database.SetInitializer<UserContext>(new ApplicationDbInitializer());
         }
 
-        public static ApplicationDbContext Create()
+        public static UserContext Create()
         {
-            return new ApplicationDbContext();
+            return new UserContext();
         }
 
         // This is useful if you do not want to tear down the database each time you run the application.
-        // public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
+        // public class ApplicationDbInitializer : DropCreateDatabaseAlways<UserContext>
         // This example shows you how to create a new database if the Model changes
-        public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
+        public class ApplicationDbInitializer : DropCreateDatabaseAlways<UserContext>
         {
-            protected override void Seed(ApplicationDbContext context)
+            protected override void Seed(UserContext context)
             {
                 
                 var store = new UserStore<ApplicationUser>(context);
                 var manager = new UserManager<ApplicationUser>(store);
                 var user = new ApplicationUser { UserName = "admin@admin.com", Email = "admin@admin.com" };
 
-                manager.Create(user, "Admin15++");
+                manager.Create(user, "Admin15++"); // Change this ASAP!
 
                 
                 base.Seed(context);

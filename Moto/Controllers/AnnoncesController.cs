@@ -18,6 +18,9 @@ namespace Motonet.Controllers
 {
     public class AnnoncesController : Controller
     {
+
+        readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private MotoContext db = new MotoContext();
 
         // Liste toutes les annonces autorisées et validées
@@ -30,6 +33,9 @@ namespace Motonet.Controllers
             string FiltreKilometrageMin, string FiltreKilometrageMax, string FiltrePrixMin,
             string FiltrePrixMax, string FiltreCylindreeMin, string FiltreCylindreeMax)
         {
+
+            logger.Error("Annonces Index");
+
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
             ViewBag.PrixSortParm = sortOrder == "prix" ? "prix_desc" : "prix";

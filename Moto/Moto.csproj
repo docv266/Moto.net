@@ -235,7 +235,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Properties\PublishProfiles\OVH.pubxml" />
-    <None Include="Properties\PublishProfiles\Test.pubxml" />
+    <None Include="Properties\PublishProfiles\FileSystem.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\chosen.jquery.min.js" />
@@ -329,6 +329,8 @@
     <Content Include="Views\Annonces\EnvoyerMailAnnonce.cshtml" />
     <Content Include="Views\Annonces\MessageEnvoye.cshtml" />
     <Content Include="Views\Emails\MailEnvoyer.cshtml" />
+    <Content Include="Views\Home\GenericError.cshtml" />
+    <Content Include="Views\Home\InternalError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

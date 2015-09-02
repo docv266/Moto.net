@@ -19,5 +19,17 @@ namespace Motonet.Controllers
         {
             return View();
         }
+
+        [AllowAnonymous]
+        public ActionResult GenericError()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult InternalError()
+        {
+            return View();
+        }
     }
 }

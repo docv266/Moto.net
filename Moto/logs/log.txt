@@ -1,1 +1,3 @@
 ERROR 2015-09-02 14:10:06,277   719ms AnnoncesController     Index              - Annonces Index
+ERROR 2015-09-02 16:03:59,367   107ms Startup                ConfigureAuth      - Startup?
+ERROR 2015-09-02 16:03:59,792   532ms AnnoncesController     Index              - Annonces Index

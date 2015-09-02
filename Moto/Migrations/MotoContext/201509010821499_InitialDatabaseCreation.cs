@@ -5,8 +5,14 @@ namespace Motonet.Migrations.MotoContext
     
     public partial class InitialDatabaseCreation : DbMigration
     {
+
+        readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public override void Up()
         {
+
+            logger.Error("Migration Up MotoContext");
+
             CreateTable(
                 "dbo.Annonce",
                 c => new

@@ -11,9 +11,13 @@ namespace Motonet
 {
     public partial class Startup
     {
+        readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
+            logger.Error("Startup?");
+
             // Configure the db context, user manager and signin manager to use a single instance per request
             app.CreatePerOwinContext(UserContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);

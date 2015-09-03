@@ -15,7 +15,6 @@ namespace Motonet
 
         protected void Application_Start()
         {
-            logger.Error("Start");
 
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
@@ -23,7 +22,14 @@ namespace Motonet
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             log4net.Config.XmlConfigurator.Configure(new FileInfo(Server.MapPath("~/Web.config")));
 
-            logger.Error("End");
+        }
+
+        protected void Application_Error(Object sender, EventArgs e)
+        {
+            var raisedException = Server.GetLastError();
+            // Process exception
+            logger.Error(raisedException.Message);
+            logger.Error(raisedException.StackTrace);
         }
     }
 }

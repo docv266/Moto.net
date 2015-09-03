@@ -11,8 +11,7 @@ namespace Motonet
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
+        
         protected void Application_Start()
         {
 
@@ -20,16 +19,7 @@ namespace Motonet
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            log4net.Config.XmlConfigurator.Configure(new FileInfo(Server.MapPath("~/Web.config")));
 
-        }
-
-        protected void Application_Error(Object sender, EventArgs e)
-        {
-            var raisedException = Server.GetLastError();
-            // Process exception
-            logger.Error(raisedException.Message);
-            logger.Error(raisedException.StackTrace);
         }
     }
 }

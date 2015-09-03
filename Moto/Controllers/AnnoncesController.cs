@@ -22,7 +22,6 @@ namespace Motonet.Controllers
         private MotoContext db = new MotoContext();
 
         // Liste toutes les annonces autorisées et validées
-        [AllowAnonymous]
         public ActionResult Index(string sortOrder, int? page, string currentFilterTitre,
             string currentFilterMoto, string currentFilterAnneeMin, string currentFilterAnneeMax,
             string currentFilterKilometrageMin, string currentFilterKilometrageMax, string currentFilterPrixMin,
@@ -174,7 +173,6 @@ namespace Motonet.Controllers
         }
 
         // Liste toutes les annonces compatibles avec une annonce donnée
-        [AllowAnonymous]
         public ActionResult AnnoncesCompatibles(int id, string sortOrder, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
@@ -439,7 +437,6 @@ namespace Motonet.Controllers
         }
 
         // Affiche les détails d'une annonce en particulier
-        [AllowAnonymous]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -459,7 +456,6 @@ namespace Motonet.Controllers
         }
 
         // Affiche le formulaire de création d'une annonce (premier affichage)
-        [AllowAnonymous]
         public ActionResult Create()
         {
 
@@ -478,7 +474,6 @@ namespace Motonet.Controllers
         // Affiche le formulaire de création d'une annonce (affichages suivants)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AllowAnonymous]
         public ActionResult Create([Bind(Include = "Titre,Description,MotoProposeeID,Annee,Kilometrage,Prix,MotosAccepteesID,MarquesAccepteesID,GenresAcceptesID,Nom,Mail,Telephone,DepartementID,MotDepasse,ConfirmerMotDePasse")] Annonce annonce, IEnumerable<HttpPostedFileBase> photos)
         {
 
@@ -598,7 +593,6 @@ namespace Motonet.Controllers
         }
 
         // Affiche la demande de mot de passe avant de pouvoir éditer l'annonce
-        [AllowAnonymous]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -621,7 +615,6 @@ namespace Motonet.Controllers
         // Affiche le formulaire pour éditer l'annonce (premier affichage)
         [HttpPost, ActionName("EditPassword")]
         [ValidateAntiForgeryToken]
-        [AllowAnonymous]
         public ActionResult EditPostPassword(int? annonceID, string password)
         {
 
@@ -677,7 +670,6 @@ namespace Motonet.Controllers
         // Affiche le formulaire pour éditer l'annonce (affichages suivants)
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        [AllowAnonymous]
         public ActionResult EditPost(int? id, int? photoPrincipale, string password, IEnumerable<HttpPostedFileBase> photos)
         {
 
@@ -826,7 +818,6 @@ namespace Motonet.Controllers
         }
 
         // Affiche la demande de mot de passe avant de pouvoir supprimer l'annonce
-        [AllowAnonymous]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -848,7 +839,6 @@ namespace Motonet.Controllers
         // Affiche le formulaire pour supprimer l'annonce (premier affichage)
         [HttpPost, ActionName("DeletePassword")]
         [ValidateAntiForgeryToken]
-        [AllowAnonymous]
         public ActionResult DeletePostPassword(int? annonceID, string password)
         {
 
@@ -882,7 +872,6 @@ namespace Motonet.Controllers
         }
 
         // Affiche la page de validation de l'adresse (et donc de l'annonce) si le code fourni est le bon
-        [AllowAnonymous]
         public ActionResult ValidateMail(int annonceId, string code)
         {
             if (code == null)
@@ -912,14 +901,12 @@ namespace Motonet.Controllers
         }
 
         // Affiche la page de confirmation après avoir posté une annonce
-        [AllowAnonymous]
         public ActionResult ConfirmationAnnoncePostee()
         {
             return View();
         }
 
         // Permet d'envoyer un mail à une annonce en passant par le site
-        [AllowAnonymous]
         public ActionResult EnvoyerMailAnnonce(int id)
         {
             Annonce annonce = db.Annonces.Find(id);
@@ -929,7 +916,6 @@ namespace Motonet.Controllers
 
         [HttpPost, ActionName("EnvoyerMailAnnonce")]
         [ValidateAntiForgeryToken]
-        [AllowAnonymous]
         public ActionResult EnvoyerMailAnnoncePost(int id, string mailExpediteur, string message)
         {
             Annonce annonce = db.Annonces.Find(id);
@@ -955,7 +941,6 @@ namespace Motonet.Controllers
         }
 
         // Affiche la page de confirmation après avoir envoyé un message
-        [AllowAnonymous]
         public ActionResult MessageEnvoye()
         {
             return View();

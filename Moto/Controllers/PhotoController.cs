@@ -12,7 +12,6 @@ namespace Motonet.Controllers
         private MotoContext db = new MotoContext();
 
         // GET: Photo
-        [AllowAnonymous]
         public ActionResult Index(int id)
         {
             var fileToRetrieve = db.Photos.Find(id);

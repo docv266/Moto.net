@@ -16,60 +16,60 @@
 
 
 <div class="panel panel-default" id="panel1">
-    <div class="panel-heading">
+    <div class="panel-heading collapser">
         <h4 class="panel-title">
-            <a data-toggle="collapse" data-target="#collapseOne" href="#collapseOne">
+            <span data-toggle="collapse" data-target="#collapseOne">
                 Filtrer
-            </a>
+            </span>
         </h4>
 
     </div>
-    <div id="collapseOne" class="panel-collapse collapse in">
+    <div id="collapseOne" class="panel-collapse collapse">
         <div class="panel-body">
             
             @using (Html.BeginForm("Index", "Annonces", FormMethod.Get))
             {
-                @Html.AntiForgeryToken()
+                <div class="form-inline form-group-sm">
 
+                    <div class="formFilter">
+                        <label>Titres:</label>
+                        @Html.TextBox("FiltreTitre", ViewBag.CurrentFilterTitre as string, new { @class = "form-control", placeholder = "Titre" })
+                        @Html.TextBox("FiltreMoto", ViewBag.CurrentFilterMoto as string, new { @class = "form-control", placeholder = "Marque ou modèle" })
+                    </div>
 
-                <div class="form-group form-group-sm">
-                    @Html.TextBox("FiltreTitre", ViewBag.CurrentFilterTitre as string, new { @class = "form-control", placeholder = "Titre" })
-                    @Html.TextBox("FiltreMoto", ViewBag.CurrentFilterMoto as string, new { @class = "form-control", placeholder = "Marque ou modèle" })
-                </div>
+                    <div class="formFilter">
+                        <label>Année:</label>
+                        @Html.TextBox("FiltreAnneeMin", ViewBag.CurrentFilterAnneeMin as string, new { @class = "form-control", type = "number", placeholder = "Année min" })
+                        @Html.TextBox("FiltreAnneeMax", ViewBag.CurrentFilterAnneeMax as string, new { @class = "form-control", type = "number", placeholder = "Année max" })
+                    </div>
 
-                <div class="form-group form-group-sm">
-                    @Html.TextBox("FiltreAnneeMin", ViewBag.CurrentFilterAnneeMin as string, new { @class = "form-control", type = "number", placeholder = "Année min" })
-                    @Html.TextBox("FiltreAnneeMax", ViewBag.CurrentFilterAnneeMax as string, new { @class = "form-control", type = "number", placeholder = "Année max" })
-                </div>
+                    <div class="formFilter">
+                        <label>Kilomètrage:</label>
+                        @Html.TextBox("FiltreKilometrageMin", ViewBag.CurrentFilterKilometrageMin as string, new { @class = "form-control", type = "number", placeholder = "Kilomètrage min" })
+                        @Html.TextBox("FiltreKilometrageMax", ViewBag.CurrentFilterKilometrageMax as string, new { @class = "form-control", type = "number", placeholder = "Kilomètrage max" })
+                    </div>
 
-                <div class="form-group form-group-sm">
-                    @Html.TextBox("FiltreKilometrageMin", ViewBag.CurrentFilterKilometrageMin as string, new { @class = "form-control", type = "number", placeholder = "Kilomètrage min" })
-                    @Html.TextBox("FiltreKilometrageMax", ViewBag.CurrentFilterKilometrageMax as string, new { @class = "form-control", type = "number", placeholder = "Kilomètrage max" })
-                </div>
+                    <div class="formFilter">
+                        <label>Prix:</label>
+                        @Html.TextBox("FiltrePrixMin", ViewBag.CurrentFilterPrixMin as string, new { @class = "form-control", type = "number", placeholder = "Prix min" })
+                        @Html.TextBox("FiltrePrixMax", ViewBag.CurrentFilterPrixMax as string, new { @class = "form-control", type = "number", placeholder = "Prix max" })
+                    </div>
 
-                <div class="form-group form-group-sm">
-                    @Html.TextBox("FiltrePrixMin", ViewBag.CurrentFilterPrixMin as string, new { @class = "form-control", type = "number", placeholder = "Prix min" })
-                    @Html.TextBox("FiltrePrixMax", ViewBag.CurrentFilterPrixMax as string, new { @class = "form-control", type = "number", placeholder = "Prix max" })
-                </div>
+                    <div class="formFilter">
+                        <label>Cylindrée:</label>
+                        @Html.TextBox("FiltreCylindreeMin", ViewBag.CurrentFilterCylindreeMin as string, new { @class = "form-control", type = "number", placeholder = "Cylindrée min" })
+                        @Html.TextBox("FiltreCylindreeMax", ViewBag.CurrentFilterCylindreeMax as string, new { @class = "form-control", type = "number", placeholder = "Cylindrée max" })
+                    </div>
 
-                <div class="form-group form-group-sm">
-                    @Html.TextBox("FiltreCylindreeMin", ViewBag.CurrentFilterCylindreeMin as string, new { @class = "form-control", type = "number", placeholder = "Cylindrée min" })
-                    @Html.TextBox("FiltreCylindreeMax", ViewBag.CurrentFilterCylindreeMax as string, new { @class = "form-control", type = "number", placeholder = "Cylindrée max" })
-                </div>
+                        @*@Html.DropDownList("RegionDepartementID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control", data_placeholder = "Région" })*@
+                        @*@Html.DropDownList("RegionDepartementID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control", data_placeholder = "Département" })*@
 
+                    </div>
 
-                <div class="form-group form-group-sm">
-                    @*@Html.DropDownList("RegionDepartementID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control", data_placeholder = "Région" })*@
-                    @*@Html.DropDownList("RegionDepartementID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control", data_placeholder = "Département" })*@
-
-                    <input type="submit" value="Filtrer" class="btn btn-default" />
-
-                </div>
-
-
+                    <input type="submit" value="Filtrer" class="btn btn-primary btn-sm boutonFiltrer" />
             }
 
-        </div>
+                </div>
     </div>
 </div>
 

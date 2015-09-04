@@ -11,7 +11,7 @@
 
 <h2>Mon annonce</h2>
 
-@using (Html.BeginForm("Create", "Annonces", null, FormMethod.Get, new { enctype = "multipart/form-data" })) 
+@using (Html.BeginForm("Create", "Annonces", null, FormMethod.Post, new { enctype = "multipart/form-data" })) 
 {
     @Html.AntiForgeryToken()
     

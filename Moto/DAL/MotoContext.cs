@@ -23,6 +23,7 @@ namespace Motonet.DAL
         public DbSet<Moto> Motos { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Region> Regions { get; set; }
+        public DbSet<Settings> Settings { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

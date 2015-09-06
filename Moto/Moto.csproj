@@ -164,6 +164,10 @@
     <Compile Include="Migrations\201509031410405_InitialCreate.Designer.cs">
       <DependentUpon>201509031410405_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201509051813097_AjoutSettings.cs" />
+    <Compile Include="Migrations\201509051813097_AjoutSettings.Designer.cs">
+      <DependentUpon>201509051813097_AjoutSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Annonce.cs" />
     <Compile Include="Models\Departement.cs" />
@@ -176,6 +180,7 @@
     <Compile Include="Models\Moto.cs" />
     <Compile Include="Models\Photo.cs" />
     <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -316,6 +321,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201509031410405_InitialCreate.resx">
       <DependentUpon>201509031410405_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509051813097_AjoutSettings.resx">
+      <DependentUpon>201509051813097_AjoutSettings.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

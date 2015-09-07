@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace Motonet.Controllers
 {
+    [SessionState(System.Web.SessionState.SessionStateBehavior.Disabled)]
     public class PhotoController : Controller
     {
         private MotoContext db = new MotoContext();

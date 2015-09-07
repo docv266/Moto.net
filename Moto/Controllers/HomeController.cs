@@ -41,19 +41,21 @@ namespace Motonet.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PasswordAdminPost(string password)
         {
-            Settings setting = db.Settings.First();
+            Settings setting = db.Settings.FirstOrDefault();
 
-            Session["estAdmin"] = !string.IsNullOrEmpty(password) && Annonce.VerifyHashedPassword(setting.AdminPassword, password);
+            if (setting != null)
+            {
 
-            if ((Boolean)Session["estAdmin"])
-            {
-                return RedirectToAction("AnnoncesAAutoriser", "Annonces");
+                Session["estAdmin"] = !string.IsNullOrEmpty(password) && Annonce.VerifyHashedPassword(setting.AdminPassword, password);
+
+                if ((Boolean)Session["estAdmin"])
+                {
+                    return RedirectToAction("AnnoncesAAutoriser", "Annonces");
+                }
             }
-            else
-            {
-                ViewBag.Message = "Mot de passe incorrect.";
-                return View("PasswordAdmin");
-            }
+
+            ViewBag.Message = "Mot de passe incorrect.";
+            return View("PasswordAdmin");
 
             
         }

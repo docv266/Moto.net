@@ -50,7 +50,7 @@ namespace Motonet.Migrations
                 new Region{Nom="Outre-Mer"}
             };
 
-            regions.ForEach(s => context.Regions.Add(s));
+            regions.ForEach(s => context.Regions.AddOrUpdate(s));
             context.SaveChanges();
 
             var departements = new List<Departement>
@@ -156,7 +156,7 @@ namespace Motonet.Migrations
                 new Departement{Nom="Savoie ",CP="73",Region=regions.Find(r => r.Nom.Equals("Rhône-Alpes"))},
                 new Departement{Nom="Haute Savoie",CP="74",Region=regions.Find(r => r.Nom.Equals("Rhône-Alpes"))}
             };
-            departements.ForEach(s => context.Departements.Add(s));
+            departements.ForEach(s => context.Departements.AddOrUpdate(s));
             context.SaveChanges();
 
             var genres = new List<Genre>
@@ -168,7 +168,7 @@ namespace Motonet.Migrations
                 new Genre{Nom="Custom"},
                 new Genre{Nom="Cross et Enduro"}
             };
-            genres.ForEach(s => context.Genres.Add(s));
+            genres.ForEach(s => context.Genres.AddOrUpdate(s));
             context.SaveChanges();
 
             var marques = new List<Marque>
@@ -191,7 +191,7 @@ namespace Motonet.Migrations
                 new Marque{Nom="HEADBANGER"},
                 new Marque{Nom="BENELLI"}
             };
-            marques.ForEach(s => context.Marques.Add(s));
+            marques.ForEach(s => context.Marques.AddOrUpdate(s));
             context.SaveChanges();
 
             var motos = new List<Moto>
@@ -739,7 +739,7 @@ namespace Motonet.Migrations
                 new Moto{Modele="Z800", Cylindree=806, MarqueID=marques.Find(r => r.Nom.Equals("KAWASAKI")).ID, GenreID=genres.Find(r => r.Nom.Equals("Roadster")).ID},
 
             };
-            motos.ForEach(s => context.Motos.Add(s));
+            motos.ForEach(s => context.Motos.AddOrUpdate(s));
             context.SaveChanges();
 
             string pass = Annonce.HashPassword("ppp");
@@ -827,7 +827,7 @@ namespace Motonet.Migrations
                 },
                 
             };
-            annonces.ForEach(s => context.Annonces.Add(s));
+            annonces.ForEach(s => context.Annonces.AddOrUpdate(s));
             context.SaveChanges();
         }
     }

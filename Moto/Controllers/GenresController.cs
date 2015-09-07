@@ -18,12 +18,22 @@ namespace Motonet.Controllers
         // GET: Genres
         public ActionResult Index()
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             return View(db.Genres.ToList());
         }
 
         // GET: Genres/Details/5
         public ActionResult Details(int? id)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -39,6 +49,11 @@ namespace Motonet.Controllers
         // GET: Genres/Create
         public ActionResult Create()
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             return View();
         }
 
@@ -49,6 +64,11 @@ namespace Motonet.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,Nom")] Genre genre)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Genres.Add(genre);
@@ -62,6 +82,11 @@ namespace Motonet.Controllers
         // GET: Genres/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -81,6 +106,11 @@ namespace Motonet.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,Nom")] Genre genre)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(genre).State = EntityState.Modified;
@@ -93,6 +123,11 @@ namespace Motonet.Controllers
         // GET: Genres/Delete/5
         public ActionResult Delete(int? id)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -110,6 +145,11 @@ namespace Motonet.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             Genre genre = db.Genres.Find(id);
             db.Genres.Remove(genre);
             db.SaveChanges();

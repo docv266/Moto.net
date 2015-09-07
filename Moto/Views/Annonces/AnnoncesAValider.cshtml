@@ -1,110 +1,99 @@
 ﻿@model IEnumerable<Motonet.Models.Annonce>
 
-@if (Model == null)
-{
-    Html.RenderPartial("~/Views/Annonces/PasswordForm.cshtml");
-}
-else
-{
 
     
-    ViewBag.Title = "Index admin";
-    
-
-    <h2>Annonces postées</h2>
 
 
-    <table class="table">
+<h2>Annonces à valider</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            Titre
+        </th>
+        <th>
+            Modèle
+        </th>
+        <th>
+            Photo principale
+        </th>
+        <th>
+            @Html.ActionLink("Année", "AnnoncesAValider", new { sortOrder = ViewBag.AnneeSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Kilométrage", "AnnoncesAValider", new { sortOrder = ViewBag.KilometrageSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Prix", "AnnoncesAValider", new { sortOrder = ViewBag.PrixSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Date", "AnnoncesAValider", new { sortOrder = ViewBag.DateSortParm })
+        </th>
+        <th>
+
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
         <tr>
-            <th>
-                Titre
-            </th>
-            <th>
-                Modèle
-            </th>
-            <th>
-                Photo principale
-            </th>
-            <th>
-                @Html.ActionLink("Année", "AnnoncesAValider", new { sortOrder = ViewBag.AnneeSortParm })
-            </th>
-            <th>
-                @Html.ActionLink("Kilométrage", "AnnoncesAValider", new { sortOrder = ViewBag.KilometrageSortParm })
-            </th>
-            <th>
-                @Html.ActionLink("Prix", "AnnoncesAValider", new { sortOrder = ViewBag.PrixSortParm })
-            </th>
-            <th>
-                @Html.ActionLink("Date", "AnnoncesAValider", new { sortOrder = ViewBag.DateSortParm })
-            </th>
-            <th>
+            <td>
+                @Html.ActionLink(item.Titre, "Details", new { id = item.ID })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MotoProposee.Identification)
+            </td>
+            <td>
+                @if (item.Photos.Count > 0)
+                {
+                    <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature).ID" alt="Photo non disponible" />
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Annee)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.KilometrageAvecUnite)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PrixAvecUnite)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                <div class="form-group">
 
-            </th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.ActionLink(item.Titre, "Details", new { id = item.ID })
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MotoProposee.Identification)
-                </td>
-                <td>
-                    @if (item.Photos.Count > 0)
+                    @using (Html.BeginForm("AnnoncesAValider", "Annonces", null, FormMethod.Get))
                     {
-                        <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature).ID" alt="Photo non disponible" />
+                        <input type="hidden" name="sortOrder" value=@ViewBag.CurrentSort />
+                        <input type="hidden" name="id" value=@item.ID />
+                        <input type="submit" value="Valider" class="btn btn-default" />
                     }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Annee)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.KilometrageAvecUnite)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PrixAvecUnite)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Date)
-                </td>
-                <td>
-                    <div class="form-group">
 
-                        @using (Html.BeginForm("AnnoncesAValiderPassword", "Annonces", null, FormMethod.Post))
-                        {
-                            <input type="hidden" name="password" value=@ViewBag.password>
-                            <input type="hidden" name="sortOrder" value=@ViewBag.CurrentSort />
-                            <input type="hidden" name="id" value=@item.ID />
-                            <input type="submit" value="Valider" class="btn btn-default" />
-                        }
+                </div>
+            </td>
+        </tr>
+    }
 
-                    </div>
-                </td>
-            </tr>
-        }
+</table>
 
-    </table>
+<div class="form-group">
 
-    <div class="form-group">
+    @using (Html.BeginForm("AnnoncesAValider", "Annonces", null, FormMethod.Get))
+    {
+        <input type="hidden" name="sortOrder" value=@ViewBag.CurrentSort />
+        <input type="hidden" name="id" value=-1 />
+        <input type="submit" value="Valider tout" class="btn btn-default" />
+    }
+    <br />
+    @using (Html.BeginForm("AnnoncesAValider", "Annonces", null, FormMethod.Get))
+    {
+        <input type="hidden" name="sortOrder" value=@ViewBag.CurrentSort />
+        <input type="hidden" name="id" value=-2 />
+        <input type="submit" value="Supprimer les annonces datant de plus d'une semaine" class="btn btn-default" />
+    }
 
-        @using (Html.BeginForm("AnnoncesAValiderPassword", "Annonces", null, FormMethod.Post))
-        {
-            <input type="hidden" name="password" value=@ViewBag.password>
-            <input type="hidden" name="sortOrder" value=@ViewBag.CurrentSort />
-            <input type="hidden" name="id" value=-1 />
-            <input type="submit" value="Valider tout" class="btn btn-default" />
-        }
-        <br />
-        @using (Html.BeginForm("AnnoncesAValiderPassword", "Annonces", null, FormMethod.Post))
-        {
-            <input type="hidden" name="password" value=@ViewBag.password>
-            <input type="hidden" name="sortOrder" value=@ViewBag.CurrentSort />
-            <input type="hidden" name="id" value=-2 />
-            <input type="submit" value="Supprimer les annonces datant de plus d'une semaine" class="btn btn-default" />
-        }
+</div>
 
-    </div>
-
-}

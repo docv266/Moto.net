@@ -20,6 +20,11 @@ namespace Motonet.Controllers
         // GET: Motos
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             ViewBag.CurrentSort = sortOrder;
             ViewBag.ModeleSortParm = String.IsNullOrEmpty(sortOrder) ? "modele_desc" : "";
             ViewBag.MarqueSortParm = sortOrder == "marque" ? "marque_desc" : "marque";
@@ -84,6 +89,11 @@ namespace Motonet.Controllers
         // GET: Motos/Details/5
         public ActionResult Details(int? id)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -99,6 +109,11 @@ namespace Motonet.Controllers
         // GET: Motos/Create
         public ActionResult Create()
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             PopulateGenresDropDownList();
             PopulateMarquesDropDownList();
             return View();
@@ -111,6 +126,11 @@ namespace Motonet.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Modele,Cylindree,GenreID,MarqueID")] Moto moto)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             try
             {
                 if (ModelState.IsValid)
@@ -133,6 +153,11 @@ namespace Motonet.Controllers
         // GET: Motos/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -154,6 +179,11 @@ namespace Motonet.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditPost(int? id)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -183,6 +213,11 @@ namespace Motonet.Controllers
         // GET: Motos/Delete/5
         public ActionResult Delete(int? id, bool? saveChangesError = false)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -204,6 +239,11 @@ namespace Motonet.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             try
             {
                 Moto moto = db.Motos.Find(id);

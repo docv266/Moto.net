@@ -295,7 +295,7 @@
     <Content Include="Views\Emails\_ViewStart.cshtml" />
     <Content Include="Views\Emails\MailValiderAdresse.cshtml" />
     <Content Include="Views\Annonces\ValidateMail.cshtml" />
-    <Content Include="Views\Annonces\PasswordForm.cshtml" />
+    <Content Include="Views\Shared\_PasswordForm.cshtml" />
     <Content Include="Views\Annonces\AnnoncesAAutoriser.cshtml" />
     <Content Include="Views\Annonces\AnnoncesAValider.cshtml" />
     <Content Include="Views\Annonces\ConfirmationAnnoncePostee.cshtml" />
@@ -307,6 +307,7 @@
     <Content Include="Views\Emails\MailEnvoyer.cshtml" />
     <Content Include="Views\Home\GenericError.cshtml" />
     <Content Include="Views\Home\InternalError.cshtml" />
+    <Content Include="Views\Home\PasswordAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

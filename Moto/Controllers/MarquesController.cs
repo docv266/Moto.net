@@ -18,12 +18,22 @@ namespace Motonet.Controllers
         // GET: Marques
         public ActionResult Index()
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             return View(db.Marques.ToList());
         }
 
         // GET: Marques/Details/5
         public ActionResult Details(int? id)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -39,6 +49,11 @@ namespace Motonet.Controllers
         // GET: Marques/Create
         public ActionResult Create()
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             return View();
         }
 
@@ -49,6 +64,11 @@ namespace Motonet.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,Nom")] Marque marque)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Marques.Add(marque);
@@ -62,6 +82,11 @@ namespace Motonet.Controllers
         // GET: Marques/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -81,6 +106,11 @@ namespace Motonet.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,Nom")] Marque marque)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(marque).State = EntityState.Modified;
@@ -93,6 +123,11 @@ namespace Motonet.Controllers
         // GET: Marques/Delete/5
         public ActionResult Delete(int? id)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -110,6 +145,11 @@ namespace Motonet.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("PasswordAdmin", "Home");
+            }
+
             Marque marque = db.Marques.Find(id);
             db.Marques.Remove(marque);
             db.SaveChanges();

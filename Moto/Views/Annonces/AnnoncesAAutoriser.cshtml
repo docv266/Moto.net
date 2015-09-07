@@ -1,115 +1,103 @@
 ﻿@model IEnumerable<Motonet.Models.Annonce>
 
 
-@if (Model == null)
-{
-    Html.RenderPartial("~/Views/Annonces/PasswordForm.cshtml");
-}
-else
-{
-
-    ViewBag.Title = "Index admin";
 
 
-    <h2>Annonces validées</h2>
+<h2>Annonces à autoriser</h2>
 
 
-    <table class="table">
+<table class="table">
+    <tr>
+        <th>
+            Titre
+        </th>
+        <th>
+            Modèle
+        </th>
+        <th>
+            Photo principale
+        </th>
+        <th>
+            @Html.ActionLink("Année", "AnnoncesAAutoriser", new { sortOrder = ViewBag.AnneeSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Kilométrage", "AnnoncesAAutoriser", new { sortOrder = ViewBag.KilometrageSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Prix", "AnnoncesAAutoriser", new { sortOrder = ViewBag.PrixSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Date", "AnnoncesAAutoriser", new { sortOrder = ViewBag.DateSortParm })
+        </th>
+        <th>
+
+        </th>
+        <th>
+
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
         <tr>
-            <th>
-                Titre
-            </th>
-            <th>
-                Modèle
-            </th>
-            <th>
-                Photo principale
-            </th>
-            <th>
-                @Html.ActionLink("Année", "AnnoncesAAutoriser", new { sortOrder = ViewBag.AnneeSortParm })
-            </th>
-            <th>
-                @Html.ActionLink("Kilométrage", "AnnoncesAAutoriser", new { sortOrder = ViewBag.KilometrageSortParm })
-            </th>
-            <th>
-                @Html.ActionLink("Prix", "AnnoncesAAutoriser", new { sortOrder = ViewBag.PrixSortParm })
-            </th>
-            <th>
-                @Html.ActionLink("Date", "AnnoncesAAutoriser", new { sortOrder = ViewBag.DateSortParm })
-            </th>
-            <th>
+            <td>
+                @Html.ActionLink(item.Titre, "Details", new { id = item.ID })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MotoProposee.Identification)
+            </td>
+            <td>
+                @if (item.Photos.Count > 0)
+                {
+                    <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature).ID" alt="Photo non disponible" />
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Annee)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.KilometrageAvecUnite)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PrixAvecUnite)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                <div class="form-group">
 
-            </th>
-            <th>
+                    @using (Html.BeginForm("AnnoncesAAutoriser", "Annonces", null, FormMethod.Get))
+                    {
+                        <input type="hidden" name="sortOrder" value=@ViewBag.CurrentSort />
+                        <input type="hidden" name="idAutoriser" value=@item.ID />
+                        <input type="submit" value="Autoriser" class="btn btn-default" />
+                    }
 
-            </th>
+                </div>
+            </td>
+            <td>
+                @using (Html.BeginForm("AnnoncesAAutoriser", "Annonces", FormMethod.Get))
+                {
+                    <input type="hidden" name="idRefuser" value=@item.ID>
+                    <input type="hidden" name="sortOrder" value=@ViewBag.CurrentSort>
+                    <input type="text" name="raison" class="form-control" />
+                    <input type="submit" value="Refuser" class="btn btn-default" />
+                }
+            </td>
         </tr>
+    }
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.ActionLink(item.Titre, "Details", new { id = item.ID })
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MotoProposee.Identification)
-                </td>
-                <td>
-                    @if (item.Photos.Count > 0)
-                    {
-                        <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature).ID" alt="Photo non disponible" />
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Annee)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.KilometrageAvecUnite)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PrixAvecUnite)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Date)
-                </td>
-                <td>
-                    <div class="form-group">
+</table>
 
-                        @using (Html.BeginForm("AnnoncesAAutoriserPassword", "Annonces", null, FormMethod.Post))
-                        {
-                            <input type="hidden" name="password" value=@ViewBag.password>
-                            <input type="hidden" name="sortOrder" value=@ViewBag.CurrentSort />
-                            <input type="hidden" name="idAutoriser" value=@item.ID />
-                            <input type="submit" value="Autoriser" class="btn btn-default" />
-                        }
+<div class="form-group">
 
-                    </div>
-                </td>
-                <td>
-                    @using (Html.BeginForm("AnnoncesAAutoriserPassword", "Annonces", FormMethod.Post))
-                    {
-                        <input type="hidden" name="password" value=@ViewBag.password>
-                        <input type="hidden" name="idRefuser" value=@item.ID>
-                        <input type="hidden" name="sortOrder" value=@ViewBag.CurrentSort>
-                        <input type="text" name="raison" class="form-control" />
-                        <input type="submit" value="Refuser" class="btn btn-default" />
-                    }
-                </td>
-            </tr>
-        }
+    @using (Html.BeginForm("AnnoncesAAutoriser", "Annonces", FormMethod.Get))
+    {
+        <input type="hidden" name="sortOrder" value=@ViewBag.CurrentSort>
+        <input type="hidden" name="idAutoriser" value=-1 />
+        <input type="submit" value="Autoriser tout" class="btn btn-default" />
+    }
 
-    </table>
+</div>
 
-    <div class="form-group">
-
-        @using (Html.BeginForm("AnnoncesAAutoriserPassword", "Annonces", FormMethod.Post))
-        {
-            <input type="hidden" name="password" value=@ViewBag.password>
-            <input type="hidden" name="sortOrder" value=@ViewBag.CurrentSort>
-            <input type="hidden" name="idAutoriser" value=-1 />
-            <input type="submit" value="Autoriser tout" class="btn btn-default" />
-        }
-
-    </div>
-
-}

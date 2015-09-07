@@ -248,56 +248,15 @@ namespace Motonet.Controllers
             return View(annonces.ToPagedList(pageNumber, pageSize));
         }
 
-        // Affiche le formulaire du mot de passe pour les annonces non validées
-        public ActionResult AnnoncesAValider()
-        {
-
-            if (Session["estAdmin"] != null && (Boolean)Session["estAdmin"])
-            {
-                var annonces = from s in db.Annonces
-                               select s;
-
-                annonces = annonces.Where(s => s.Autorisee == false && s.Validee == false);
-
-                return View("AnnoncesAValider", annonces);
-            }
-
-            ViewBag.actionName = "AnnoncesAValiderPassword";
-            return View();
-        }
-
         // Liste toutes les annonces non validées
-        [HttpPost]
-        public ActionResult AnnoncesAValiderPassword(string sortOrder, int? id, string password)
+        public ActionResult AnnoncesAValider(string sortOrder, int? id)
         {
-            Settings setting = db.Settings.First();
-            Boolean go = false;
-
-            // On vérifie que le code saisi est le bon (une fois hashé)
-            if (String.IsNullOrEmpty(password))
+            
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
             {
-                if (Session["estAdmin"] != null && (Boolean)Session["estAdmin"])
-                {
-                    go = true;
-                }
+                return RedirectToAction("PasswordAdmin", "Home");
             }
-            else
-            {
-                if (Annonce.VerifyHashedPassword(setting.AdminPassword, password))
-                {
-                    go = true;
-                }
-            }
-
-
-            if (!go)
-            {
-                ViewBag.Message = "Mot de passe incorrect";
-                ViewBag.actionName = "AnnoncesAValiderPassword";
-                return View("AnnoncesAValider");
-            }
-
-            Session["estAdmin"] = true;
+            
             
             var annonces = from s in db.Annonces
                            select s;
@@ -375,56 +334,14 @@ namespace Motonet.Controllers
             return View("AnnoncesAValider", annonces);
         }
 
-        // Affiche le formulaire du mot de passe pour les annonces non validées
-        public ActionResult AnnoncesAAutoriser()
-        {
-
-            if (Session["estAdmin"] != null && (Boolean)Session["estAdmin"])
-            {
-                var annonces = from s in db.Annonces
-                               select s;
-
-                annonces = annonces.Where(s => s.Autorisee == false && s.Validee == false);
-
-                return View("AnnoncesAAutoriser", annonces);
-            }
-
-            ViewBag.actionName = "AnnoncesAAutoriserPassword";
-            return View();
-        }
-
         // Liste toutes les annonces non autorisées et validées
-        [HttpPost]
-        public ActionResult AnnoncesAAutoriserPassword(string sortOrder, int? idAutoriser, int? idRefuser, string raison, string password)
+        public ActionResult AnnoncesAAutoriser(string sortOrder, int? idAutoriser, int? idRefuser, string raison)
         {
-            Settings setting = db.Settings.First();
-            Boolean go = false;
 
-            // On vérifie que le code saisi est le bon (une fois hashé)
-            if (String.IsNullOrEmpty(password))
+            if (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"])
             {
-                if (Session["estAdmin"] != null && (Boolean)Session["estAdmin"])
-                {
-                    go = true;
-                }
+                return RedirectToAction("PasswordAdmin", "Home");
             }
-            else
-            {
-                if (Annonce.VerifyHashedPassword(setting.AdminPassword, password))
-                {
-                    go = true;
-                }
-            }
-
-
-            if (!go)
-            {
-                ViewBag.Message = "Mot de passe incorrect";
-                ViewBag.actionName = "AnnoncesAAutoriserPassword";
-                return View("AnnoncesAAutoriser");
-            }
-
-            Session["estAdmin"] = true;
 
             var annonces = from s in db.Annonces
                            select s;

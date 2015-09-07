@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Motonet.DAL;
+using Motonet.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +10,8 @@ namespace Motonet.Controllers
 {
     public class HomeController : Controller
     {
+        private MotoContext db = new MotoContext();
+
         public ActionResult About()
         {
             return View();
@@ -26,6 +30,32 @@ namespace Motonet.Controllers
         public ActionResult InternalError()
         {
             return View();
+        }
+
+        public ActionResult PasswordAdmin()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PasswordAdminPost(string password)
+        {
+            Settings setting = db.Settings.First();
+
+            Session["estAdmin"] = !string.IsNullOrEmpty(password) && Annonce.VerifyHashedPassword(setting.AdminPassword, password);
+
+            if ((Boolean)Session["estAdmin"])
+            {
+                return RedirectToAction("AnnoncesAAutoriser", "Annonces");
+            }
+            else
+            {
+                ViewBag.Message = "Mot de passe incorrect.";
+                return View("PasswordAdmin");
+            }
+
+            
         }
     }
 }

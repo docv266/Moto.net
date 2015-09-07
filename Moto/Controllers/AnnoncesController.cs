@@ -909,6 +909,14 @@ namespace Motonet.Controllers
             annonce.Validee = true;
 
             db.SaveChanges();
+
+            // On envoie un mail à l'admin
+            MailAdminAnnoncePostee email = new MailAdminAnnoncePostee
+            {
+                Lien = Url.Action("Details", "Annonces", new { id = annonce.ID.ToString() }, Request.Url.Scheme)
+            };
+
+            email.Send();
             
             return View();
         }

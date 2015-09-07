@@ -172,6 +172,7 @@
     <Compile Include="Models\Annonce.cs" />
     <Compile Include="Models\Departement.cs" />
     <Compile Include="Models\Genre.cs" />
+    <Compile Include="Models\MailAdminAnnoncePostee.cs" />
     <Compile Include="Models\MailAnnonceAutorisee.cs" />
     <Compile Include="Models\MailAnnonceRefusee.cs" />
     <Compile Include="Models\MailEnvoyer.cs" />
@@ -308,6 +309,7 @@
     <Content Include="Views\Home\GenericError.cshtml" />
     <Content Include="Views\Home\InternalError.cshtml" />
     <Content Include="Views\Home\PasswordAdmin.cshtml" />
+    <Content Include="Views\Emails\MailAdminAnnoncePostee.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

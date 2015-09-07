@@ -899,24 +899,29 @@ namespace Motonet.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            if (!code.Equals(annonce.CodeValidation))
+            // Uniquement si l'annonce n'est pas déjà validée.
+            if (!annonce.Validee)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+                if (!code.Equals(annonce.CodeValidation))
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+
+
+                annonce.ConfirmerMotDePasse = annonce.MotDePasse;
+                annonce.Validee = true;
+
+                db.SaveChanges();
+
+                // On envoie un mail à l'admin
+                MailAdminAnnoncePostee email = new MailAdminAnnoncePostee
+                {
+                    Lien = Url.Action("Details", "Annonces", new { id = annonce.ID.ToString() }, Request.Url.Scheme)
+                };
+
+                email.Send();
             }
-
-
-            annonce.ConfirmerMotDePasse = annonce.MotDePasse;
-            annonce.Validee = true;
-
-            db.SaveChanges();
-
-            // On envoie un mail à l'admin
-            MailAdminAnnoncePostee email = new MailAdminAnnoncePostee
-            {
-                Lien = Url.Action("Details", "Annonces", new { id = annonce.ID.ToString() }, Request.Url.Scheme)
-            };
-
-            email.Send();
             
             return View();
         }

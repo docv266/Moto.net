@@ -86,3 +86,35 @@ fieldset {
     display: block;
     clear: both;
 }
+
+.fieldsetPhotos {
+    background-color: white;
+    text-align: center;
+    border: 0;
+}
+
+.fieldsetPhotos img {
+    border: 1px solid #ccc;
+}
+
+.fieldsetPhotos div img {
+    border: 0;
+    vertical-align:middle;
+}
+
+.fieldsetPhotos div {
+    height: 382px;
+    width: 452px;
+    border: 1px solid #ccc;
+    margin: 0 auto;
+    line-height: 377px;
+    background-color: white;
+}
+
+.fieldsetPhotos a {
+    text-decoration: none;
+}
+
+.texteDescription {
+    font-family:Arial, Verdana;
+}

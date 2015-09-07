@@ -973,7 +973,7 @@ namespace Motonet.Controllers
         private void PopulateMotosDropDownLists(object selectedMoto = null, List<int> selectedMotos = null)
         {
             var motosQuery = from d in db.Motos
-                              orderby d.Modele
+                              orderby d.Marque.Nom, d.Modele
                               select d;
             ViewBag.MotoProposeeID = new SelectList(motosQuery, "ID", "Identification", selectedMoto);
             ViewBag.MotosAccepteesID = new MultiSelectList(motosQuery, "ID", "Identification", selectedMotos);

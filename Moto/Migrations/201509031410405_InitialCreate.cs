@@ -158,7 +158,7 @@ namespace Motonet.Migrations
             DropForeignKey("dbo.AnnonceGenre", "Annonce_ID", "dbo.Annonce");
             DropForeignKey("dbo.Moto", "MarqueID", "dbo.Marque");
             DropForeignKey("dbo.Moto", "GenreID", "dbo.Genre");
-            DropForeignKey("dbo.Annonce", "DepartementID", "dbo.Departement");
+            DropForeignKey("dbo.Annonce", "DepartementsID", "dbo.Departement");
             DropForeignKey("dbo.Departement", "Region_ID", "dbo.Region");
             DropIndex("dbo.AnnonceMoto", new[] { "Moto_ID" });
             DropIndex("dbo.AnnonceMoto", new[] { "Annonce_ID" });
@@ -170,7 +170,7 @@ namespace Motonet.Migrations
             DropIndex("dbo.Moto", new[] { "GenreID" });
             DropIndex("dbo.Moto", new[] { "MarqueID" });
             DropIndex("dbo.Departement", new[] { "Region_ID" });
-            DropIndex("dbo.Annonce", new[] { "DepartementID" });
+            DropIndex("dbo.Annonce", new[] { "DepartementsID" });
             DropIndex("dbo.Annonce", new[] { "MotoProposeeID" });
             DropTable("dbo.AnnonceMoto");
             DropTable("dbo.AnnonceMarque");

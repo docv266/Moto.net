@@ -71,15 +71,8 @@ fieldset {
   border-radius: 3px;
 }
 
-.formFilter {
-    margin-right: 10px;
+.formFilter input, .formFilter .chosen-container {
     margin-bottom: 10px;
-    float: left;
-    width: 48%;
-}
-
-.formFilter label {
-    width: 20%;
 }
 
 .boutonFiltrer {
@@ -117,4 +110,11 @@ fieldset {
 
 .texteDescription {
     font-family:Arial, Verdana;
+}
+
+.required:after 
+{
+    content: "*";
+    font-weight: bold;
+    color: red; 
 }

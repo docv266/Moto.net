@@ -3,6 +3,7 @@ using Motonet.Models;
 using PagedList;
 using Postal;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -25,10 +26,10 @@ namespace Motonet.Controllers
         public ActionResult Index(string sortOrder, int? page, string currentFilterTitre,
             string currentFilterMoto, string currentFilterAnneeMin, string currentFilterAnneeMax,
             string currentFilterKilometrageMin, string currentFilterKilometrageMax, string currentFilterPrixMin,
-            string currentFilterPrixMax, string currentFilterCylindreeMin, string currentFilterCylindreeMax, 
+            string currentFilterPrixMax, string currentFilterCylindreeMin, string currentFilterCylindreeMax, List<int> currentFilterRegionID, List<int> currentFilterDepartementID, 
             string FiltreTitre, string FiltreMoto, string FiltreAnneeMin, string FiltreAnneeMax,
             string FiltreKilometrageMin, string FiltreKilometrageMax, string FiltrePrixMin,
-            string FiltrePrixMax, string FiltreCylindreeMin, string FiltreCylindreeMax)
+            string FiltrePrixMax, string FiltreCylindreeMin, string FiltreCylindreeMax, List<int> RegionsID, List<int> DepartementsID)
         {
 
             ViewBag.CurrentSort = sortOrder;
@@ -41,7 +42,7 @@ namespace Motonet.Controllers
             if (FiltreTitre != null || FiltreMoto != null || FiltreAnneeMin != null || FiltreAnneeMax != null ||
                 FiltreKilometrageMin != null || FiltreKilometrageMax != null ||
                 FiltrePrixMin != null || FiltrePrixMax != null ||
-                FiltreCylindreeMin != null || FiltreCylindreeMax != null)
+                FiltreCylindreeMin != null || FiltreCylindreeMax != null || RegionsID != null || DepartementsID != null)
             {
                 page = 1;
             }
@@ -57,6 +58,8 @@ namespace Motonet.Controllers
                 FiltrePrixMax = currentFilterPrixMax;
                 FiltreCylindreeMin = currentFilterCylindreeMin;
                 FiltreCylindreeMax = currentFilterCylindreeMax;
+                RegionsID = currentFilterRegionID;
+                DepartementsID = currentFilterDepartementID;
             }
 
             ViewBag.CurrentFilterTitre = FiltreTitre;
@@ -135,6 +138,16 @@ namespace Motonet.Controllers
                 annonces = annonces.Where(s => s.MotoProposee.Cylindree <= intFiltreCylindreeMax);
             }
 
+            if (RegionsID != null && RegionsID.Any())
+            {
+                annonces = annonces.Where(s => RegionsID.Contains(s.Departement.Region.ID));
+            }
+
+            if (DepartementsID != null && DepartementsID.Any())
+            {
+                annonces = annonces.Where(s => DepartementsID.Contains(s.Departement.ID));
+            }
+
 
             switch (sortOrder)
             {
@@ -167,7 +180,8 @@ namespace Motonet.Controllers
             int pageSize = int.Parse(ConfigurationManager.AppSettings["pageSize"]);
             int pageNumber = (page ?? 1);
 
-            PopulateRegionsDepartementsDropDownList();
+            PopulateRegionsDropDownList(RegionsID);
+            PopulateMultiDepartementsDropDownList(DepartementsID);
 
             return View(annonces.ToPagedList(pageNumber, pageSize));
         }
@@ -487,7 +501,7 @@ namespace Motonet.Controllers
         // Affiche le formulaire de création d'une annonce (affichages suivants)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Titre,Description,MotoProposeeID,Annee,Kilometrage,Prix,MotosAccepteesID,MarquesAccepteesID,GenresAcceptesID,Nom,Mail,Telephone,DepartementID,MotDepasse,ConfirmerMotDePasse")] Annonce annonce, IEnumerable<HttpPostedFileBase> photos)
+        public ActionResult Create([Bind(Include = "Titre,Description,MotoProposeeID,Annee,Kilometrage,Prix,MotosAccepteesID,MarquesAccepteesID,GenresAcceptesID,Nom,Mail,Telephone,DepartementsID,MotDepasse,ConfirmerMotDePasse")] Annonce annonce, IEnumerable<HttpPostedFileBase> photos)
         {
 
             int tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]);
@@ -707,7 +721,7 @@ namespace Motonet.Controllers
             annonceToUpdate.ConfirmerMotDePasse = annonceToUpdate.MotDePasse;
 
             if (TryUpdateModel(annonceToUpdate, "",
-               new string[] { "Titre", "Description", "MotoProposeeID", "Annee", "Kilometrage", "Prix", "MotosAccepteesID", "MarquesAccepteesID", "GenresAcceptesID", "Nom", "Mail", "Telephone", "DepartementID" }))
+               new string[] { "Titre", "Description", "MotoProposeeID", "Annee", "Kilometrage", "Prix", "MotosAccepteesID", "MarquesAccepteesID", "GenresAcceptesID", "Nom", "Mail", "Telephone", "DepartementsID" }))
             {
                 try
                 {
@@ -1022,23 +1036,25 @@ namespace Motonet.Controllers
             ViewBag.DepartementID = new SelectList(departementsQuery, "ID", "Nom", selectedDepartement);
         }
 
-        // Peuple la liste déroulante des départements avec région
-        private void PopulateRegionsDepartementsDropDownList(object selectedRegionDepartement = null)
+        // Peuple la liste déroulante des départements
+        private void PopulateMultiDepartementsDropDownList(List<int> selectedDepartements = null)
         {
-            var regionDepartementsQuery = (from d in db.Departements
-                                          join r in db.Regions on d.Region.ID equals r.ID
-                                          orderby d.Nom
-                                           select new
-                                            {
-                                                d.ID,
-                                                NomDepartement = d.Nom,
-                                                NomRegion = r.Nom
-                                            }).ToList();
+            var departementsQuery = from d in db.Departements
+                                    orderby d.Nom
+                                    select d;
 
+            ViewBag.DepartementsID = new MultiSelectList(departementsQuery, "ID", "Nom", selectedDepartements);
+        }
 
+        // Peuple la liste déroulante des régions
+        private void PopulateRegionsDropDownList(List<int> selectedRegions = null)
+        {
+            var regionsQuery = from d in db.Regions
+                               orderby d.Nom
+                               select d;
 
+            ViewBag.RegionsID = new MultiSelectList(regionsQuery, "ID", "Nom", selectedRegions);
 
-            ViewBag.RegionDepartementID = new SelectList(regionDepartementsQuery, "ID", "NomDepartement", "NomRegion", selectedRegionDepartement, null);
         }
         
         // Rempli les listes des paramètres virtuels concernant les relations many-many

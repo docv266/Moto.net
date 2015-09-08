@@ -56,7 +56,7 @@ namespace Motonet.Controllers
             switch (sortOrder)
             {
                 case "modele_desc":
-                    motos = motos.OrderByDescending(s => s.Modele);
+                    motos = motos.OrderByDescending(s => s.Marque.Nom).ThenByDescending(s => s.Modele);
                     break;
                 case "marque":
                     motos = motos.OrderBy(s => s.Marque.Nom);
@@ -77,7 +77,7 @@ namespace Motonet.Controllers
                     motos = motos.OrderByDescending(s => s.Genre.Nom);
                     break;
                 default:
-                    motos = motos.OrderBy(s => s.Modele);
+                    motos = motos.OrderBy(s => s.Marque.Nom).ThenBy(s => s.Modele);
                     break;
             }
 

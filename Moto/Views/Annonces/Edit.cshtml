@@ -105,7 +105,7 @@ else
                 <div class="form-group">
                     @Html.LabelFor(model => model.Annee, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-5">
-                        @Html.EditorFor(model => model.Annee, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.Annee, new { htmlAttributes = new { @class = "form-control", min = "1900", max = DateTime.Now.Year } })
                     </div>
                     <div class="col-md-5">
                         @Html.ValidationMessageFor(model => model.Annee, "", new { @class = "text-danger" })
@@ -115,7 +115,7 @@ else
                 <div class="form-group">
                     @Html.LabelFor(model => model.Kilometrage, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-5">
-                        @Html.EditorFor(model => model.Kilometrage, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.Kilometrage, new { htmlAttributes = new { @class = "form-control", min = "0", max = "999999" } })
                     </div>
                     <div class="col-md-5">
                         @Html.ValidationMessageFor(model => model.Kilometrage, "", new { @class = "text-danger" })
@@ -125,7 +125,7 @@ else
                 <div class="form-group">
                     @Html.LabelFor(model => model.Prix, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-5">
-                        @Html.EditorFor(model => model.Prix, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.Prix, new { htmlAttributes = new { @class = "form-control", min = "0", max = "999999" } })
                     </div>
                     <div class="col-md-5">
                         @Html.ValidationMessageFor(model => model.Prix, "", new { @class = "text-danger" })

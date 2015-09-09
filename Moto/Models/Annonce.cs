@@ -18,42 +18,42 @@ namespace Motonet.Models
 
         [Required]
         [DataType(DataType.Text)]
-        [StringLength(60, MinimumLength = 3)]
+        [StringLength(60, ErrorMessage = "La longueur doit être comprise entre {2} et {1}.", MinimumLength = 3)]
         public string Titre { get; set; }
 
         [Required]
         [DataType(DataType.MultilineText)]
-        [StringLength(10000, MinimumLength = 3)]
+        [StringLength(10000, ErrorMessage = "La longueur doit être comprise entre {2} et {1}.", MinimumLength = 3)]
         public string Description { get; set; }
         
         [Required]
-        [Range(1500, 3000, ErrorMessage = "Veuillez saisir un nombre compris entre 1500 et 3000.")]
+        [Range(1900, 3000, ErrorMessage = "Veuillez saisir un nombre compris entre {2} et {1}.")]
         [DisplayAttribute(Name="Année")]
         public int Annee { get; set; }
 
         [Required]
-        [Range(0, 99999, ErrorMessage = "Veuillez saisir un nombre compris entre 0 et 99999.")]
+        [Range(0, 999999, ErrorMessage = "Veuillez saisir un nombre compris entre {2} et {1}.")]
         [DisplayAttribute(Name = "Kilométrage")]
         public int Kilometrage { get; set; }
 
         [Required]
-        [Range(0, 999999, ErrorMessage = "Veuillez saisir un nombre compris entre 0 et 999999.")]
+        [Range(0, 999999, ErrorMessage = "Veuillez saisir un nombre compris entre {2} et {1}.")]
         public int Prix { get; set; }
 
         [Required]
-        [StringLength(30, MinimumLength = 3)]
+        [StringLength(30, ErrorMessage = "La longueur doit être comprise entre {2} et {1}.", MinimumLength = 3)]
         [DataType(DataType.Text)]
         public string Nom { get; set; }
 
         [Required]
-        [StringLength(68, MinimumLength = 3)]
+        [StringLength(68, ErrorMessage = "La longueur doit être comprise entre {2} et {1}.", MinimumLength = 3)]
         [DataType(DataType.Password)]
         [DisplayAttribute(Name = "Mot de passe")]
         public string MotDePasse { get; set; }
 
         [Required]
         [NotMapped]
-        [StringLength(68, MinimumLength = 3)]
+        [StringLength(68, ErrorMessage = "La longueur doit être comprise entre {2} et {1}.", MinimumLength = 3)]
         [DataType(DataType.Password)]
         [DisplayAttribute(Name = "Confirmer le mot de passe")]
         [Compare("MotDePasse", ErrorMessage = "Les mots de passe sont différents")]
@@ -65,8 +65,8 @@ namespace Motonet.Models
         public string CodeValidation { get; set; }
 
         [Required]
-        [StringLength(50, MinimumLength = 5)]
-        [DataType(DataType.Text)]
+        [StringLength(50, ErrorMessage = "La longueur doit être comprise entre {2} et {1}.", MinimumLength = 5)]
+        [EmailAddress(ErrorMessage = "Entrer une adresse mail valide.")]
         public string Mail { get; set; }
 
         [DataType(DataType.PhoneNumber)]

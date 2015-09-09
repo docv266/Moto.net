@@ -118,3 +118,7 @@ fieldset {
     font-weight: bold;
     color: red; 
 }
+
+.toolTipClass .tooltip {
+    min-width: 210px !important;
+}

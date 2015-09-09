@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Text;
+using System.Web.Mvc;
 
 namespace Motonet.Models
 {
@@ -27,7 +28,7 @@ namespace Motonet.Models
         public string Description { get; set; }
         
         [Required]
-        [Range(1900, 3000, ErrorMessage = "Veuillez saisir un nombre compris entre {2} et {1}.")]
+        [RangeYearToCurrent(1900, ErrorMessage = "L'année doit être comprise entre {0} et {1}.")]
         [DisplayAttribute(Name="Année")]
         public int Annee { get; set; }
 
@@ -56,7 +57,7 @@ namespace Motonet.Models
         [StringLength(68, ErrorMessage = "La longueur doit être comprise entre {2} et {1}.", MinimumLength = 3)]
         [DataType(DataType.Password)]
         [DisplayAttribute(Name = "Confirmer le mot de passe")]
-        [Compare("MotDePasse", ErrorMessage = "Les mots de passe sont différents")]
+        [System.ComponentModel.DataAnnotations.Compare("MotDePasse", ErrorMessage = "Les mots de passe sont différents")]
         public string ConfirmerMotDePasse { get; set; }
 
         [Required]
@@ -236,5 +237,21 @@ namespace Motonet.Models
         }
 
         
+    }
+
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
+    public class RangeYearToCurrent : RangeAttribute, IClientValidatable
+    {
+        public RangeYearToCurrent(int from) : base(from, DateTime.Today.Year) { }
+
+        #region IClientValidatable Members
+
+        public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
+        {
+            var rules = new ModelClientValidationRangeRule(this.ErrorMessage, this.Minimum, this.Maximum);
+            yield return rules;
+        }
+
+        #endregion
     }
 }

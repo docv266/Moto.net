@@ -857,10 +857,13 @@ namespace Motonet.Controllers
                 return HttpNotFound();
             }
 
+            
             ViewBag.AnnonceID = annonce.ID;
             ViewBag.actionName = "DeletePassword";
             ViewBag.supprimee = false;
             return View();
+            
+
         }
 
         // Affiche le formulaire pour supprimer l'annonce (premier affichage)
@@ -875,9 +878,9 @@ namespace Motonet.Controllers
             }
             var annonce = db.Annonces.Find(annonceID);
 
-
+            
             // On vérifie que le code saisi est le bon (une fois hashé)
-            if (!Annonce.VerifyHashedPassword(annonce.MotDePasse, password))
+            if (!Annonce.VerifyHashedPassword(annonce.MotDePasse, password) && (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"]))
             {
                 ViewBag.Message = "Mot de passe incorrect";
                 ViewBag.AnnonceID = annonce.ID;

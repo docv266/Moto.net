@@ -56,7 +56,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Photos, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-5">
-                    <input type="file" class="file" multiple id="photos" name="photos" data-language="fr" accept="image/*" data-show-upload="false" data-max-file-count=@ViewBag.nombreMaxdePhotos data-max-file-size=@ViewBag.tailleMaxiUploadEnOctet />
+                    <input type="file" class="file" multiple id="photos" name="photos" data-language="fr" accept="image/*" data-show-upload="false" data-max-file-count=@ViewBag.nombreMaxdePhotos data-max-file-size=@ViewBag.tailleMaxiUploadEnOctet >
                 </div>
                 <div class="col-md-5">
                     @Html.ValidationMessageFor(model => model.Photos, "", new { @class = "text-danger" })
@@ -66,7 +66,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Annee, htmlAttributes: new { @class = "control-label col-md-2 required" })
                 <div class="col-md-5">
-                    @Html.EditorFor(model => model.Annee, new { htmlAttributes = new { @class = "form-control", min = "1900", max = DateTime.Now.Year } })
+                    @Html.EditorFor(model => model.Annee, new { htmlAttributes = new { @class = "form-control", min = "1900", max = DateTime.Now.Year, step = "10" } })
                 </div>
                 <div class="col-md-5">
                     @Html.ValidationMessageFor(model => model.Annee, "", new { @class = "text-danger" })
@@ -76,7 +76,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Kilometrage, htmlAttributes: new { @class = "control-label col-md-2 required" })
                 <div class="col-md-5">
-                    @Html.EditorFor(model => model.Kilometrage, new { htmlAttributes = new { @class = "form-control", min = "0", max = "999999" } })
+                    @Html.EditorFor(model => model.Kilometrage, new { htmlAttributes = new { @class = "form-control", min = "0", max = "999999", step = "1000" } })
                 </div>
                 <div class="col-md-5">
                     @Html.ValidationMessageFor(model => model.Kilometrage, "", new { @class = "text-danger" })
@@ -86,7 +86,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Prix, htmlAttributes: new { @class = "control-label col-md-2 required" })
                 <div class="col-md-5">
-                    @Html.EditorFor(model => model.Prix, new { htmlAttributes = new { @class = "form-control", min = "0", max = "999999" } })
+                    @Html.EditorFor(model => model.Prix, new { htmlAttributes = new { @class = "form-control", min = "0", max = "999999", step = "100" } })
                 </div>
                 <div class="col-md-5">
                     @Html.ValidationMessageFor(model => model.Prix, "", new { @class = "text-danger" })
@@ -226,8 +226,6 @@
         //$('form').validate({
         //    ignore: ":hidden:not(.chosen-select)"
         //});
-
-        
 
         $('.chosen-container').tooltip({ placement: 'right' });
         

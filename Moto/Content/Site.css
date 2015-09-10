@@ -122,3 +122,17 @@ fieldset {
 .toolTipClass .tooltip {
     min-width: 210px !important;
 }
+
+.alert {
+	position:absolute;
+    z-index:1;
+    top:10%;
+    width:1000px;
+    left: 50%;
+    margin-left:-500px;
+}
+
+#tableIndex tr:hover td {
+      background-color: #efefef;
+      cursor: pointer;
+}

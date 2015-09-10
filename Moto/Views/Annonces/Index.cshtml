@@ -14,6 +14,14 @@
 
 <br />
 
+<div class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>Merci!</strong><br />
+    Vous faites partie des premiers utilisateurs de moto-echange.fr<br />
+    A ce titre n'hésitez pas à remonter vos remarques (page contact)<br />
+    Moto-echange.fr est une plateforme de petites annonces deux roues qui <u>favorise les échanges</u> en proposant des outils pour simplifier le processus.<br />
+    Fait par un motard pour les motards! ;-)
+</div>
 
 <div class="panel panel-default" id="panel1">
     <div class="panel-heading collapser">
@@ -46,8 +54,8 @@
             <div class="col-xs-4">
                 <div class="form-group">
                     <label class="control-label">Année:</label>
-                    @Html.TextBox("FiltreAnneeMin", ViewBag.CurrentFilterAnneeMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "1900", max = DateTime.Now.Year })
-                    @Html.TextBox("FiltreAnneeMax", ViewBag.CurrentFilterAnneeMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "1900", max = DateTime.Now.Year })
+                    @Html.TextBox("FiltreAnneeMin", ViewBag.CurrentFilterAnneeMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "1900", max = DateTime.Now.Year, step = "10" })
+                    @Html.TextBox("FiltreAnneeMax", ViewBag.CurrentFilterAnneeMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "1900", max = DateTime.Now.Year, step = "10" })
 
                 </div>
             </div>
@@ -55,8 +63,8 @@
             <div class="col-xs-4">
                 <div class="form-group">
                     <label>Kilomètrage:</label>
-                    @Html.TextBox("FiltreKilometrageMin", ViewBag.CurrentFilterKilometrageMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "0", max = "999999" })
-                    @Html.TextBox("FiltreKilometrageMax", ViewBag.CurrentFilterKilometrageMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "0", max = "999999" })
+                    @Html.TextBox("FiltreKilometrageMin", ViewBag.CurrentFilterKilometrageMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "0", max = "999999", step = "1000" })
+                    @Html.TextBox("FiltreKilometrageMax", ViewBag.CurrentFilterKilometrageMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "0", max = "999999", step = "1000" })
                 </div>
             </div>
 
@@ -68,16 +76,16 @@
 
                 <div class="form-group">
                     <label>Prix:</label>
-                    @Html.TextBox("FiltrePrixMin", ViewBag.CurrentFilterPrixMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "0", max = "999999" })
-                    @Html.TextBox("FiltrePrixMax", ViewBag.CurrentFilterPrixMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "0", max = "999999" })
+                    @Html.TextBox("FiltrePrixMin", ViewBag.CurrentFilterPrixMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "0", max = "999999", step = "100" })
+                    @Html.TextBox("FiltrePrixMax", ViewBag.CurrentFilterPrixMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "0", max = "999999", step = "100" })
                 </div>
             </div>
 
             <div class="col-xs-4">
                 <div class="form-group">
                     <label>Cylindrée:</label>
-                    @Html.TextBox("FiltreCylindreeMin", ViewBag.CurrentFilterCylindreeMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "0", max = "7000" })
-                    @Html.TextBox("FiltreCylindreeMax", ViewBag.CurrentFilterCylindreeMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "0", max = "7000" })
+                    @Html.TextBox("FiltreCylindreeMin", ViewBag.CurrentFilterCylindreeMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "0", max = "7000", step = "100" })
+                    @Html.TextBox("FiltreCylindreeMax", ViewBag.CurrentFilterCylindreeMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "0", max = "7000", step = "100" })
                 </div>
             </div>
 
@@ -97,7 +105,7 @@
             </div>
 
             <div class="col-xs-2 text-right">
-                <input type="button" id="buttonClear" onclick="clearForm()" value="Effacer les filtres" class="btn btn-default btn-sm" />
+                <input type="button" id="buttonClear" onclick="clearForm()" value="Effacer les filtres" class="btn btn-default btn-sm pull-right" />
             </div>
         </div>
 
@@ -109,7 +117,7 @@
     </div>
 </div>
 
-<table class="table">
+<table id="tableIndex" class="table">
     <tr>
         <th>
             Titre
@@ -140,9 +148,9 @@
 
     @foreach (var item in Model)
     {
-        <tr>
+        <tr onclick="location.href = '@(Url.Action("Details", "Annonces", new { id = item.ID }))'">
             <td>
-                @Html.ActionLink(item.Titre, "Details", new { id = item.ID })
+                @Html.DisplayFor(modelItem => item.Titre)
             </td>
             <td data-toggle="tooltip" data-html="true" title="@item.MotoProposee.IdentificationSuite" data-placement="left" data-container="body">
                 @Html.DisplayFor(modelItem => item.MotoProposee.Identification, new { sortOrder = ViewBag.PrixSortParm })
@@ -197,6 +205,7 @@
 
                 $(document).ready(function () {
                     $('[data-toggle="tooltip"]').tooltip();
+                    $(".alert").delay(8000).addClass("in").fadeOut(3500);
                 });
 
                 function clearForm() {

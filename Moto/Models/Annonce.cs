@@ -56,7 +56,7 @@ namespace Motonet.Models
         [NotMapped]
         [StringLength(68, ErrorMessage = "La longueur doit être comprise entre {2} et {1}.", MinimumLength = 3)]
         [DataType(DataType.Password)]
-        [DisplayAttribute(Name = "Confirmer le mot de passe")]
+        [DisplayAttribute(Name = "Confirmation")]
         [System.ComponentModel.DataAnnotations.Compare("MotDePasse", ErrorMessage = "Les mots de passe sont différents")]
         public string ConfirmerMotDePasse { get; set; }
 

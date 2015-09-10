@@ -136,3 +136,12 @@ fieldset {
       background-color: #efefef;
       cursor: pointer;
 }
+
+legend {
+        font-size: 1.2em !important;
+        font-weight: bold !important;
+        text-align: left !important;
+        width:auto;
+        padding:0 10px;
+        border-bottom:none;
+    }

@@ -157,18 +157,6 @@
 
         }
         
-        
-
-        <p><a class="btn btn-warning" href="@Url.Content("~/Annonces/Edit/" + Model.ID)">Modifier</a>
-        <a class="btn btn-danger" href="@Url.Content("~/Annonces/Delete/" + Model.ID)">Supprimer</a></p>
-
-        @if (Model.MotosAcceptees.Any() || Model.MarquesAcceptees.Any() || Model.GenresAcceptes.Any())
-        {
-            <p><a class="btn btn-default" href="@Url.Content("~/Annonces/AnnoncesCompatibles/" + Model.ID)">Voir les annonces compatibles</a></p>
-        }
-
-
-
 
 
     </div>
@@ -218,10 +206,28 @@
         }
 
 
-        <pre class="texteDescription">@Html.DisplayFor(model => model.Description)</pre>
+        
 
 </div>
+
+    <div class="col-md-12">
+        <pre class="texteDescription">@Html.DisplayFor(model => model.Description)</pre>
+
+
+        <p>
+            <a class="btn btn-warning" href="@Url.Content("~/Annonces/Edit/" + Model.ID)">Modifier</a>
+            <a class="btn btn-danger" href="@Url.Content("~/Annonces/Delete/" + Model.ID)">Supprimer</a>
+        </p>
+
+        @if (Model.MotosAcceptees.Any() || Model.MarquesAcceptees.Any() || Model.GenresAcceptes.Any())
+        {         
+            <p><a class="btn btn-default" href="@Url.Content("~/Annonces/AnnoncesCompatibles/" + Model.ID)">Voir les annonces compatibles</a></p>
+        }
+        
     </div>
+
+
+</div>
 
 
 

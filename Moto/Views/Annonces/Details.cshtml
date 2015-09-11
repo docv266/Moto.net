@@ -150,7 +150,7 @@
                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                     Modifier
                 </a>
-                <a class="btn btn-default" href="@Url.Content("~/Annonces/Delete/" + Model.ID)">
+                <a class="btn btn-default pull-right" href="@Url.Content("~/Annonces/Delete/" + Model.ID)">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     Supprimer
                 </a>
@@ -243,14 +243,14 @@
 
 <div class="row">
 
-    <div class="col-md-2">
+    <div class="col-md-1">
     </div>
 
-    <div class="col-md-8">
+    <div class="col-md-10">
         <pre class="texteDescription">@Html.DisplayFor(model => model.Description)</pre>
     </div>
         
-    <div class="col-md-2">
+    <div class="col-md-1">
     </div>
 
 </div>

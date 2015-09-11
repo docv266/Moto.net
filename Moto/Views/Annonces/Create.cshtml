@@ -45,8 +45,8 @@
 
             <div class="form-group">
                 @Html.LabelFor(model => model.MotoProposeeID, htmlAttributes: new { @class = "control-label col-md-2 required" })
-                <div class="col-md-5">
-                    @Html.DropDownList("MotoProposeeID", (SelectList)ViewBag.MotoProposeeID, new { @class = "chosen-select form-control" })
+                <div class="col-md-5 toolTipClass">
+                    @Html.DropDownList("MotoProposeeID", (SelectList)ViewBag.MotoProposeeID, new { @class = "chosen-select form-control", data_toggle = "tooltip", title = "Votre moto n'apparait pas dans la liste? Dites le nous!" })
                 </div>
                 <div class="col-md-5">
                     @Html.ValidationMessageFor(model => model.MotoProposeeID, "", new { @class = "text-danger" })

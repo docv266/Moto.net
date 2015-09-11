@@ -20,10 +20,22 @@
                     <span class="icon-bar"></span>
                 </button>
                 @Html.ActionLink("Accueil", "Index", "Annonces", new { area = "" }, new { @class = "navbar-brand" })
+
+                
+
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Créer mon annonce", "Create", "Annonces")</li>
+                    
+                    <li>
+
+                        <a href="@Url.Action("Create")">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            Créer mon annonce
+                        </a>
+
+                    </li>
+
                     @if (Session["estAdmin"] != null && (Boolean)Session["estAdmin"])
                     {
                         <li>@Html.ActionLink("Annonces à valider", "AnnoncesAValider", "Annonces")</li>
@@ -39,8 +51,8 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Motonet</p>
+        <footer class="text-center">
+            &copy; @DateTime.Now.Year - moto-echange.fr |
             @Html.ActionLink("Contact", "Contact", "Home") |
             @Html.ActionLink("A propos", "About", "Home")
         </footer>

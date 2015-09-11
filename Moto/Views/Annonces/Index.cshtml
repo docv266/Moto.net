@@ -14,7 +14,7 @@
 
 <br />
 
-<div class="alert alert-success alert-dismissible" role="alert">
+<div id="MonAlerte" class="alert alert-success alert-dismissible hidden" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <strong>Merci!</strong><br />
     Vous faites partie des premiers utilisateurs de moto-echange.fr<br />
@@ -105,7 +105,7 @@
             </div>
 
             <div class="col-xs-2 text-right">
-                <input type="button" id="buttonClear" onclick="clearForm()" value="Effacer les filtres" class="btn btn-default btn-sm pull-right" />
+                <input type="button" id="buttonClear" onclick='clearForm()' value="Effacer les filtres" class="btn btn-default btn-sm pull-right" />
             </div>
         </div>
 
@@ -117,62 +117,7 @@
     </div>
 </div>
 
-<table id="tableIndex" class="table">
-    <tr>
-        <th>
-            
-        </th>
-        <th>
-            
-        </th>
-        <th>
-            @Html.ActionLink("Année", "Index", new { sortOrder = ViewBag.AnneeSortParm })
-        </th>
-        <th>
-            @Html.ActionLink("Kilomètrage", "Index", new { sortOrder = ViewBag.KilometrageSortParm })
-        </th>
-        <th>
-            @Html.ActionLink("Prix", "Index", new { sortOrder = ViewBag.PrixSortParm })
-        </th>
-        <th>
-            @Html.ActionLink("Date", "Index", new { sortOrder = ViewBag.DateSortParm })
-        </th>
-
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr onclick="location.href = '@(Url.Action("Details", "Annonces", new { id = item.ID }))'">
-            <td>
-                @if (item.Photos.Count > 0)
-                {
-                    <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature && x.Principale == true).ID" alt="Photo non disponible" />
-                }
-            </td>
-            <td>
-                <h5 style="color:blue;">@Html.DisplayFor(modelItem => item.Titre)</h5>
-                <div data-toggle="tooltip" data-html="true" title="@item.MotoProposee.IdentificationSuite" data-placement="left" data-container="body">
-                    <b>@Html.DisplayFor(modelItem => item.MotoProposee.Identification, new { sortOrder = ViewBag.PrixSortParm })</b>
-                </div>
-                @Html.DisplayFor(modelItem => item.Departement.Identification)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Annee)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.KilometrageAvecUnite)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PrixAvecUnite)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-        </tr>
-    }
-
-</table>
-
+@{Html.RenderPartial("~/Views/Shared/_ListeAnnonces.cshtml");}
 
 
 <br />
@@ -186,29 +131,68 @@
             <script src="~/Scripts/chosen.jquery.js"></script>
             <script src="~/Scripts/fileinput.js"></script>
             <script src="~/Scripts/fileinput_locale_fr.js"></script>
+            <script src="~/Scripts/js.cookie.js"></script>
 
             <script type="text/javascript">
+
+                // config Chosen
                 $(".chosen-select").chosen({ no_results_text: "Pas de résultat pour", width: '100%' })
 
                 $('form').validate({
                     ignore: []
                 });
 
+                
 
-                $(document).ready(function () {
-                    $('[data-toggle="tooltip"]').tooltip();
-                    $(".alert").delay(8000).addClass("in").fadeOut(3500);
-                });
-
+                // Effacer les données du formulaire de filtrage
                 function clearForm() {
                     $('#formFilter').trigger("reset");
                     $(".chosen-select").val('').trigger("chosen:updated");
                     
                 }
 
+                // Redonner au bouton Clear une apparence normale après un clic
                 $('#buttonClear').mouseup(function () {
                     $(this).blur();
                 })
+
+                
+                function retainDivCollapsedState(nameOfDiv, nameOfHeader) {
+                    // when the div is shown, save a cookie with a value of 'true'
+                    $("#" + nameOfDiv).on('shown.bs.collapse', function ()
+                    {
+                        Cookies.set(nameOfDiv, "true"); // this is a cookie.  named the same as the control (poor practice) for brevity 
+                    });
+                    // when the div is collapsed, remove the same cookie
+                    $("#" + nameOfDiv).on('hidden.bs.collapse', function ()
+                    {
+                        Cookies.set(nameOfDiv, "false")
+                    });
+
+                    // on page load, show or hide the div (and stylized the header) according to the cookie (if it exists)
+                    if (Cookies.get(nameOfDiv) == "false")
+                    {
+                        $("#" + nameOfDiv).removeClass("in");                      // The div to show
+                        $("#" + nameOfHeader).addClass("collapsed");         // The header to stylize as expanded
+                    }
+                }
+                
+                // Faire disparaitre l'alerte au bout de quelques secondes
+                $(document).ready(function () {
+                    $('[data-toggle="tooltip"]').tooltip();
+                    $(".alert").delay(8000).addClass("in").fadeOut(1500);
+                    retainDivCollapsedState("collapseOne", "panel1");
+
+
+                    if (Cookies.get("PremierAffichage") != "false")
+                    {
+                        $("#MonAlerte").removeClass("hidden");
+                    }
+
+                    Cookies.set("PremierAffichage", "false");
+
+                });
+               
 
             </script>
         }

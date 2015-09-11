@@ -185,6 +185,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\alt.png" />
     <Content Include="Content\bootstrap-fileinput\css\fileinput.css" />
     <Content Include="Content\bootstrap-fileinput\css\fileinput.min.css" />
     <Content Include="Content\bootstrap-fileinput\img\loading-sm.gif" />
@@ -249,6 +250,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\js.cookie.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\respond.js" />
@@ -310,6 +312,7 @@
     <Content Include="Views\Home\InternalError.cshtml" />
     <Content Include="Views\Home\PasswordAdmin.cshtml" />
     <Content Include="Views\Emails\MailAdminAnnoncePostee.cshtml" />
+    <Content Include="Views\Shared\_ListeAnnonces.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -14,62 +14,7 @@
     new { page, sortOrder = ViewBag.CurrentSort }))
 <br />
 
-<table class="table">
-    <tr>
-        <th>
-            Titre
-        </th>
-        <th>
-            Modèle
-        </th>
-        <th>
-            Photo principale
-        </th>
-        <th>
-            @Html.ActionLink("Année", "AnnoncesCompatibles", new { sortOrder = ViewBag.AnneeSortParm })
-        </th>
-        <th>
-            @Html.ActionLink("Kilométrage", "AnnoncesCompatibles", new { sortOrder = ViewBag.KilometrageSortParm })
-        </th>
-        <th>
-            @Html.ActionLink("Prix", "AnnoncesCompatibles", new { sortOrder = ViewBag.PrixSortParm })
-        </th>
-        <th>
-            @Html.ActionLink("Date", "AnnoncesCompatibles", new { sortOrder = ViewBag.DateSortParm })
-        </th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.ActionLink(item.Titre, "Details", new { id = item.ID })
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MotoProposee.Identification)
-            </td>
-            <td>
-                @if (item.Photos.Count > 0)
-                {
-                    <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature).ID" alt="Photo non disponible" />
-                }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Annee)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.KilometrageAvecUnite)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PrixAvecUnite)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-        </tr>
-    }
-
-</table>
+@{Html.RenderPartial("~/Views/Shared/_ListeAnnonces.cshtml");}
 
 <div>
     @Html.ActionLink("Revenir à l'annonce", "Details", new { id = ViewBag.annonceSourceId })

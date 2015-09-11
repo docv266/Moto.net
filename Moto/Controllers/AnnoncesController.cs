@@ -183,6 +183,9 @@ namespace Motonet.Controllers
             PopulateRegionsDropDownList(RegionsID);
             PopulateMultiDepartementsDropDownList(DepartementsID);
 
+
+            ViewBag.ActionName = "Index";
+
             return View(annonces.ToPagedList(pageNumber, pageSize));
         }
 
@@ -192,7 +195,7 @@ namespace Motonet.Controllers
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
             ViewBag.PrixSortParm = sortOrder == "prix" ? "prix_desc" : "prix";
-            ViewBag.CylindreeSortParm = sortOrder == "cylindree" ? "cylindree_desc" : "cylindree";
+            ViewBag.AnneeSortParm = sortOrder == "cylindree" ? "annee_desc" : "annee";
             ViewBag.KilometrageSortParm = sortOrder == "kilometrage" ? "kilometrage_desc" : "kilometrage";
 
             //var annonces = from s in db.Annonces select s;
@@ -232,11 +235,11 @@ namespace Motonet.Controllers
                 case "date_desc":
                     annonces = annonces.OrderByDescending(s => s.Date);
                     break;
-                case "cylindree":
-                    annonces = annonces.OrderBy(s => s.MotoProposee.Cylindree);
+                case "annee":
+                    annonces = annonces.OrderBy(s => s.Annee);
                     break;
-                case "cylindree_desc":
-                    annonces = annonces.OrderByDescending(s => s.MotoProposee.Cylindree);
+                case "annee_desc":
+                    annonces = annonces.OrderByDescending(s => s.Annee);
                     break;
                 case "prix":
                     annonces = annonces.OrderBy(s => s.Prix);
@@ -256,6 +259,7 @@ namespace Motonet.Controllers
             }
 
             ViewBag.annonceSourceId = id;
+            ViewBag.ActionName = "AnnoncesCompatibles";
             
             int pageSize = int.Parse(ConfigurationManager.AppSettings["pageSize"]);
             int pageNumber = (page ?? 1);

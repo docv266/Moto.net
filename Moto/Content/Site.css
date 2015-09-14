@@ -158,8 +158,9 @@ legend {
 }
 
 a {
-    color: red;
+    color: black;
     font-weight:normal;
+    text-decoration:underline;
 }
 
 a:hover {

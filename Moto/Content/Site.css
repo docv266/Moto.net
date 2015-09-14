@@ -157,7 +157,7 @@ legend {
     float: none;
 }
 
-a {
+a:not(.btn) {
     color: black;
     font-weight:normal;
     text-decoration:underline;

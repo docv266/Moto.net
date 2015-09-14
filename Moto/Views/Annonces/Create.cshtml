@@ -9,8 +9,6 @@
     ViewBag.Title = "Ajouter une annonce";
 }
 
-<h2>Mon annonce</h2>
-
 @using (Html.BeginForm("Create", "Annonces", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()

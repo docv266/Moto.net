@@ -33,7 +33,7 @@
                 }
             </td>
             <td>
-                <h5 style="color:blue;">@Html.DisplayFor(modelItem => item.Titre)</h5>
+                <h5 style="color:red;">@Html.DisplayFor(modelItem => item.Titre)</h5>
                 <div data-toggle="tooltip" data-html="true" title="@item.MotoProposee.IdentificationSuite" data-placement="left" data-container="body">
                     <b>@Html.DisplayFor(modelItem => item.MotoProposee.Identification, new { sortOrder = ViewBag.PrixSortParm })</b>
                 </div>

@@ -3,53 +3,68 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Moto échange</title>
+    <title>Moto échange</title>
 
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("Styles", required: false)
 
 </head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Accueil", "Index", "Annonces", new { area = "" }, new { @class = "navbar-brand" })
 
-                
+@{
+    string style = (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"]) ? "padding-top:0px;margin-top: 0px;" : "";
+}
 
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    
-                    <li>
+<body style="@style">
 
-                        <a href="@Url.Action("Create")">
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                            Créer mon annonce
-                        </a>
+    @if (Session["estAdmin"] != null && (Boolean)Session["estAdmin"])
+    {
 
-                    </li>
+        <div class="navbar navbar-default navbar-fixed-top">
 
-                    @if (Session["estAdmin"] != null && (Boolean)Session["estAdmin"])
-                    {
-                        <li>@Html.ActionLink("Annonces à valider", "AnnoncesAValider", "Annonces")</li>
-                        <li>@Html.ActionLink("Annonces à autoriser", "AnnoncesAAutoriser", "Annonces")</li>
-                        <li>@Html.ActionLink("Motos", "Index", "Motos")</li>
-                        <li>@Html.ActionLink("Marques", "Index", "Marques")</li>
-                        <li>@Html.ActionLink("Genres", "Index", "Genres")</li>
-                    }
-                </ul>
+            <div class="container">
+                <div class="navbar-header">
+
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+
+                        @if (Session["estAdmin"] != null && (Boolean)Session["estAdmin"])
+                        {
+                            <li>@Html.ActionLink("Annonces à valider", "AnnoncesAValider", "Annonces")</li>
+                            <li>@Html.ActionLink("Annonces à autoriser", "AnnoncesAAutoriser", "Annonces")</li>
+                            <li>@Html.ActionLink("Motos", "Index", "Motos")</li>
+                            <li>@Html.ActionLink("Marques", "Index", "Marques")</li>
+                            <li>@Html.ActionLink("Genres", "Index", "Genres")</li>
+                        }
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
+
+    }
     <div class="container body-content">
+
+        <div class="header">
+
+            <a href="@Url.Action("Index", "Annonces", null)">
+                <img src="~/Content/Logo.png">
+            </a>
+
+            @RenderSection("BoutonAjouter", required: false)
+
+            
+
+        </div>
+
         @RenderBody()
+
         <hr />
         <footer class="text-center">
             &copy; @DateTime.Now.Year - moto-echange.fr |

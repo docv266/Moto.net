@@ -145,3 +145,36 @@ legend {
         padding:0 10px;
         border-bottom:none;
     }
+
+.header {
+    height:75px;
+    line-height:75px;
+}
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+a {
+    color: red;
+    font-weight:normal;
+}
+
+a:hover {
+    color: red;
+}
+
+.glyphSize {
+    font-size: 1.2em;
+    color: black;
+}
+
+.glyphSize:hover {
+    color: red;
+}
+
+.glyphSize .glyphicon-plus{
+    color: red;
+}

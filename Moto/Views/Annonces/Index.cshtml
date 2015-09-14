@@ -8,9 +8,14 @@
     <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 }
 
-@{
-    ViewBag.Title = "Annonces";
+
+@section BoutonAjouter {
+    <a class="pull-right vcenter glyphSize" href="@Url.Action("Create", "Annonces", null)">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        Créer mon annonce
+    </a>
 }
+
 
 <br />
 
@@ -101,12 +106,16 @@
 
         <div class="row formFilter">
             <div class="col-xs-10">
-                <input type="submit" value="Filtrer" class="btn btn-primary btn-sm boutonFiltrer" /> 
+                <input type="submit" value="Filtrer" class="btn btn-danger btn-sm boutonFiltrer" /> 
             </div>
 
             <div class="col-xs-2 text-right">
                 <input type="button" id="buttonClear" onclick='clearForm()' value="Effacer les filtres" class="btn btn-default btn-sm pull-right" />
             </div>
+
+
+
+
         </div>
 
 

@@ -2,10 +2,18 @@
 To: @Model.Destinataire
 From: admin@moto-echange.fr
 Subject: Annonce refusée
+Content-Type: text/html; charset=utf-8
 
-Bonjour @Model.Nom.
-Votre annonce ne peut être mise en ligne pour la raison suivante:
 
-@Html.Raw(Model.Raison)
-
-L'équipe moto-echange
+<html>
+<body>
+    Bonjour @Model.Nom.<br />
+    Votre annonce ne peut être mise en ligne pour la raison suivante:<br />
+    <br />
+    @Html.Raw(Model.Raison)<br />
+    <br />
+    L'équipe moto-echange<br />
+    <br />
+    @Html.EmbedImage("~/Content/logo.png")
+</body>
+</html>

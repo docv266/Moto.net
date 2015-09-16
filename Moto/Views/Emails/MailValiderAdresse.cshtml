@@ -2,11 +2,21 @@
 To: @Model.Destinataire
 From: admin@moto-echange.fr
 Subject: Validation de l'adresse
+Content-Type: text/html; charset=utf-8
 
-Bonjour @Model.Nom!
-Merci d'avoir déposé une annonce sur moto-echange.
-
-Afin de valider l'adresse mail fournie, veuillez cliquer sur le lien suivant:
-@Html.Raw(Model.Lien)
-
-L'équipe moto-echange
+<html>
+    <body>
+        <h4>Bonjour @Model.Nom!</h4>
+        Merci d'avoir déposé une annonce sur moto-echange.
+        <br />
+        <br />
+        Afin de valider l'adresse mail fournie, veuillez cliquer sur le lien suivant:<br />
+        @Html.Raw(Model.Lien)
+        <br />
+        <br />
+        L'équipe moto-echange
+        <br />
+        <br />
+        @Html.EmbedImage("~/Content/logo.png")
+    </body>
+</html>

@@ -64,7 +64,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Annee, htmlAttributes: new { @class = "control-label col-md-2 required" })
                 <div class="col-md-5">
-                    @Html.EditorFor(model => model.Annee, new { htmlAttributes = new { @class = "form-control", min = "1900", max = DateTime.Now.Year, step = "10" } })
+                    @Html.EditorFor(model => model.Annee, new { htmlAttributes = new { @class = "form-control", step = "10" } })
                 </div>
                 <div class="col-md-5">
                     @Html.ValidationMessageFor(model => model.Annee, "", new { @class = "text-danger" })
@@ -74,7 +74,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Kilometrage, htmlAttributes: new { @class = "control-label col-md-2 required" })
                 <div class="col-md-5">
-                    @Html.EditorFor(model => model.Kilometrage, new { htmlAttributes = new { @class = "form-control", min = "0", max = "999999", step = "1000" } })
+                    @Html.EditorFor(model => model.Kilometrage, new { htmlAttributes = new { @class = "form-control", step = "1000" } })
                 </div>
                 <div class="col-md-5">
                     @Html.ValidationMessageFor(model => model.Kilometrage, "", new { @class = "text-danger" })
@@ -84,7 +84,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Prix, htmlAttributes: new { @class = "control-label col-md-2 required" })
                 <div class="col-md-5">
-                    @Html.EditorFor(model => model.Prix, new { htmlAttributes = new { @class = "form-control", min = "0", max = "999999", step = "100" } })
+                    @Html.EditorFor(model => model.Prix, new { htmlAttributes = new { @class = "form-control", step = "100" } })
                 </div>
                 <div class="col-md-5">
                     @Html.ValidationMessageFor(model => model.Prix, "", new { @class = "text-danger" })
@@ -220,10 +220,6 @@
 
     <script type="text/javascript">
         $(".chosen-select").chosen({ placeholder_text_multiple: "Choisir plusieurs éléments", placeholder_text_single: "Choisir un élément", no_results_text: "Pas de résultat pour" })
-
-        //$('form').validate({
-        //    ignore: ":hidden:not(.chosen-select)"
-        //});
 
         $('.chosen-container').tooltip({ placement: 'right' });
         

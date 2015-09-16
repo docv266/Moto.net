@@ -2,10 +2,20 @@
 To: @Model.Destinataire
 From: @Model.Expediteur
 Subject: Vous avez reçu un message!
+Content-Type: text/html; charset=utf-8
 
-Bonjour,
-Vous avez reçu un message concernant votre annonce:
-@Model.TitreAnnonce
-
-Message:
+<html>
+    <body>
+        Bonjour,
+        Vous avez reçu un message concernant votre annonce:<br />
+        @Model.TitreAnnonce<br />
+        <br />
+        <pre style="font-weight: bold; font-family: Georgia,serif;">
 @Html.Raw(Model.Message)
+        </pre>
+        <br />
+        L'équipe moto-echange<br />
+        <br />
+        @Html.EmbedImage("~/Content/logo.png")
+</body>
+</html>

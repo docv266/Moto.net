@@ -19,7 +19,7 @@
 
 <br />
 
-<div id="MonAlerte" class="alert alert-success alert-dismissible hidden" role="alert">
+<div id="MonAlerte" class="alert alert-success alert-dismissible hidden alertPerso" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <strong>Merci!</strong><br />
     Vous faites partie des premiers utilisateurs de moto-echange.fr<br />
@@ -129,79 +129,22 @@
 @{Html.RenderPartial("~/Views/Shared/_ListeAnnonces.cshtml");}
 
 
-<br />
-        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-        @Html.PagedListPager(Model, page => Url.Action("Index",
+        
+<div class="MaPagination">
+
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",
     new { page, sortOrder = ViewBag.CurrentSort }))
-
+</div>
         @section Scripts {
-            @Scripts.Render("~/bundles/jqueryval")
+            
+
             <script src="~/Scripts/chosen.jquery.js"></script>
             <script src="~/Scripts/fileinput.js"></script>
             <script src="~/Scripts/fileinput_locale_fr.js"></script>
             <script src="~/Scripts/js.cookie.js"></script>
 
-            <script type="text/javascript">
-
-                // config Chosen
-                $(".chosen-select").chosen({ no_results_text: "Pas de résultat pour", width: '100%' })
-
-                $('form').validate({
-                    ignore: []
-                });
-
-                
-
-                // Effacer les données du formulaire de filtrage
-                function clearForm() {
-                    $('#formFilter').trigger("reset");
-                    $(".chosen-select").val('').trigger("chosen:updated");
-                    
-                }
-
-                // Redonner au bouton Clear une apparence normale après un clic
-                $('#buttonClear').mouseup(function () {
-                    $(this).blur();
-                })
-
-                
-                function retainDivCollapsedState(nameOfDiv, nameOfHeader) {
-                    // when the div is shown, save a cookie with a value of 'true'
-                    $("#" + nameOfDiv).on('shown.bs.collapse', function ()
-                    {
-                        Cookies.set(nameOfDiv, "true"); // this is a cookie.  named the same as the control (poor practice) for brevity 
-                    });
-                    // when the div is collapsed, remove the same cookie
-                    $("#" + nameOfDiv).on('hidden.bs.collapse', function ()
-                    {
-                        Cookies.set(nameOfDiv, "false")
-                    });
-
-                    // on page load, show or hide the div (and stylized the header) according to the cookie (if it exists)
-                    if (Cookies.get(nameOfDiv) == "false")
-                    {
-                        $("#" + nameOfDiv).removeClass("in");                      // The div to show
-                        $("#" + nameOfHeader).addClass("collapsed");         // The header to stylize as expanded
-                    }
-                }
-                
-                // Faire disparaitre l'alerte au bout de quelques secondes
-                $(document).ready(function () {
-                    $('[data-toggle="tooltip"]').tooltip();
-                    $(".alert").delay(8000).addClass("in").fadeOut(1500);
-                    retainDivCollapsedState("collapseOne", "panel1");
-
-
-                    if (Cookies.get("PremierAffichage") != "false")
-                    {
-                        $("#MonAlerte").removeClass("hidden");
-                    }
-
-                    Cookies.set("PremierAffichage", "false");
-
-                });
-               
-
-            </script>
+            <script src="~/Scripts/Site_AnnoncesIndex.js"></script>
         }

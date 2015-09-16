@@ -9,6 +9,16 @@
     padding-right: 15px;
 }
 
+a:not(.btn) {
+    color: black;
+    font-weight:normal;
+    text-decoration:underline;
+}
+
+a:hover {
+    color: red;
+}
+
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
 */
@@ -123,7 +133,7 @@ fieldset {
     min-width: 210px !important;
 }
 
-.alert {
+.alertPerso {
 	position:absolute;
     z-index:1;
     top:10%;
@@ -157,16 +167,6 @@ legend {
     float: none;
 }
 
-a:not(.btn) {
-    color: black;
-    font-weight:normal;
-    text-decoration:underline;
-}
-
-a:hover {
-    color: red;
-}
-
 .glyphSize {
     font-size: 1.2em;
     color: black;
@@ -178,4 +178,14 @@ a:hover {
 
 .glyphSize .glyphicon-plus{
     color: red;
+}
+
+.MaPagination .pagination > .active > a,
+.MaPagination .pagination > .active > span,
+.MaPagination .pagination > .active > a:hover,
+.MaPagination .pagination > .active > span:hover,
+.MaPagination .pagination > .active > a:focus,
+.MaPagination .pagination > .active > span:focus {
+  background-color: #ff6262;
+  border-color: #ff6262;
 }

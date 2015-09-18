@@ -1,8 +1,8 @@
 ﻿@model Motonet.Models.Annonce
 
 @section Styles {
-    <link href="~/Content/chosen.css" rel="stylesheet" />
-    <link href="~/Content/bootstrap-fileinput/css/fileinput.css" rel="stylesheet" />
+    @Styles.Render("~/Content/chosenStyle")
+    @Styles.Render("~/Content/fileinputStyle")
 }
 
 @{
@@ -214,9 +214,9 @@
     @Scripts.Render("~/bundles/jqueryval")
 
 
-    <script src="~/Scripts/chosen.jquery.js"></script>
-    <script src="~/Scripts/fileinput.js"></script>
-    <script src="~/Scripts/fileinput_locale_fr.js"></script>
+    @Scripts.Render("~/bundles/chosenJs")
+
+    @Scripts.Render("~/bundles/inputFileJs")
 
     <script type="text/javascript">
         $(".chosen-select").chosen({ placeholder_text_multiple: "Choisir plusieurs éléments", placeholder_text_single: "Choisir un élément", no_results_text: "Pas de résultat pour" })

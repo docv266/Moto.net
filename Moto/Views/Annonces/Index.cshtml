@@ -3,8 +3,9 @@
 
 
 @section Styles {
-    <link href="~/Content/chosen.css" rel="stylesheet" />
-    <link href="~/Content/bootstrap-fileinput/css/fileinput.css" rel="stylesheet" />
+
+    @Styles.Render("~/Content/chosenStyle")
+
     <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 }
 
@@ -135,10 +136,8 @@
 </div>
         @section Scripts {
             
+            @Scripts.Render("~/bundles/chosenJs")
 
-            <script src="~/Scripts/chosen.jquery.js"></script>
-            <script src="~/Scripts/fileinput.js"></script>
-            <script src="~/Scripts/fileinput_locale_fr.js"></script>
             <script src="~/Scripts/js.cookie.js"></script>
 
             <script src="~/Scripts/Site_AnnoncesIndex.js"></script>

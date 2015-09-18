@@ -29,6 +29,19 @@ namespace Motonet
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
 
+            bundles.Add(new ScriptBundle("~/bundles/chosenJs").Include(
+                      "~/Scripts/chosen.jquery.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/inputFileJs").Include(
+                      "~/Scripts/fileinput.js",
+                      "~/Scripts/fileinput_locale_fr.js"));
+
+            bundles.Add(new StyleBundle("~/Content/chosenStyle").Include(
+                      "~/Content/chosen.css"));
+
+            bundles.Add(new StyleBundle("~/Content/fileinputStyle").Include(
+                      "~/Content/bootstrap-fileinput/css/fileinput.css"));
+
         }
     }
 }

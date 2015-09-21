@@ -8,7 +8,6 @@ $(".chosen-select").chosen({ no_results_text: "Pas de résultat pour", width: '1
 function clearForm() {
     $('#formFilter').trigger("reset");
     $(".chosen-select").val('').trigger("chosen:updated");
-
 }
 
 // Redonner au bouton Clear une apparence normale après un clic

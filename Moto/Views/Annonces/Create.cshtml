@@ -5,6 +5,7 @@
     @Styles.Render("~/Content/fileinputStyle")
 }
 
+
 @{
     ViewBag.Title = "Ajouter une annonce";
 }
@@ -40,11 +41,17 @@
                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                 </div>
             </div>
-
+            
             <div class="form-group">
                 @Html.LabelFor(model => model.MotoProposeeID, htmlAttributes: new { @class = "control-label col-md-2 required" })
                 <div class="col-md-5 toolTipClass">
-                    @Html.DropDownList("MotoProposeeID", (SelectList)ViewBag.MotoProposeeID, new { @class = "chosen-select form-control", data_toggle = "tooltip", title = "Votre moto n'apparait pas dans la liste? Dites le nous!" })
+                    @Html.DropDownList("MotoProposeeID", (SelectList)ViewBag.MotoProposeeID, new { @class = "chosen-select form-control", data_toggle = "tooltip", title = "Votre moto n'apparait pas dans la liste? cochez la case ci-dessous!" })
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="checkMotoPerso" onclick='enableField(this)' > Ma moto n'apparaît pas dans la liste
+                        </label>
+                    </div>
+                    <input type="text" id="idMotoPerso" name="motoPerso" class="form-control" placeholder="Marque et modèle de ma moto" data_toggle="tooltip" data-placement="right" title="Saisissez la marque et le modèle, la moto sera intégrée dans la base de données par nos soins." disabled>
                 </div>
                 <div class="col-md-5">
                     @Html.ValidationMessageFor(model => model.MotoProposeeID, "", new { @class = "text-danger" })
@@ -214,16 +221,14 @@
     @Scripts.Render("~/bundles/jqueryval")
 
 
+
     @Scripts.Render("~/bundles/chosenJs")
+
+<script src="~/Scripts/Site_AnnoncesCreate.js"></script>
 
     @Scripts.Render("~/bundles/inputFileJs")
 
-    <script type="text/javascript">
-        $(".chosen-select").chosen({ placeholder_text_multiple: "Choisir plusieurs éléments", placeholder_text_single: "Choisir un élément", no_results_text: "Pas de résultat pour" })
 
-        $('.chosen-container').tooltip({ placement: 'right' });
-        
-
-    </script>
+    
 
 }

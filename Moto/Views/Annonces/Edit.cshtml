@@ -36,7 +36,7 @@ else
                 <input type="hidden" name="password" value=@ViewBag.password>   
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Titre, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.Titre, htmlAttributes: new { @class = "control-label col-md-2 required" })
                     <div class="col-md-5">
                         @Html.EditorFor(model => model.Titre, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
@@ -46,7 +46,7 @@ else
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2 required" })
                     <div class="col-md-5">
                         @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", rows = 10, maxLength = @ViewBag.nombreMaxCaracteresDescription } })
                     </div>
@@ -55,7 +55,7 @@ else
                     </div>
                 </div>
 
-                <div class="form-group">
+                @*<div class="form-group">
                     @Html.LabelFor(model => model.MotoProposeeID, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-5">
                         @Html.DropDownList("MotoProposeeID", null, String.Empty, new { @class = "chosen-select form-control" })
@@ -63,7 +63,33 @@ else
                     <div class="col-md-5">
                         @Html.ValidationMessageFor(model => model.MotoProposeeID, "", new { @class = "text-danger" })
                     </div>
+                </div>*@
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MotoProposeeID, htmlAttributes: new { @class = "control-label col-md-2 required" })
+                    <div class="col-md-5 toolTipClass">
+
+                        <div class="checkbox">
+                            <label>
+                                @Html.CheckBoxFor(model => model.PresenceMotoPerso, new { onclick = "enableField()" })Ma moto n'apparaît pas dans la liste
+                            </label>
+                        </div>
+
+                        <div id="conteneurMotoProposee">
+                            @Html.DropDownList("MotoProposeeID", (SelectList)ViewBag.MotoProposeeID, new { @class = "chosen-select form-control", data_toggle = "tooltip", title = "Votre moto n'apparait pas dans la liste? cochez la case ci-dessus!" })
+                        </div>
+
+                        <div id="conteneurMotoPerso" class="hidden">
+                            @Html.EditorFor(model => model.MotoPerso, new { htmlAttributes = new { @class = "form-control", placeholder = "Marque et modèle de ma moto", data_toggle = "tooltip", title = "Saisissez la marque et le modèle, la moto sera intégrée dans la base de données par nos soins." } })
+                        </div>
+
+                    </div>
+                    <div class="col-md-5">
+                        @Html.ValidationMessageFor(model => model.MotoProposeeID, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.MotoPerso, "", new { @class = "text-danger" })
+                    </div>
                 </div>
+
             
                 @if (Model.Photos.Any())
                 {
@@ -103,7 +129,7 @@ else
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Annee, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.Annee, htmlAttributes: new { @class = "control-label col-md-2 required" })
                     <div class="col-md-5">
                         @Html.EditorFor(model => model.Annee, new { htmlAttributes = new { @class = "form-control", min = "1900", max = DateTime.Now.Year } })
                     </div>
@@ -113,7 +139,7 @@ else
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Kilometrage, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.Kilometrage, htmlAttributes: new { @class = "control-label col-md-2 required" })
                     <div class="col-md-5">
                         @Html.EditorFor(model => model.Kilometrage, new { htmlAttributes = new { @class = "form-control", min = "0", max = "999999" } })
                     </div>
@@ -123,7 +149,7 @@ else
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Prix, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.Prix, htmlAttributes: new { @class = "control-label col-md-2 required" })
                     <div class="col-md-5">
                         @Html.EditorFor(model => model.Prix, new { htmlAttributes = new { @class = "form-control", min = "0", max = "999999" } })
                     </div>
@@ -150,8 +176,8 @@ else
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.MarquesAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-5">
-                        @Html.DropDownList("MarquesAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control" })
+                    <div class="col-md-5 toolTipClass">
+                        @Html.DropDownList("MarquesAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control", data_toggle = "tooltip", title = "Renseignez le genre et laissez ce champ vide si toutes les marques vous conviennent" })
                     </div>
                     <div class="col-md-5">
                         @Html.ValidationMessageFor(model => model.MarquesAccepteesID, "", new { @class = "text-danger" })
@@ -160,8 +186,8 @@ else
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.GenresAcceptesID, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-5">
-                        @Html.DropDownList("GenresAcceptesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control" })
+                    <div class="col-md-5 toolTipClass">
+                        @Html.DropDownList("GenresAcceptesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control", data_toggle = "tooltip", title = "Renseignez la marque et laissez ce champ vide si tous les genres vous conviennent" })
                     </div>
                     <div class="col-md-5">
                         @Html.ValidationMessageFor(model => model.GenresAcceptesID, "", new { @class = "text-danger" })
@@ -175,7 +201,7 @@ else
                 <h5>A propos de vous:</h5>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Nom, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.Nom, htmlAttributes: new { @class = "control-label col-md-2 required" })
                     <div class="col-md-5">
                         @Html.EditorFor(model => model.Nom, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
@@ -185,7 +211,7 @@ else
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Mail, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.Mail, htmlAttributes: new { @class = "control-label col-md-2 required" })
                     <div class="col-md-5">
                         @Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
@@ -205,7 +231,7 @@ else
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.DepartementID, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.DepartementID, htmlAttributes: new { @class = "control-label col-md-2 required" })
                     <div class="col-md-5">
                         @Html.DropDownList("DepartementID", null, String.Empty, new { @class = "chosen-select form-control" })
                     </div>
@@ -233,19 +259,14 @@ else
 
     @section Scripts {
         @Scripts.Render("~/bundles/jqueryval")
-        <script src="/Scripts/chosen.jquery.js"></script>
-        <script src="~/Scripts/fileinput.js"></script>
-        <script src="~/Scripts/fileinput_locale_fr.js"></script>
-
-        <script type="text/javascript">
-            $(".chosen-select").chosen({ placeholder_text_multiple: "Choisir plusieurs éléments", placeholder_text_single: "Choisir un élément", no_results_text: "Pas de résultat pour" })
-
-            //$('form').validate({
-            //    ignore: []
-            //});
 
 
-        </script>
+
+        @Scripts.Render("~/bundles/chosenJs")
+
+        <script src="~/Scripts/Site_AnnoncesCreate.js"></script>
+
+        @Scripts.Render("~/bundles/inputFileJs")
 
     }
 }

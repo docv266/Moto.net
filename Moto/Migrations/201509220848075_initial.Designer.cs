@@ -7,13 +7,13 @@ namespace Motonet.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class AjoutSettings : IMigrationMetadata
+    public sealed partial class initial : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AjoutSettings));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(initial));
         
         string IMigrationMetadata.Id
         {
-            get { return "201509051813097_AjoutSettings"; }
+            get { return "201509220848075_initial"; }
         }
         
         string IMigrationMetadata.Source

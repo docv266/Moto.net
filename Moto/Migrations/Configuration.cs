@@ -18,42 +18,47 @@ namespace Motonet.Migrations
         {
             //  This method will be called after migrating to the latest version.
 
-            var regions = new List<Region>
+            if (!context.Regions.Any())
             {
-                new Region{Nom="Alsace"},
-                new Region{Nom="Aquitaine"},
-                new Region{Nom="Auvergne"},
-                new Region{Nom="Basse-Normandie"},
-                new Region{Nom="Bourgogne"},
-                new Region{Nom="Bretagne"},
-                new Region{Nom="Centre-Val de Loire"},
-                new Region{Nom="Champagne-Ardenne"},
-                new Region{Nom="Corse"},
-                new Region{Nom="Franche-Comté"},
-                new Region{Nom="Guadeloupe"},
-                new Region{Nom="Guyane"},
-                new Region{Nom="Haute-Normandie"},
-                new Region{Nom="Ile-de-France"},
-                new Region{Nom="Languedoc-Roussillon"},
-                new Region{Nom="Limousin"},
-                new Region{Nom="Lorraine"},
-                new Region{Nom="Martinique"},
-                new Region{Nom="Mayotte"},
-                new Region{Nom="Midi-Pyrénées"},
-                new Region{Nom="Nord-Pas-de-Calais"},
-                new Region{Nom="Pays de la Loire"},
-                new Region{Nom="Picardie"},
-                new Region{Nom="Poitou-Charentes"},
-                new Region{Nom="Provence-Alpes-Côte d'Azur"},
-                new Region{Nom="Réunion"},
-                new Region{Nom="Rhône-Alpes"},
-                new Region{Nom="Outre-Mer"}
-            };
 
-            regions.ForEach(s => context.Regions.AddOrUpdate(s));
-            context.SaveChanges();
+                var regions = new List<Region>
+                {
+                    new Region{Nom="Alsace"},
+                    new Region{Nom="Aquitaine"},
+                    new Region{Nom="Auvergne"},
+                    new Region{Nom="Basse-Normandie"},
+                    new Region{Nom="Bourgogne"},
+                    new Region{Nom="Bretagne"},
+                    new Region{Nom="Centre-Val de Loire"},
+                    new Region{Nom="Champagne-Ardenne"},
+                    new Region{Nom="Corse"},
+                    new Region{Nom="Franche-Comté"},
+                    new Region{Nom="Guadeloupe"},
+                    new Region{Nom="Guyane"},
+                    new Region{Nom="Haute-Normandie"},
+                    new Region{Nom="Ile-de-France"},
+                    new Region{Nom="Languedoc-Roussillon"},
+                    new Region{Nom="Limousin"},
+                    new Region{Nom="Lorraine"},
+                    new Region{Nom="Martinique"},
+                    new Region{Nom="Mayotte"},
+                    new Region{Nom="Midi-Pyrénées"},
+                    new Region{Nom="Nord-Pas-de-Calais"},
+                    new Region{Nom="Pays de la Loire"},
+                    new Region{Nom="Picardie"},
+                    new Region{Nom="Poitou-Charentes"},
+                    new Region{Nom="Provence-Alpes-Côte d'Azur"},
+                    new Region{Nom="Réunion"},
+                    new Region{Nom="Rhône-Alpes"},
+                    new Region{Nom="Outre-Mer"}
+                };
 
-            var departements = new List<Departement>
+                regions.ForEach(s => context.Regions.AddOrUpdate(s));
+                context.SaveChanges();
+
+
+
+                var departements = new List<Departement>
             {
                 new Departement{Nom="Bas Rhin",CP="67",Region=regions.Find(r => r.Nom.Equals("Alsace"))},
                 new Departement{Nom="Haut Rhin",CP="68",Region=regions.Find(r => r.Nom.Equals("Alsace"))},
@@ -156,10 +161,10 @@ namespace Motonet.Migrations
                 new Departement{Nom="Savoie ",CP="73",Region=regions.Find(r => r.Nom.Equals("Rhône-Alpes"))},
                 new Departement{Nom="Haute Savoie",CP="74",Region=regions.Find(r => r.Nom.Equals("Rhône-Alpes"))}
             };
-            departements.ForEach(s => context.Departements.AddOrUpdate(s));
-            context.SaveChanges();
+                departements.ForEach(s => context.Departements.AddOrUpdate(s));
+                context.SaveChanges();
 
-            var genres = new List<Genre>
+                var genres = new List<Genre>
             {
                 new Genre{Nom="Roadster"},
                 new Genre{Nom="Trail"},
@@ -168,10 +173,10 @@ namespace Motonet.Migrations
                 new Genre{Nom="Custom"},
                 new Genre{Nom="Cross et Enduro"}
             };
-            genres.ForEach(s => context.Genres.AddOrUpdate(s));
-            context.SaveChanges();
+                genres.ForEach(s => context.Genres.AddOrUpdate(s));
+                context.SaveChanges();
 
-            var marques = new List<Marque>
+                var marques = new List<Marque>
             {
                 new Marque{Nom="DUCATI"},
                 new Marque{Nom="BMW"},
@@ -191,10 +196,10 @@ namespace Motonet.Migrations
                 new Marque{Nom="HEADBANGER"},
                 new Marque{Nom="BENELLI"}
             };
-            marques.ForEach(s => context.Marques.AddOrUpdate(s));
-            context.SaveChanges();
+                marques.ForEach(s => context.Marques.AddOrUpdate(s));
+                context.SaveChanges();
 
-            var motos = new List<Moto>
+                var motos = new List<Moto>
             {
                 new Moto{Modele="Z750R", Cylindree=750, MarqueID=marques.Find(r => r.Nom.Equals("KAWASAKI")).ID, GenreID=genres.Find(r => r.Nom.Equals("Roadster")).ID},
                 new Moto{Modele="Z1000", Cylindree=1000, MarqueID=marques.Find(r => r.Nom.Equals("KAWASAKI")).ID, GenreID=genres.Find(r => r.Nom.Equals("Roadster")).ID},
@@ -739,12 +744,12 @@ namespace Motonet.Migrations
                 new Moto{Modele="Z800", Cylindree=806, MarqueID=marques.Find(r => r.Nom.Equals("KAWASAKI")).ID, GenreID=genres.Find(r => r.Nom.Equals("Roadster")).ID},
 
             };
-            motos.ForEach(s => context.Motos.AddOrUpdate(s));
-            context.SaveChanges();
+                motos.ForEach(s => context.Motos.AddOrUpdate(s));
+                context.SaveChanges();
 
-            string pass = Annonce.HashPassword("ppp");
+                string pass = Annonce.HashPassword("ppp");
 
-            var annonces = new List<Annonce>
+                var annonces = new List<Annonce>
             {
                 new Annonce
                 {
@@ -827,8 +832,10 @@ namespace Motonet.Migrations
                 },
                 
             };
-            annonces.ForEach(s => context.Annonces.AddOrUpdate(s));
-            context.SaveChanges();
+                annonces.ForEach(s => context.Annonces.AddOrUpdate(s));
+                context.SaveChanges();
+
+            }
         }
     }
 }

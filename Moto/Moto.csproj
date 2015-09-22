@@ -160,13 +160,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201509031410405_InitialCreate.cs" />
-    <Compile Include="Migrations\201509031410405_InitialCreate.Designer.cs">
-      <DependentUpon>201509031410405_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201509051813097_AjoutSettings.cs" />
-    <Compile Include="Migrations\201509051813097_AjoutSettings.Designer.cs">
-      <DependentUpon>201509051813097_AjoutSettings.cs</DependentUpon>
+    <Compile Include="Migrations\201509220848075_initial.cs" />
+    <Compile Include="Migrations\201509220848075_initial.Designer.cs">
+      <DependentUpon>201509220848075_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Annonce.cs" />
@@ -328,11 +324,8 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201509031410405_InitialCreate.resx">
-      <DependentUpon>201509031410405_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201509051813097_AjoutSettings.resx">
-      <DependentUpon>201509051813097_AjoutSettings.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201509220848075_initial.resx">
+      <DependentUpon>201509220848075_initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,8 +1,9 @@
 ﻿
-function enableField(checkbox) {
+function enableField() {
     
-    $("#idMotoPerso").prop("disabled", !checkbox.checked);
-    $("select[name=MotoProposeeID").attr("disabled", checkbox.checked).trigger('chosen:updated');
+    $("#conteneurMotoPerso").toggleClass("hidden");
+
+    $("#conteneurMotoProposee").toggleClass("hidden");
 
 }
 
@@ -10,5 +11,16 @@ function enableField(checkbox) {
 $(".chosen-select").chosen({ placeholder_text_multiple: "Choisir plusieurs éléments", placeholder_text_single: "Choisir un élément", no_results_text: "Pas de résultat pour" });
 
 $('.chosen-container').tooltip({ placement: 'right' });
-$("#idMotoPerso").tooltip();
+$("#MotoPerso").tooltip({ placement: 'right' });
 
+
+$(document).ready(function () {
+
+    var c = document.getElementById('PresenceMotoPerso');
+
+    if (c.checked)
+    {
+        enableField();
+    }
+
+});

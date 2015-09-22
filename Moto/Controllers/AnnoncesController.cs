@@ -505,7 +505,7 @@ namespace Motonet.Controllers
         // Affiche le formulaire de création d'une annonce (affichages suivants)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Titre,Description,MotoProposeeID,Annee,Kilometrage,Prix,MotosAccepteesID,MarquesAccepteesID,GenresAcceptesID,Nom,Mail,Telephone,DepartementID,MotDepasse,ConfirmerMotDePasse")] Annonce annonce, IEnumerable<HttpPostedFileBase> photos)
+        public ActionResult Create([Bind(Include = "Titre,Description,MotoProposeeID,PresenceMotoPerso,MotoPerso,Annee,Kilometrage,Prix,MotosAccepteesID,MarquesAccepteesID,GenresAcceptesID,Nom,Mail,Telephone,DepartementID,MotDepasse,ConfirmerMotDePasse")] Annonce annonce, IEnumerable<HttpPostedFileBase> photos)
         {
 
             int tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]);
@@ -657,7 +657,7 @@ namespace Motonet.Controllers
 
 
             // On vérifie que le code saisi est le bon (une fois hashé)
-            if (!Annonce.VerifyHashedPassword(annonce.MotDePasse, password))
+            if (!Annonce.VerifyHashedPassword(annonce.MotDePasse, password) && (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"]))
             {
                 ViewBag.Message = "Mot de passe incorrect";
                 ViewBag.AnnonceID = annonce.ID;
@@ -716,7 +716,7 @@ namespace Motonet.Controllers
 
 
             // On vérifie que le code saisi est le bon (une fois hashé)
-            if (!Annonce.VerifyHashedPassword(annonceToUpdate.MotDePasse, password))
+            if (!Annonce.VerifyHashedPassword(annonceToUpdate.MotDePasse, password) && (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"]))
             {
                 ViewBag.Message = "Mot de passe incorrect";
                 return View();

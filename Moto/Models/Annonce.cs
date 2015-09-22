@@ -44,6 +44,7 @@ namespace Motonet.Models
         [Required]
         [StringLength(30, ErrorMessage = "La longueur doit être comprise entre {2} et {1}.", MinimumLength = 3)]
         [DataType(DataType.Text)]
+        [DisplayAttribute(Name = "Pseudo")]
         public string Nom { get; set; }
 
         [Required]
@@ -87,6 +88,11 @@ namespace Motonet.Models
         [Required]
         [DisplayAttribute(Name = "Modèle")]
         public int MotoProposeeID { get; set; }
+
+        public Boolean PresenceMotoPerso { get; set; }
+
+        [DataType(DataType.Text)]
+        public string MotoPerso { get; set; }
 
         [Required]
         [DisplayAttribute(Name = "Département")]

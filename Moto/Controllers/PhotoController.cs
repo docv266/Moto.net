@@ -1,4 +1,5 @@
 ﻿using Motonet.DAL;
+using Motonet.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,19 @@ namespace Motonet.Controllers
         // GET: Photo
         public ActionResult Index(int id)
         {
-            var fileToRetrieve = db.Photos.Find(id);
+            Photo fileToRetrieve = db.Photos.Find(id);
 
-            return File(fileToRetrieve.Content, fileToRetrieve.ContentType);
+            return File(fileToRetrieve.CheminComplet, GetContentType(fileToRetrieve.CheminComplet));
+        }
+
+        private string GetContentType(string fileName)
+        {
+            string strcontentType = "application/octet-stream";
+            string ext = System.IO.Path.GetExtension(fileName).ToLower();
+            Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(ext);
+            if (registryKey != null && registryKey.GetValue("Content Type") != null)
+                strcontentType = registryKey.GetValue("Content Type").ToString();
+            return strcontentType;
         }
     }
 }

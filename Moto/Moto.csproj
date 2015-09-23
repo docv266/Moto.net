@@ -164,6 +164,10 @@
     <Compile Include="Migrations\201509220848075_initial.Designer.cs">
       <DependentUpon>201509220848075_initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201509231013456_PhotoToFileSystem.cs" />
+    <Compile Include="Migrations\201509231013456_PhotoToFileSystem.Designer.cs">
+      <DependentUpon>201509231013456_PhotoToFileSystem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Annonce.cs" />
     <Compile Include="Models\Departement.cs" />
@@ -315,6 +319,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Photos\Miniatures\" />
+    <Folder Include="Content\Photos\Vignettes\" />
     <Folder Include="Views\Photo\" />
   </ItemGroup>
   <ItemGroup>
@@ -326,6 +332,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201509220848075_initial.resx">
       <DependentUpon>201509220848075_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509231013456_PhotoToFileSystem.resx">
+      <DependentUpon>201509231013456_PhotoToFileSystem.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -418,6 +418,11 @@ namespace Motonet.Controllers
                     Raison = raison
                 });
 
+                foreach (Photo photoASupprimer in annonceASupprimer.Photos)
+                {
+                    System.IO.File.Delete(photoASupprimer.CheminComplet);
+                }
+
                 db.Annonces.Remove(annonceASupprimer);
                 db.SaveChanges();
             }
@@ -529,11 +534,14 @@ namespace Motonet.Controllers
 
                         Image imageRedimensionneeMiniature = ScaleImage(imageOriginale, largeurMaxMiniature, hauteurMaxMiniature);
 
+                        String savePathMiniature = Server.MapPath("~/Content/Photos/Miniatures/" + annonce.ID + "_" + i + ".png");
+
+                        imageRedimensionneeMiniature.Save(savePathMiniature, System.Drawing.Imaging.ImageFormat.Png);
+
                         var photoMiniature = new Photo
                         {
                             Taille = Photo.TypeTaille.Miniature,
-                            ContentType = fichier.ContentType,
-                            Content = imageToByteArray(imageRedimensionneeMiniature, fichier.ContentType)
+                            CheminComplet = savePathMiniature
                         };
                                           
                         annonce.Photos.Add(photoMiniature);
@@ -544,11 +552,14 @@ namespace Motonet.Controllers
 
                         Image imageRedimensionneeVignette = ScaleImage(imageOriginale, largeurMaxVignette, hauteurMaxVignette);
 
+                        String savePathVignette = Server.MapPath("~/Content/Photos/Vignettes/" + annonce.ID + "_" + i + ".png");
+
+                        imageRedimensionneeVignette.Save(savePathVignette, System.Drawing.Imaging.ImageFormat.Png);
+
                         var photoVignette = new Photo
                         {
                             Taille = Photo.TypeTaille.Vignette,
-                            ContentType = fichier.ContentType,
-                            Content = imageToByteArray(imageRedimensionneeVignette, fichier.ContentType)
+                            CheminComplet = savePathVignette
                         };
 
                         annonce.Photos.Add(photoVignette);
@@ -732,6 +743,12 @@ namespace Motonet.Controllers
                     if (photos != null && photos.First() != null)
                     {
                         // On vide la liste pour mettre uniquement les nouvelles photos.
+                        // On supprime les photos
+                        foreach (Photo photoASupprimer in annonceToUpdate.Photos)
+                        {
+                            System.IO.File.Delete(photoASupprimer.CheminComplet);
+                        }
+
                         db.Photos.RemoveRange(annonceToUpdate.Photos);
                         db.SaveChanges();
 
@@ -750,11 +767,14 @@ namespace Motonet.Controllers
 
                                 Image imageRedimensionneeMiniature = ScaleImage(imageOriginale, largeurMaxMiniature, hauteurMaxMiniature);
 
+                                String savePathMiniature = Server.MapPath("~/Content/Photos/Miniatures/" + annonceToUpdate.ID + "_" + i + ".png");
+
+                                imageRedimensionneeMiniature.Save(savePathMiniature, System.Drawing.Imaging.ImageFormat.Png);
+
                                 var photoMiniature = new Photo
                                 {
                                     Taille = Photo.TypeTaille.Miniature,
-                                    ContentType = fichier.ContentType,
-                                    Content = imageToByteArray(imageRedimensionneeMiniature, fichier.ContentType)
+                                    CheminComplet = savePathMiniature
                                 };
 
                                 annonceToUpdate.Photos.Add(photoMiniature);
@@ -765,11 +785,14 @@ namespace Motonet.Controllers
 
                                 Image imageRedimensionneeVignette = ScaleImage(imageOriginale, largeurMaxVignette, hauteurMaxVignette);
 
+                                String savePathVignette = Server.MapPath("~/Content/Photos/Vignettes/" + annonceToUpdate.ID + "_" + i + ".png");
+
+                                imageRedimensionneeVignette.Save(savePathVignette, System.Drawing.Imaging.ImageFormat.Png);
+
                                 var photoVignette = new Photo
                                 {
                                     Taille = Photo.TypeTaille.Vignette,
-                                    ContentType = fichier.ContentType,
-                                    Content = imageToByteArray(imageRedimensionneeVignette, fichier.ContentType)
+                                    CheminComplet = savePathVignette
                                 };
 
                                 annonceToUpdate.Photos.Add(photoVignette);
@@ -894,8 +917,13 @@ namespace Motonet.Controllers
             }
 
             // A ce niveau, le mot de passe a été renseigné et est correct
-            // On affiche la page de suppression de l'annonce
-
+            // On supprime les photos
+            foreach (Photo photoASupprimer in annonce.Photos)
+            {
+                System.IO.File.Delete(photoASupprimer.CheminComplet);
+            }
+                        
+            // On supprime l'annonce
             db.Annonces.Remove(annonce);
             db.SaveChanges();
 
@@ -1116,31 +1144,6 @@ namespace Motonet.Controllers
 
             return newImage;
         }        
-
-        // Image vers Byte array
-        private byte[] imageToByteArray(System.Drawing.Image imageIn, String ContentType)
-        {
-            MemoryStream ms = new MemoryStream();
-
-            if (ContentType.Equals(GetMimeType(System.Drawing.Imaging.ImageFormat.Bmp)))
-            {
-                imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-            }
-            else if (ContentType.Equals(GetMimeType(System.Drawing.Imaging.ImageFormat.Gif)))
-            {
-                imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
-            }
-            else if (ContentType.Equals(GetMimeType(System.Drawing.Imaging.ImageFormat.Jpeg)))
-            {
-                imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-            }
-            else if (ContentType.Equals(GetMimeType(System.Drawing.Imaging.ImageFormat.Png)))
-            {
-                imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-            }                    
-
-            return ms.ToArray();
-        }
               
         // Récupérer le type Mime de l'image
         private string GetMimeType(ImageFormat imageFormat)

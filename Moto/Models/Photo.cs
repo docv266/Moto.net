@@ -12,10 +12,7 @@ namespace Motonet.Models
 
         public TypeTaille Taille { get; set; }
 
-        [StringLength(100)]
-        public string ContentType { get; set; }
-
-        public byte[] Content { get; set; }
+        public string CheminComplet { get; set; }
 
         public int AnnonceID { get; set; }
 

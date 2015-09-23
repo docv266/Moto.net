@@ -200,6 +200,8 @@
     <Content Include="Content\chosen.min.css" />
     <Content Include="Content\logo.png" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\Photos\Miniatures\thxMS.txt" />
+    <Content Include="Content\Photos\Vignettes\thxMS.txt" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -319,8 +321,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\Photos\Miniatures\" />
-    <Folder Include="Content\Photos\Vignettes\" />
     <Folder Include="Views\Photo\" />
   </ItemGroup>
   <ItemGroup>

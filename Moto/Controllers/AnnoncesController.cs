@@ -519,6 +519,22 @@ namespace Motonet.Controllers
             if (ModelState.IsValid)
             {
                 
+                                // On hash le mot de passe
+                annonce.MotDePasse = Annonce.HashPassword(annonce.MotDePasse);
+                annonce.ConfirmerMotDePasse = annonce.MotDePasse;
+
+                // L'annonce est faite à la date du jour
+                annonce.Date = DateTime.Today;
+                                
+                // On ajoute les modèles, marques et genres acceptés
+                ProcessManyToManyRelationships(annonce);
+
+                db.Annonces.Add(annonce);
+
+                // On sauvi ici pour que l'ID de l'annonce soit accessible pour l'utiliser pour nommer les photos.
+                db.SaveChanges();
+
+
                 // On parcourt les fichiers sélectionnés (dans la limite de "nombreMaxdePhotos") afin de les redimensionner et les stocker
                 for (int i = 0; i < ((nombreMaxdePhotos < photos.Count()) ? nombreMaxdePhotos : photos.Count()); i++)
                 {
@@ -543,9 +559,9 @@ namespace Motonet.Controllers
                             Taille = Photo.TypeTaille.Miniature,
                             CheminComplet = savePathMiniature
                         };
-                                          
+
                         annonce.Photos.Add(photoMiniature);
-                        
+
                         // Ajout de la version Vignette de cette image
                         int largeurMaxVignette = int.Parse(ConfigurationManager.AppSettings["largeurMaxVignette"]);
                         int hauteurMaxVignette = int.Parse(ConfigurationManager.AppSettings["hauteurMaxVignette"]);
@@ -575,20 +591,9 @@ namespace Motonet.Controllers
                     annonce.Photos.ElementAt(1).Principale = true;
                 }
 
-
-                // On hash le mot de passe
-                annonce.MotDePasse = Annonce.HashPassword(annonce.MotDePasse);
-                annonce.ConfirmerMotDePasse = annonce.MotDePasse;
-
-                // L'annonce est faite à la date du jour
-                annonce.Date = DateTime.Today;
-                                
-                // On ajoute les modèles, marques et genres acceptés
-                ProcessManyToManyRelationships(annonce);
-
-                db.Annonces.Add(annonce);
+                // On sauve à nouveau pour les modifications des images
                 db.SaveChanges();
-                
+
                 // On envoie un mail pour valider l'adresse
                 MailValiderAdresse email = new MailValiderAdresse
                 {
@@ -740,6 +745,12 @@ namespace Motonet.Controllers
             {
                 try
                 {
+                    
+                    annonceToUpdate.Date = DateTime.Today;
+                    ProcessManyToManyRelationships(annonceToUpdate);
+                    db.SaveChanges();
+
+
                     if (photos != null && photos.First() != null)
                     {
                         // On vide la liste pour mettre uniquement les nouvelles photos.
@@ -821,9 +832,6 @@ namespace Motonet.Controllers
                         annonceToUpdate.Photos.ElementAt(annonceToUpdate.Photos.IndexOf(photoPr) + 1).Principale = true;
                     }
 
-
-                    annonceToUpdate.Date = DateTime.Today;
-                    ProcessManyToManyRelationships(annonceToUpdate);
                     db.SaveChanges();
 
                     return RedirectToAction("Details", new { id = annonceToUpdate.ID });

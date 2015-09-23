@@ -307,10 +307,11 @@
     <Content Include="Views\Annonces\MessageEnvoye.cshtml" />
     <Content Include="Views\Emails\MailEnvoyer.cshtml" />
     <Content Include="Views\Home\GenericError.cshtml" />
-    <Content Include="Views\Home\InternalError.cshtml" />
+    <Content Include="Views\Home\Error404.cshtml" />
     <Content Include="Views\Home\PasswordAdmin.cshtml" />
     <Content Include="Views\Emails\MailAdminAnnoncePostee.cshtml" />
     <Content Include="Views\Shared\_ListeAnnonces.cshtml" />
+    <Content Include="Views\Home\Error403.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

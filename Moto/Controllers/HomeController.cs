@@ -28,7 +28,12 @@ namespace Motonet.Controllers
             return View();
         }
 
-        public ActionResult InternalError()
+        public ActionResult Error404()
+        {
+            return View();
+        }
+
+        public ActionResult Error403()
         {
             return View();
         }

@@ -6,14 +6,16 @@ $(".chosen-select").chosen({ no_results_text: "Pas de résultat pour", width: '1
 
 // Effacer les données du formulaire de filtrage
 function clearForm() {
-    $('#formFilter').trigger("reset");
+
+    // Efface les valeurs des champs text et number de la form #formFilter
+    $("form#formFilter input[type=text],form#formFilter input[type=number]").each(function () {
+        var input = $(this);
+        input.val("");
+    });
+
+    // Efface les valeurs des champs chosen
     $(".chosen-select").val('').trigger("chosen:updated");
 }
-
-// Redonner au bouton Clear une apparence normale après un clic
-$('#buttonClear').mouseup(function () {
-    $(this).blur();
-})
 
 // Conserver l'état de la div de filtrage
 function retainDivCollapsedState(nameOfDiv, nameOfHeader) {

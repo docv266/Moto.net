@@ -557,7 +557,8 @@ namespace Motonet.Controllers
                         var photoMiniature = new Photo
                         {
                             Taille = Photo.TypeTaille.Miniature,
-                            CheminComplet = savePathMiniature
+                            CheminComplet = savePathMiniature,
+                            ModifiedDate = DateTime.Now
                         };
 
                         annonce.Photos.Add(photoMiniature);
@@ -575,7 +576,8 @@ namespace Motonet.Controllers
                         var photoVignette = new Photo
                         {
                             Taille = Photo.TypeTaille.Vignette,
-                            CheminComplet = savePathVignette
+                            CheminComplet = savePathVignette,
+                            ModifiedDate = DateTime.Now
                         };
 
                         annonce.Photos.Add(photoVignette);
@@ -785,7 +787,8 @@ namespace Motonet.Controllers
                                 var photoMiniature = new Photo
                                 {
                                     Taille = Photo.TypeTaille.Miniature,
-                                    CheminComplet = savePathMiniature
+                                    CheminComplet = savePathMiniature,
+                                    ModifiedDate = DateTime.Now
                                 };
 
                                 annonceToUpdate.Photos.Add(photoMiniature);
@@ -803,7 +806,8 @@ namespace Motonet.Controllers
                                 var photoVignette = new Photo
                                 {
                                     Taille = Photo.TypeTaille.Vignette,
-                                    CheminComplet = savePathVignette
+                                    CheminComplet = savePathVignette,
+                                    ModifiedDate = DateTime.Now
                                 };
 
                                 annonceToUpdate.Photos.Add(photoVignette);

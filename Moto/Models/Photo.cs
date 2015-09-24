@@ -18,6 +18,8 @@ namespace Motonet.Models
 
         public Boolean Principale { get; set; }
 
+        public DateTime ModifiedDate { get; set; }
+
         public virtual Annonce Annonce { get; set; }
 
         public enum TypeTaille { Miniature, Vignette }

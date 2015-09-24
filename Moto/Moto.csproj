@@ -168,6 +168,10 @@
     <Compile Include="Migrations\201509231013456_PhotoToFileSystem.Designer.cs">
       <DependentUpon>201509231013456_PhotoToFileSystem.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201509241302256_PhotoLastModified.cs" />
+    <Compile Include="Migrations\201509241302256_PhotoLastModified.Designer.cs">
+      <DependentUpon>201509241302256_PhotoLastModified.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Annonce.cs" />
     <Compile Include="Models\Departement.cs" />
@@ -335,6 +339,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509231013456_PhotoToFileSystem.resx">
       <DependentUpon>201509231013456_PhotoToFileSystem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509241302256_PhotoLastModified.resx">
+      <DependentUpon>201509241302256_PhotoLastModified.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

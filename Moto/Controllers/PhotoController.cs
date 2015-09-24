@@ -16,9 +16,35 @@ namespace Motonet.Controllers
         // GET: Photo
         public ActionResult Index(int id)
         {
+
+            HttpContext.Response.Cache.SetCacheability(HttpCacheability.Public);
+            HttpContext.Response.Cache.SetMaxAge(new TimeSpan(1, 0, 0));
+
             Photo fileToRetrieve = db.Photos.Find(id);
 
+            string rawIfModifiedSince = HttpContext.Request.Headers.Get("If-Modified-Since");
+            if (string.IsNullOrEmpty(rawIfModifiedSince))
+            {
+                // Set Last Modified time
+                HttpContext.Response.Cache.SetLastModified(fileToRetrieve.ModifiedDate);
+            }
+            else
+            {
+                DateTime ifModifiedSince = DateTime.Parse(rawIfModifiedSince);
+
+
+                // HTTP does not provide milliseconds, so remove it from the comparison
+                if (fileToRetrieve.ModifiedDate.AddMilliseconds(-fileToRetrieve.ModifiedDate.Millisecond) == ifModifiedSince)
+                {
+                    // The requested file has not changed
+                    HttpContext.Response.StatusCode = 304;
+                    return Content(string.Empty);
+                }
+            }
+
             return File(fileToRetrieve.CheminComplet, GetContentType(fileToRetrieve.CheminComplet));
+
+
         }
 
         private string GetContentType(string fileName)

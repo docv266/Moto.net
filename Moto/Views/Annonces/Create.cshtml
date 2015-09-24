@@ -176,7 +176,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Telephone, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-5">
-                    @Html.EditorFor(model => model.Telephone, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.Telephone, new { htmlAttributes = new { @class = "form-control", type = "tel" } })
                 </div>
                 <div class="col-md-5">
                     @Html.ValidationMessageFor(model => model.Telephone, "", new { @class = "text-danger" })

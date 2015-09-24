@@ -76,7 +76,7 @@ else
                         </div>
 
                         <div id="conteneurMotoProposee">
-                            @Html.DropDownList("MotoProposeeID", (SelectList)ViewBag.MotoProposeeID, new { @class = "chosen-select form-control", data_toggle = "tooltip", title = "Votre moto n'apparait pas dans la liste? cochez la case ci-dessus!" })
+                            @Html.DropDownList("MotoProposeeID", null, String.Empty, new { @class = "chosen-select form-control", data_toggle = "tooltip", title = "Votre moto n'apparait pas dans la liste? cochez la case ci-dessus!" })
                         </div>
 
                         <div id="conteneurMotoPerso" class="hidden">

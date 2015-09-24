@@ -71,7 +71,7 @@ namespace Motonet.Models
         [EmailAddress(ErrorMessage = "Entrer une adresse mail valide.")]
         public string Mail { get; set; }
 
-        [DataType(DataType.PhoneNumber)]
+        [RegularExpression("^0[1-9]([-. ]?[0-9]{2}){4}$", ErrorMessage = "Saisir un numéro de téléphone valide.")]
         [DisplayAttribute(Name = "Téléphone")]
         [DisplayFormat(NullDisplayText = "Non renseigné")]
         public string Telephone { get; set; }

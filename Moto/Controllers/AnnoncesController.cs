@@ -741,7 +741,7 @@ namespace Motonet.Controllers
             annonceToUpdate.ConfirmerMotDePasse = annonceToUpdate.MotDePasse;
 
             if (TryUpdateModel(annonceToUpdate, "",
-               new string[] { "Titre", "Description", "MotoProposeeID", "Annee", "Kilometrage", "Prix", "MotosAccepteesID", "MarquesAccepteesID", "GenresAcceptesID", "Nom", "Mail", "Telephone", "DepartementsID" }))
+               new string[] { "Titre", "Description", "MotoProposeeID", "Annee", "Kilometrage", "Prix", "MotosAccepteesID", "MarquesAccepteesID", "GenresAcceptesID", "Nom", "Mail", "Telephone", "DepartementID" }))
             {
                 try
                 {

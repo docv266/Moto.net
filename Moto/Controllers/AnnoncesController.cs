@@ -548,7 +548,7 @@ namespace Motonet.Controllers
                         int largeurMaxMiniature = int.Parse(ConfigurationManager.AppSettings["largeurMaxMiniature"]);
                         int hauteurMaxMiniature = int.Parse(ConfigurationManager.AppSettings["hauteurMaxMiniature"]);
 
-                        Image imageRedimensionneeMiniature = ScaleImage(imageOriginale, largeurMaxMiniature, hauteurMaxMiniature);
+                        Image imageRedimensionneeMiniature = ScaleImage(imageOriginale, largeurMaxMiniature, hauteurMaxMiniature, false);
 
                         String savePathMiniature = Server.MapPath("~/Content/Photos/Miniatures/" + annonce.ID + "_" + i + ".png");
 
@@ -566,7 +566,7 @@ namespace Motonet.Controllers
                         int largeurMaxVignette = int.Parse(ConfigurationManager.AppSettings["largeurMaxVignette"]);
                         int hauteurMaxVignette = int.Parse(ConfigurationManager.AppSettings["hauteurMaxVignette"]);
 
-                        Image imageRedimensionneeVignette = ScaleImage(imageOriginale, largeurMaxVignette, hauteurMaxVignette);
+                        Image imageRedimensionneeVignette = ScaleImage(imageOriginale, largeurMaxVignette, hauteurMaxVignette, true);
 
                         String savePathVignette = Server.MapPath("~/Content/Photos/Vignettes/" + annonce.ID + "_" + i + ".png");
 
@@ -776,7 +776,7 @@ namespace Motonet.Controllers
                                 int largeurMaxMiniature = int.Parse(ConfigurationManager.AppSettings["largeurMaxMiniature"]);
                                 int hauteurMaxMiniature = int.Parse(ConfigurationManager.AppSettings["hauteurMaxMiniature"]);
 
-                                Image imageRedimensionneeMiniature = ScaleImage(imageOriginale, largeurMaxMiniature, hauteurMaxMiniature);
+                                Image imageRedimensionneeMiniature = ScaleImage(imageOriginale, largeurMaxMiniature, hauteurMaxMiniature, false);
 
                                 String savePathMiniature = Server.MapPath("~/Content/Photos/Miniatures/" + annonceToUpdate.ID + "_" + i + ".png");
 
@@ -794,7 +794,7 @@ namespace Motonet.Controllers
                                 int largeurMaxVignette = int.Parse(ConfigurationManager.AppSettings["largeurMaxVignette"]);
                                 int hauteurMaxVignette = int.Parse(ConfigurationManager.AppSettings["hauteurMaxVignette"]);
 
-                                Image imageRedimensionneeVignette = ScaleImage(imageOriginale, largeurMaxVignette, hauteurMaxVignette);
+                                Image imageRedimensionneeVignette = ScaleImage(imageOriginale, largeurMaxVignette, hauteurMaxVignette, true);
 
                                 String savePathVignette = Server.MapPath("~/Content/Photos/Vignettes/" + annonceToUpdate.ID + "_" + i + ".png");
 
@@ -1136,7 +1136,7 @@ namespace Motonet.Controllers
         }
 
         // Redimensionne l'image en gardant son ratio et en étant inférieur au maximum de largeur et hauteur
-        private Image ScaleImage(Image image, int maxWidth, int maxHeight)
+        private Image ScaleImage(Image image, int maxWidth, int maxHeight, Boolean watermarker)
         {
             var ratioX = (double)maxWidth / image.Width;
             var ratioY = (double)maxHeight / image.Height;
@@ -1149,6 +1149,34 @@ namespace Motonet.Controllers
 
             using (var graphics = Graphics.FromImage(newImage))
                 graphics.DrawImage(image, 0, 0, newWidth, newHeight);
+
+
+            string watermarkText = "© moto-echange.fr";
+
+            if (watermarker)
+            { 
+                using (Graphics grp = Graphics.FromImage(newImage))
+                {
+
+                    //Set the Color of the Watermark text.
+                    Brush brush = new SolidBrush(Color.Red);
+
+                    //Set the Font and its size.
+                    Font font = new System.Drawing.Font("Arial", 10, FontStyle.Bold, GraphicsUnit.Pixel);
+
+                    //Determine the size of the Watermark text.
+                    SizeF textSize = new SizeF();
+                    textSize = grp.MeasureString(watermarkText, font);
+
+                    //Position the text and draw it on the image.
+                    Point position = new Point((newImage.Width - ((int)textSize.Width + 10)), (newImage.Height - ((int)textSize.Height + 10)));
+                    grp.DrawString(watermarkText, font, brush, position);
+
+                    
+                }
+            }
+            
+
 
             return newImage;
         }        

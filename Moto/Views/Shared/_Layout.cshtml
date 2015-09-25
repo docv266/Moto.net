@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Echanger facilement et gratuitement son deux-roues!" />
+    <meta name="description" content="Vendre ou échanger facilement et gratuitement son deux-roues!" />
     <title>Moto échange</title>
 
     @Styles.Render("~/Content/css")
@@ -54,15 +54,20 @@
 
         <div class="header">
 
-            <a href="@Url.Action("Index", "Annonces", null)">
-                <img src="~/Content/Logo.png">
-            </a>
+            <div>
+                <a href="@Url.Action("Index", "Annonces", null)" style="text-decoration: none;">
+                    <img src="~/Content/Logo.png">
+                </a>
 
-            @RenderSection("BoutonAjouter", required: false)
+                <span class="Phrase vcenter">Vendez ou échangez facilement votre deux-roues!</span>
 
-            
+
+                @RenderSection("BoutonAjouter", required: false)
+            </div>
 
         </div>
+
+        
 
         @RenderBody()
 

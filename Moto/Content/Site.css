@@ -170,6 +170,7 @@ legend {
 .glyphSize {
     font-size: 1.2em;
     color: black;
+    margin-top: 5px;
 }
 
 .glyphSize:hover {
@@ -188,4 +189,13 @@ legend {
 .MaPagination .pagination > .active > span:focus {
   background-color: #ff6262;
   border-color: #ff6262;
+}
+
+.Phrase {
+    font-weight: bold;
+    font-style:italic;
+    font-size:medium;
+    color: red;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 2px;
 }

@@ -1022,7 +1022,15 @@ namespace Motonet.Controllers
                 Message = message
             };
 
-            email.Send();
+            try
+            {
+                email.Send();
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = "Adresse mail non valide (domaine inconnu).";
+                return View("EnvoyerMailAnnonce", annonce);
+            }
 
             return RedirectToAction("MessageEnvoye");
         }

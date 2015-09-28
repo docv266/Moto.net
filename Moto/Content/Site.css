@@ -133,15 +133,6 @@ fieldset {
     min-width: 210px !important;
 }
 
-.alertPerso {
-	position:absolute;
-    z-index:1;
-    top:10%;
-    width:1000px;
-    left: 50%;
-    margin-left:-500px;
-}
-
 #tableIndex tr:hover td {
       background-color: #efefef;
       cursor: pointer;
@@ -161,14 +152,53 @@ legend {
     line-height:75px;
 }
 
-.vcenter {
-    display: inline-block;
-    vertical-align: middle;
-    float: none;
+ @media (min-width: 993px){
+    .vertical-align {
+        display: flex;
+        align-items: center;
+    }
+
+    .Phrase {
+        font-weight: bold;
+        font-style:italic;
+        font-size:medium;
+        color: red;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+}
+
+  @media (min-width: 769px) and (max-width: 992px){
+    .vcenter {
+        margin-bottom:5px;
+    }
+
+    .Phrase {
+        font-weight: bold;
+        font-style:italic;
+        font-size:medium;
+        color: red;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+}
+
+  @media (max-width: 768px){
+
+    .vcenter {
+        margin-bottom:5px;
+    }
+
+    .Phrase {
+        font-weight: bold;
+        font-style:italic;
+        font-size:small;
+        color: red;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 }
 
 .glyphSize {
-    font-size: 1.2em;
+    font-size: 1.1em;
     color: black;
     margin-top: 5px;
 }
@@ -191,11 +221,3 @@ legend {
   border-color: #ff6262;
 }
 
-.Phrase {
-    font-weight: bold;
-    font-style:italic;
-    font-size:medium;
-    color: red;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin-top: 2px;
-}

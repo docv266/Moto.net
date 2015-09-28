@@ -52,24 +52,27 @@
     }
     <div class="container body-content">
 
-        <div class="header">
+        <div class="row vertical-align">
 
-            <div>
+            <div class="col-md-5 col-sm-6 col-xs-12">
                 <a href="@Url.Action("Index", "Annonces", null)" style="text-decoration: none;">
-                    <img src="~/Content/Logo.png">
+                    <img src="~/Content/Logo.png" class="img-responsive">
                 </a>
+            </div>
 
-                <span class="Phrase vcenter">Vendez ou échangez facilement votre deux-roues!</span>
+            <div class="col-md-5 col-sm-6 col-xs-12 vcenter">
+                <span class="Phrase">Vendez ou échangez facilement votre deux-roues!</span>
+            </div>
 
-
+            <div class="col-md-2 col-sm-12 col-xs-12 vcenter">
                 @RenderSection("BoutonAjouter", required: false)
             </div>
 
+
         </div>
 
+       @RenderBody()
         
-
-        @RenderBody()
 
         <hr />
         <footer class="text-center">

@@ -1,57 +1,59 @@
 ﻿@model PagedList.IPagedList<Motonet.Models.Annonce>
 
-<table id="tableIndex" class="table">
-    <tr>
-        <th>
+<div class="table-responsive">
+    <table id="tableIndex" class="table">
+        <tr>
+            <th>
 
-        </th>
-        <th>
+            </th>
+            <th>
 
-        </th>
-        <th>
-            @Html.ActionLink("Année", (string)ViewBag.ActionName, new { sortOrder = ViewBag.AnneeSortParm })
-        </th>
-        <th>
-            @Html.ActionLink("Kilomètrage", (string)ViewBag.ActionName, new { sortOrder = ViewBag.KilometrageSortParm })
-        </th>
-        <th>
-            @Html.ActionLink("Prix", (string)ViewBag.ActionName, new { sortOrder = ViewBag.PrixSortParm })
-        </th>
-        <th>
-            @Html.ActionLink("Date", (string)ViewBag.ActionName, new { sortOrder = ViewBag.DateSortParm })
-        </th>
+            </th>
+            <th class="hidden-xs">
+                @Html.ActionLink("Prix", (string)ViewBag.ActionName, new { sortOrder = ViewBag.PrixSortParm })
+            </th>
+            <th class="hidden-xs">
+                @Html.ActionLink("Kilomètrage", (string)ViewBag.ActionName, new { sortOrder = ViewBag.KilometrageSortParm })
+            </th>
+            <th class="hidden-xs hidden-sm">
+                @Html.ActionLink("Année", (string)ViewBag.ActionName, new { sortOrder = ViewBag.AnneeSortParm })
+            </th>
+            <th class="hidden-xs hidden-sm">
+                @Html.ActionLink("Date", (string)ViewBag.ActionName, new { sortOrder = ViewBag.DateSortParm })
+            </th>
 
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr onclick="location.href = '@(Url.Action("Details", "Annonces", new { id = item.ID }))'">
-            <td>
-                @if (item.Photos.Count > 0)
-                {
-                    <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature && x.Principale == true).ID" alt="Photo non disponible" />
-                }
-            </td>
-            <td>
-                <h5 style="color:red;">@Html.DisplayFor(modelItem => item.Titre)</h5>
-                <div data-toggle="tooltip" data-html="true" title="@item.MotoProposee.IdentificationSuite" data-placement="left" data-container="body">
-                    <b>@Html.DisplayFor(modelItem => item.MotoProposee.Identification, new { sortOrder = ViewBag.PrixSortParm })</b>
-                </div>
-                @Html.DisplayFor(modelItem => item.Departement.Identification)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Annee)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.KilometrageAvecUnite)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PrixAvecUnite)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
         </tr>
-    }
 
-</table>
+        @foreach (var item in Model)
+        {
+            <tr onclick="location.href = '@(Url.Action("Details", "Annonces", new { id = item.ID }))'">
+                <td>
+                    @if (item.Photos.Count > 0)
+                    {
+                        <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature && x.Principale == true).ID" alt="Photo non disponible" class="img-responsive" />
+                    }
+                </td>
+                <td>
+                    <h5 style="color:red;">@Html.DisplayFor(modelItem => item.Titre)</h5>
+                    <div data-toggle="tooltip" data-html="true" title="@item.MotoProposee.IdentificationSuite" data-placement="left" data-container="body">
+                        <b>@Html.DisplayFor(modelItem => item.MotoProposee.Identification, new { sortOrder = ViewBag.PrixSortParm })</b>
+                    </div>
+                    @Html.DisplayFor(modelItem => item.Departement.Identification)
+                </td>
+                <td class="hidden-xs">
+                    @Html.DisplayFor(modelItem => item.PrixAvecUnite)
+                </td>
+                <td class="hidden-xs">
+                    @Html.DisplayFor(modelItem => item.KilometrageAvecUnite)
+                </td>
+                <td class="hidden-xs hidden-sm">
+                    @Html.DisplayFor(modelItem => item.Annee)
+                </td>
+                <td class="hidden-xs hidden-sm">
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

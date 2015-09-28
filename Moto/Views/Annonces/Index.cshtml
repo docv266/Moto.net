@@ -11,126 +11,119 @@
 
 
 @section BoutonAjouter {
-    <a class="pull-right vcenter glyphSize" href="@Url.Action("Create", "Annonces", null)">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-        Créer mon annonce
-    </a>
+    <a class="glyphSize" href="@Url.Action("Create", "Annonces", null)">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Créer mon annonce</a>
 }
 
+<div class="row">
 
-<br />
+    <div class="col-md-12">
 
-<div id="MonAlerte" class="alert alert-success alert-dismissible hidden alertPerso" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <strong>Merci!</strong><br />
-    Vous faites partie des premiers utilisateurs de moto-echange.fr<br />
-    A ce titre n'hésitez pas à remonter vos remarques (page contact)<br />
-    Moto-echange.fr est une plateforme de petites annonces deux roues qui <u>favorise les échanges</u> en proposant des outils pour simplifier le processus.<br />
-    Fait par un motard pour les motards! ;-)
-</div>
+        <div class="panel panel-default" id="panel1">
 
-<div class="panel panel-default" id="panel1">
-    <div class="panel-heading collapser">
-        <h4 class="panel-title">
-            <span data-toggle="collapse" data-target="#collapseOne">
-                Filtrer
-            </span>
-        </h4>
+            <div class="panel-heading collapser">
+                <h4 class="panel-title">
+                    <span data-toggle="collapse" data-target="#collapseOne">Filtrer</span>
+                </h4>
 
-    </div>
-    <div id="collapseOne" class="panel-collapse collapse in">
+            </div>
 
-        <div class="panel-body">
+            <div id="collapseOne" class="panel-collapse collapse in">
 
-    @using (Html.BeginForm("Index", "Annonces", FormMethod.Get, new { id = "formFilter" }))
-    {
+                <div class="panel-body">
 
-        <div class="row formFilter">
+                    @using (Html.BeginForm("Index", "Annonces", FormMethod.Get, new { id = "formFilter" }))
+                    {
 
-            <div class="col-xs-4">
-                <div class="form-group">
-                    <label class="control-label">Titres:</label>
+                        <div class="row formFilter">
 
-                    @Html.TextBox("FiltreTitre", ViewBag.CurrentFilterTitre as string, new { @class = "form-control", placeholder = "Titre" })
-                    @Html.TextBox("FiltreMoto", ViewBag.CurrentFilterMoto as string, new { @class = "form-control", placeholder = "Marque ou modèle" })
+                            <div class="col-xs-4">
+                                <div class="form-group">
+                                    <label class="control-label">Titres:</label>
+
+                                    @Html.TextBox("FiltreTitre", ViewBag.CurrentFilterTitre as string, new { @class = "form-control", placeholder = "Titre" })
+                                    @Html.TextBox("FiltreMoto", ViewBag.CurrentFilterMoto as string, new { @class = "form-control", placeholder = "Marque ou modèle" })
+
+                                </div>
+                            </div>
+
+                            <div class="col-xs-4">
+                                <div class="form-group">
+                                    <label class="control-label">Année:</label>
+                                    @Html.TextBox("FiltreAnneeMin", ViewBag.CurrentFilterAnneeMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "1900", max = DateTime.Now.Year })
+                                    @Html.TextBox("FiltreAnneeMax", ViewBag.CurrentFilterAnneeMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "1900", max = DateTime.Now.Year })
+
+                                </div>
+                            </div>
+
+                            <div class="col-xs-4">
+                                <div class="form-group">
+                                    <label>Kilomètrage:</label>
+                                    @Html.TextBox("FiltreKilometrageMin", ViewBag.CurrentFilterKilometrageMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "0", max = "999999" })
+                                    @Html.TextBox("FiltreKilometrageMax", ViewBag.CurrentFilterKilometrageMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "0", max = "999999" })
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row formFilter">
+
+                            <div class="col-xs-4">
+
+                                <div class="form-group">
+                                    <label>Prix:</label>
+                                    @Html.TextBox("FiltrePrixMin", ViewBag.CurrentFilterPrixMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "0", max = "999999" })
+                                    @Html.TextBox("FiltrePrixMax", ViewBag.CurrentFilterPrixMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "0", max = "999999" })
+                                </div>
+                            </div>
+
+                            <div class="col-xs-4">
+                                <div class="form-group">
+                                    <label>Cylindrée:</label>
+                                    @Html.TextBox("FiltreCylindreeMin", ViewBag.CurrentFilterCylindreeMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "0", max = "7000" })
+                                    @Html.TextBox("FiltreCylindreeMax", ViewBag.CurrentFilterCylindreeMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "0", max = "7000" })
+                                </div>
+                            </div>
+
+                            <div class="col-xs-4">
+                                <div class="form-group">
+                                    <label>Localisation:</label>
+                                    @Html.ListBox("RegionsID", null, new { multiple = "multiple", @class = "chosen-select form-control", data_placeholder = "Région" })
+                                    @Html.ListBox("DepartementsID", null, new { multiple = "multiple", @class = "chosen-select form-control", data_placeholder = "Département" })
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row formFilter">
+                            <div class="col-xs-10">
+                                <input type="submit" value="Filtrer" class="btn btn-danger btn-sm boutonFiltrer" />
+                            </div>
+
+                            <div class="col-xs-2 text-right">
+                                <a class="btn btn-default btn-sm pull-right" onclick='clearForm()'>
+                                    <span class="glyphicon glyphicon-remove" style="color:red;" aria-hidden="true"></span>
+                                    Effacer les filtres
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    }
 
                 </div>
             </div>
-
-            <div class="col-xs-4">
-                <div class="form-group">
-                    <label class="control-label">Année:</label>
-                    @Html.TextBox("FiltreAnneeMin", ViewBag.CurrentFilterAnneeMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "1900", max = DateTime.Now.Year })
-                    @Html.TextBox("FiltreAnneeMax", ViewBag.CurrentFilterAnneeMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "1900", max = DateTime.Now.Year })
-
-                </div>
-            </div>
-
-            <div class="col-xs-4">
-                <div class="form-group">
-                    <label>Kilomètrage:</label>
-                    @Html.TextBox("FiltreKilometrageMin", ViewBag.CurrentFilterKilometrageMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "0", max = "999999" })
-                    @Html.TextBox("FiltreKilometrageMax", ViewBag.CurrentFilterKilometrageMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "0", max = "999999" })
-                </div>
-            </div>
-
         </div>
-
-        <div class="row formFilter">
-
-            <div class="col-xs-4">
-
-                <div class="form-group">
-                    <label>Prix:</label>
-                    @Html.TextBox("FiltrePrixMin", ViewBag.CurrentFilterPrixMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "0", max = "999999" })
-                    @Html.TextBox("FiltrePrixMax", ViewBag.CurrentFilterPrixMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "0", max = "999999" })
-                </div>
-            </div>
-
-            <div class="col-xs-4">
-                <div class="form-group">
-                    <label>Cylindrée:</label>
-                    @Html.TextBox("FiltreCylindreeMin", ViewBag.CurrentFilterCylindreeMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "0", max = "7000" })
-                    @Html.TextBox("FiltreCylindreeMax", ViewBag.CurrentFilterCylindreeMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "0", max = "7000" })
-                </div>
-            </div>
-
-            <div class="col-xs-4">
-                <div class="form-group">
-                    <label>Localisation:</label>
-                    @Html.ListBox("RegionsID", null, new { multiple = "multiple", @class = "chosen-select form-control", data_placeholder = "Région" })
-                    @Html.ListBox("DepartementsID", null, new { multiple = "multiple", @class = "chosen-select form-control", data_placeholder = "Département" })
-                </div>
-            </div>
-
-        </div>
-
-        <div class="row formFilter">
-            <div class="col-xs-10">
-                <input type="submit" value="Filtrer" class="btn btn-danger btn-sm boutonFiltrer" /> 
-            </div>
-
-            <div class="col-xs-2 text-right">
-                <a class="btn btn-default btn-sm pull-right" onclick='clearForm()'>
-                    <span class="glyphicon glyphicon-remove" style="color:red;" aria-hidden="true"></span>
-                    Effacer les filtres
-                </a>
-
-            </div>
-
-        </div>
-
-    }
-
-    </div>
     </div>
 </div>
+
 
 @{Html.RenderPartial("~/Views/Shared/_ListeAnnonces.cshtml");}
 
 
 
-        
+
 <div class="MaPagination">
 
     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
@@ -138,11 +131,11 @@
     @Html.PagedListPager(Model, page => Url.Action("Index",
     new { page, sortOrder = ViewBag.CurrentSort }))
 </div>
-        @section Scripts {
-            
-            @Scripts.Render("~/bundles/chosenJs")
+@section Scripts {
 
-            <script src="~/Scripts/js.cookie.js"></script>
+    @Scripts.Render("~/bundles/chosenJs")
 
-            <script src="~/Scripts/Site_AnnoncesIndex.js"></script>
-        }
+    <script src="~/Scripts/js.cookie.js"></script>
+
+    <script src="~/Scripts/Site_AnnoncesIndex.js"></script>
+}

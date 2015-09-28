@@ -8,15 +8,81 @@
     ViewBag.Title = "Details";
 }
 
-<h3>@Html.DisplayFor(model => model.Titre)</h3>
+<div class="row">
+
+
+        <div class="col-md-8">
+            <h3>@Html.DisplayFor(model => model.Titre)</h3>
+        </div>
+
+        <div class="col-md-4 boutonsModifierSupprimer">
+            <a class="btn btn-default" href="@Url.Content("~/Annonces/Edit/" + Model.ID)">
+                <span class="glyphicon glyphicon-pencil" style="color:red;" aria-hidden="true"></span>
+                Modifier
+            </a>
+            <a class="btn btn-default pull-right" href="@Url.Content("~/Annonces/Delete/" + Model.ID)">
+                <span class="glyphicon glyphicon-trash" style="color:red;" aria-hidden="true"></span>
+                Supprimer
+            </a>
+        </div>
+    
+    </div>
 
 <hr />
   
 <div class="row">
 
-    <div class="col-md-12">
+        <div class="col-md-8">
 
-        <div class="col-md-3">
+            @if (Model.Photos.Any())
+            {
+
+                <fieldset class="fieldsetPhotos">
+
+                    <div id="0" name="Vignette" style="display: block;">
+                        <img src="~/Photo?id=@Model.Photos.Find(x => x.Taille == Photo.TypeTaille.Vignette && x.Principale == true).ID" alt="Photo non disponible" class="img-responsive" />
+                    </div>
+                    @{
+                int compteur = 0;
+                foreach (Photo photo in Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Vignette && x.Principale == false))
+                {
+                    compteur++;
+                    <div id="@compteur" name="Vignette" style="display: none;">
+                        <img src="~/Photo?id=@photo.ID" alt="Photo non disponible" class="img-responsive" />
+                    </div>
+                }
+                    }
+
+                    <br />
+
+                    <a href="javascript: gestionAffichageImages(0)">
+                        <img src="~/Photo?id=@Model.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature && x.Principale == true).ID" alt=" photo non disponible" />
+                    </a>
+
+                    @{
+                int compteur2 = 0;
+                foreach (Photo photo in Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Miniature && x.Principale == false))
+                {
+                    compteur2++;
+                    <a href="javascript: gestionAffichageImages(@compteur2)">
+                        <img src="~/Photo?id=@photo.ID" alt=" photo non disponible" />
+                    </a>
+                }
+                    }
+
+                </fieldset>
+
+            }
+            else
+            {
+                <fieldset class="fieldsetPhotos">
+                    <img src="~/Content/alt.png" alt="Photo non disponible" class="img-responsive" />
+                </fieldset>
+            }
+
+        </div>
+
+        <div class="col-md-4">
 
             <fieldset>
 
@@ -89,72 +155,6 @@
 
                 </dl>
             </fieldset>
-
-
-        </div>
-
-        <div class="col-md-6">
-
-            @if (Model.Photos.Any())
-            {
-
-                <fieldset class="fieldsetPhotos">
-
-                    <div id="0" name="Vignette" style="display: block;">
-                        <img src="~/Photo?id=@Model.Photos.Find(x => x.Taille == Photo.TypeTaille.Vignette && x.Principale == true).ID" alt="Photo non disponible" />
-                    </div>
-                    @{
-                int compteur = 0;
-                foreach (Photo photo in Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Vignette && x.Principale == false))
-                {
-                    compteur++;
-                    <div id="@compteur" name="Vignette" style="display: none;">
-                        <img src="~/Photo?id=@photo.ID" alt="Photo non disponible" />
-                    </div>
-                }
-                    }
-
-                    <br />
-
-                    <a href="javascript: gestionAffichageImages(0)">
-                        <img src="~/Photo?id=@Model.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature && x.Principale == true).ID" alt=" photo non disponible" />
-                    </a>
-
-                    @{
-                int compteur2 = 0;
-                foreach (Photo photo in Model.Photos.FindAll(x => x.Taille == Photo.TypeTaille.Miniature && x.Principale == false))
-                {
-                    compteur2++;
-                    <a href="javascript: gestionAffichageImages(@compteur2)">
-                        <img src="~/Photo?id=@photo.ID" alt=" photo non disponible" />
-                    </a>
-                }
-                    }
-
-                </fieldset>
-
-            }
-            else
-            {
-                <fieldset class="fieldsetPhotos">
-                    <img src="~/Content/alt.png" alt="Photo non disponible" />
-                </fieldset>
-            }
-
-</div>
-
-        <div class="col-md-3">
-
-            <p>
-                <a class="btn btn-default" href="@Url.Content("~/Annonces/Edit/" + Model.ID)">
-                    <span class="glyphicon glyphicon-pencil" style="color:red;" aria-hidden="true"></span>
-                    Modifier
-                </a>
-                <a class="btn btn-default pull-right" href="@Url.Content("~/Annonces/Delete/" + Model.ID)">
-                    <span class="glyphicon glyphicon-trash" style="color:red;" aria-hidden="true"></span>
-                    Supprimer
-                </a>
-            </p>
 
             @if (Model.MotosAcceptees.Any() || Model.MarquesAcceptees.Any() || Model.GenresAcceptes.Any())
             {
@@ -237,22 +237,14 @@
 
         </div>
 
-    </div>
-
 </div>
 
 <div class="row">
 
-    <div class="col-md-1">
-    </div>
-
-    <div class="col-md-10">
+    <div class="col-md-12">
         <pre class="texteDescription">@Html.DisplayFor(model => model.Description)</pre>
     </div>
         
-    <div class="col-md-1">
-    </div>
-
 </div>
 
 

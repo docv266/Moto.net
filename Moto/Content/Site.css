@@ -106,11 +106,11 @@ fieldset {
 }
 
 .fieldsetPhotos div {
-    height: 382px;
-    width: 452px;
+    height: 452px;
+    width: 602px;
     border: 1px solid #ccc;
     margin: 0 auto;
-    line-height: 377px;
+    line-height: 448px;
     background-color: white;
 }
 
@@ -225,3 +225,6 @@ legend {
   border-color: #ff6262;
 }
 
+.boutonsModifierSupprimer {
+    margin-top:22px;
+}

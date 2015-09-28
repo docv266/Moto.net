@@ -30,7 +30,7 @@
                 <td>
                     @if (item.Photos.Count > 0)
                     {
-                        <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature && x.Principale == true).ID" alt="Photo non disponible" class="img-responsive" />
+                        <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature && x.Principale == true).ID" alt="Photo non disponible" />
                     }
                 </td>
                 <td>

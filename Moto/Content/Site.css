@@ -195,6 +195,10 @@ legend {
         color: red;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+
+    .formFilter .chosen-select {
+        margin-bottom: 10px;
+    }
 }
 
 .glyphSize {

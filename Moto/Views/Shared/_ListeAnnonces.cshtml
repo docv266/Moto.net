@@ -30,13 +30,13 @@
                 <td>
                     @if (item.Photos.Count > 0)
                     {
-                        <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature && x.Principale == true).ID" alt="Photo non disponible" />
+                        <img src="~/Photo?id=@item.Photos.Find(x => x.Taille == Photo.TypeTaille.Miniature && x.Principale == true).ID" alt="@item.MotoProposee.Identification" />
                     }
                 </td>
                 <td>
                     <h5 style="color:red;">@Html.DisplayFor(modelItem => item.Titre)</h5>
                     <div data-toggle="tooltip" data-html="true" title="@item.MotoProposee.IdentificationSuite" data-placement="left" data-container="body">
-                        <b>@Html.DisplayFor(modelItem => item.MotoProposee.Identification, new { sortOrder = ViewBag.PrixSortParm })</b>
+                        <b>@Html.DisplayFor(modelItem => item.MotoProposee.Identification)</b>
                     </div>
                     @Html.DisplayFor(modelItem => item.Departement.Identification)
                 </td>

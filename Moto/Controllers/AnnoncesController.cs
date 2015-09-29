@@ -33,7 +33,7 @@ namespace Motonet.Controllers
         {
 
             ViewBag.CurrentSort = sortOrder;
-            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) || sortOrder == "date_desc" ? "date" : "date_desc";
             ViewBag.PrixSortParm = sortOrder == "prix" ? "prix_desc" : "prix";
             ViewBag.AnneeSortParm = sortOrder == "annee" ? "annee_desc" : "annee";
             ViewBag.KilometrageSortParm = sortOrder == "kilometrage" ? "kilometrage_desc" : "kilometrage";
@@ -151,8 +151,8 @@ namespace Motonet.Controllers
 
             switch (sortOrder)
             {
-                case "date_desc":
-                    annonces = annonces.OrderByDescending(s => s.Date);
+                case "date":
+                    annonces = annonces.OrderBy(s => s.Date);
                     break;
                 case "annee":
                     annonces = annonces.OrderBy(s => s.Annee);
@@ -173,7 +173,7 @@ namespace Motonet.Controllers
                     annonces = annonces.OrderByDescending(s => s.Kilometrage);
                     break;
                 default:
-                    annonces = annonces.OrderBy(s => s.Date);
+                    annonces = annonces.OrderByDescending(s => s.Date);
                     break;
             }
 
@@ -193,7 +193,7 @@ namespace Motonet.Controllers
         public ActionResult AnnoncesCompatibles(int id, string sortOrder, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
-            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) || sortOrder == "date_desc" ? "date" : "date_desc";
             ViewBag.PrixSortParm = sortOrder == "prix" ? "prix_desc" : "prix";
             ViewBag.AnneeSortParm = sortOrder == "cylindree" ? "annee_desc" : "annee";
             ViewBag.KilometrageSortParm = sortOrder == "kilometrage" ? "kilometrage_desc" : "kilometrage";
@@ -226,14 +226,18 @@ namespace Motonet.Controllers
                         b.GenresAcceptes.Contains(a.MotoProposee.Genre)
                     )
                 )
+                &&
+                (
+                    a.ID != id
+                )
             );
 
 
 
             switch (sortOrder)
             {
-                case "date_desc":
-                    annonces = annonces.OrderByDescending(s => s.Date);
+                case "date":
+                    annonces = annonces.OrderBy(s => s.Date);
                     break;
                 case "annee":
                     annonces = annonces.OrderBy(s => s.Annee);
@@ -254,7 +258,7 @@ namespace Motonet.Controllers
                     annonces = annonces.OrderByDescending(s => s.Kilometrage);
                     break;
                 default:
-                    annonces = annonces.OrderBy(s => s.Date);
+                    annonces = annonces.OrderByDescending(s => s.Date);
                     break;
             }
 

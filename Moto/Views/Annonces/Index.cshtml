@@ -99,7 +99,8 @@
                             <div class="col-xs-4">
                                 <div class="form-group">
                                     <label>Qui recherche mon deux-roues?</label>
-                                    @Html.DropDownList("MotoProposeeID", null, String.Empty, new { @class = "chosen-select form-control", data_placeholder = "Mon deux-roues" })
+                                    @*@Html.DropDownList("MotoProposeeID", null, String.Empty, new { @class = "chosen-select form-control", data_placeholder = "Mon deux-roues" })*@
+                                    @Html.TextBox("SearchString")
                                 </div>
                             </div>
                         </div>
@@ -144,7 +145,23 @@
 
     @Scripts.Render("~/bundles/chosenJs")
 
+    <script src="~/Scripts/jquery-ui-1.11.4.js"></script>
     <script src="~/Scripts/js.cookie.js"></script>
 
     <script src="~/Scripts/Site_AnnoncesIndex.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("#SearchString").autocomplete({
+                source: "/Motos/AutocompleteSuggestions",
+                minLength: 1,
+                select: function (event, ui) {
+                    if (ui.item) {
+                        $("#SearchString").val(ui.item.value);
+                        $("form").submit();
+                    }
+                }
+            });
+        });
+    </script>
 }

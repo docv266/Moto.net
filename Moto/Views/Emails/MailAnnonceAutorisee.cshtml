@@ -2,18 +2,4 @@
 To: @Model.Destinataire
 From: admin@moto-echange.fr
 Subject: Annonce en ligne!
-Content-Type: text/html; charset=utf-8
-
-<html>
-<body>
-    Bonjour @Model.Nom!<br />
-    Votre annonce est désormais en ligne.<br />
-    <br />
-    Voici l'adresse:<br />
-    @Html.Raw(Model.Lien)<br />
-    <br />
-    L'équipe moto-echange<br />
-    <br />
-    @Html.EmbedImage("~/Content/logo.png")
-</body>
-</html>
+Views: Text, Html

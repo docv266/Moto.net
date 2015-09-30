@@ -1,0 +1,14 @@
+﻿Content-Type: text/html; charset=utf-8
+
+<html>
+<body>
+    Bonjour @Model.Nom.<br />
+    Votre annonce ne peut être mise en ligne pour la raison suivante:<br />
+    <br />
+    @Html.Raw(Model.Raison)<br />
+    <br />
+    L'équipe moto-echange<br />
+    <br />
+    @Html.EmbedImage("~/Content/logo.png")
+</body>
+</html>

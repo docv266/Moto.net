@@ -322,6 +322,16 @@
     <Content Include="Views\Emails\MailAdminAnnoncePostee.cshtml" />
     <Content Include="Views\Shared\_ListeAnnonces.cshtml" />
     <Content Include="Views\Home\Error403.cshtml" />
+    <Content Include="Views\Emails\MailEnvoyer.Text.cshtml" />
+    <Content Include="Views\Emails\MailEnvoyer.Html.cshtml" />
+    <Content Include="Views\Emails\MailValiderAdresse.Text.cshtml" />
+    <Content Include="Views\Emails\MailValiderAdresse.Html.cshtml" />
+    <Content Include="Views\Emails\MailAnnonceRefusee.Text.cshtml" />
+    <Content Include="Views\Emails\MailAnnonceRefusee.Html.cshtml" />
+    <Content Include="Views\Emails\MailAnnonceAutorisee.Text.cshtml" />
+    <Content Include="Views\Emails\MailAnnonceAutorisee.Html.cshtml" />
+    <Content Include="Views\Emails\MailAdminAnnoncePostee.Text.cshtml" />
+    <Content Include="Views\Emails\MailAdminAnnoncePostee.Html.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

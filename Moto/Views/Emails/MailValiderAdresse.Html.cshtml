@@ -1,0 +1,18 @@
+﻿Content-Type: text/html; charset=utf-8
+
+<html>
+    <body>
+        <h4>Bonjour @Model.Nom!</h4>
+        Merci d'avoir déposé une annonce sur moto-echange.
+        <br />
+        <br />
+        Afin de valider l'adresse mail fournie, veuillez cliquer sur le lien suivant:<br />
+        @Html.Raw(Model.Lien)
+        <br />
+        <br />
+        L'équipe moto-echange
+        <br />
+        <br />
+        @Html.EmbedImage("~/Content/logo.png")
+    </body>
+</html>

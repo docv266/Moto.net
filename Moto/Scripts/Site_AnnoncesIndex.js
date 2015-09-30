@@ -38,14 +38,7 @@ function retainDivCollapsedState(nameOfDiv, nameOfHeader) {
 // Faire disparaitre l'alerte au bout de quelques secondes
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
-    $(".alert").delay(8000).addClass("in").fadeOut(1500);
+    
     retainDivCollapsedState("collapseOne", "panel1");
-
-
-    if (Cookies.get("PremierAffichage") != "false") {
-        $("#MonAlerte").removeClass("hidden");
-    }
-
-    Cookies.set("PremierAffichage", "false");
 
 });

@@ -26,14 +26,14 @@ namespace Motonet.Controllers
         public ActionResult Index(string sortOrder, int? page, string currentFilterTitre,
             string currentFilterMoto, string currentFilterAnneeMin, string currentFilterAnneeMax,
             string currentFilterKilometrageMin, string currentFilterKilometrageMax, string currentFilterPrixMin,
-            string currentFilterPrixMax, string currentFilterCylindreeMin, string currentFilterCylindreeMax, List<int> currentFilterRegionID, List<int> currentFilterDepartementID, 
+            string currentFilterPrixMax, string currentFilterCylindreeMin, string currentFilterCylindreeMax, List<int> currentFilterRegionID, List<int> currentFilterDepartementID, string currentFilterMotoProposeeID,
             string FiltreTitre, string FiltreMoto, string FiltreAnneeMin, string FiltreAnneeMax,
             string FiltreKilometrageMin, string FiltreKilometrageMax, string FiltrePrixMin,
-            string FiltrePrixMax, string FiltreCylindreeMin, string FiltreCylindreeMax, List<int> RegionsID, List<int> DepartementsID)
+            string FiltrePrixMax, string FiltreCylindreeMin, string FiltreCylindreeMax, List<int> RegionsID, List<int> DepartementsID, int? MotoProposeeID)
         {
 
             ViewBag.CurrentSort = sortOrder;
-            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) || sortOrder == "date_desc" ? "date" : "date_desc";
             ViewBag.PrixSortParm = sortOrder == "prix" ? "prix_desc" : "prix";
             ViewBag.AnneeSortParm = sortOrder == "annee" ? "annee_desc" : "annee";
             ViewBag.KilometrageSortParm = sortOrder == "kilometrage" ? "kilometrage_desc" : "kilometrage";
@@ -42,7 +42,7 @@ namespace Motonet.Controllers
             if (FiltreTitre != null || FiltreMoto != null || FiltreAnneeMin != null || FiltreAnneeMax != null ||
                 FiltreKilometrageMin != null || FiltreKilometrageMax != null ||
                 FiltrePrixMin != null || FiltrePrixMax != null ||
-                FiltreCylindreeMin != null || FiltreCylindreeMax != null || RegionsID != null || DepartementsID != null)
+                FiltreCylindreeMin != null || FiltreCylindreeMax != null || RegionsID != null || DepartementsID != null || MotoProposeeID != null)
             {
                 page = 1;
             }
@@ -60,6 +60,7 @@ namespace Motonet.Controllers
                 FiltreCylindreeMax = currentFilterCylindreeMax;
                 RegionsID = currentFilterRegionID;
                 DepartementsID = currentFilterDepartementID;
+                MotoProposeeID = String.IsNullOrEmpty(currentFilterMotoProposeeID) ? 0 : int.Parse(currentFilterMotoProposeeID);
             }
 
             ViewBag.CurrentFilterTitre = FiltreTitre;
@@ -73,10 +74,11 @@ namespace Motonet.Controllers
             ViewBag.CurrentFilterCylindreeMin = FiltreCylindreeMin;
             ViewBag.CurrentFilterCylindreeMax = FiltreCylindreeMax;
              
-            var annonces = from s in db.Annonces
-                        select s;
+            //var annonces = from s in db.Annonces
+            //            select s;
 
-            annonces = annonces.Where(s => s.Autorisee == true && s.Validee == true);
+            var annonces = db.Annonces.ToList().Where(s => s.Autorisee == true && s.Validee == true);
+
 
             int intFiltreAnneeMin;
             int intFiltreAnneeMax;
@@ -148,11 +150,28 @@ namespace Motonet.Controllers
                 annonces = annonces.Where(s => DepartementsID.Contains(s.Departement.ID));
             }
 
+            if (MotoProposeeID > 0)
+            {
+                Moto m = db.Motos.Find(MotoProposeeID);
+
+                annonces = annonces.ToList().Where(a =>
+                    (
+                        a.MotosAcceptees.Contains(m)
+                        ||
+                        (
+                            a.MarquesAcceptees.Contains(m.Marque)
+                            &&
+                            a.GenresAcceptes.Contains(m.Genre)
+                        )
+                    )
+                );
+            }
+
 
             switch (sortOrder)
             {
-                case "date_desc":
-                    annonces = annonces.OrderByDescending(s => s.Date);
+                case "date":
+                    annonces = annonces.OrderBy(s => s.Date);
                     break;
                 case "annee":
                     annonces = annonces.OrderBy(s => s.Annee);
@@ -173,7 +192,7 @@ namespace Motonet.Controllers
                     annonces = annonces.OrderByDescending(s => s.Kilometrage);
                     break;
                 default:
-                    annonces = annonces.OrderBy(s => s.Date);
+                    annonces = annonces.OrderByDescending(s => s.Date);
                     break;
             }
 
@@ -182,6 +201,7 @@ namespace Motonet.Controllers
 
             PopulateRegionsDropDownList(RegionsID);
             PopulateMultiDepartementsDropDownList(DepartementsID);
+            PopulateMotosDropDownList(MotoProposeeID);
 
 
             ViewBag.ActionName = "Index";
@@ -193,7 +213,7 @@ namespace Motonet.Controllers
         public ActionResult AnnoncesCompatibles(int id, string sortOrder, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
-            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) || sortOrder == "date_desc" ? "date" : "date_desc";
             ViewBag.PrixSortParm = sortOrder == "prix" ? "prix_desc" : "prix";
             ViewBag.AnneeSortParm = sortOrder == "cylindree" ? "annee_desc" : "annee";
             ViewBag.KilometrageSortParm = sortOrder == "kilometrage" ? "kilometrage_desc" : "kilometrage";
@@ -226,14 +246,18 @@ namespace Motonet.Controllers
                         b.GenresAcceptes.Contains(a.MotoProposee.Genre)
                     )
                 )
+                &&
+                (
+                    a.ID != id
+                )
             );
 
 
 
             switch (sortOrder)
             {
-                case "date_desc":
-                    annonces = annonces.OrderByDescending(s => s.Date);
+                case "date":
+                    annonces = annonces.OrderBy(s => s.Date);
                     break;
                 case "annee":
                     annonces = annonces.OrderBy(s => s.Annee);
@@ -254,7 +278,7 @@ namespace Motonet.Controllers
                     annonces = annonces.OrderByDescending(s => s.Kilometrage);
                     break;
                 default:
-                    annonces = annonces.OrderBy(s => s.Date);
+                    annonces = annonces.OrderByDescending(s => s.Date);
                     break;
             }
 
@@ -1049,6 +1073,15 @@ namespace Motonet.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        // Peuple les listes déroulantes des modèles moto
+        private void PopulateMotosDropDownList(object selectedMoto = null)
+        {
+            var motosQuery = from d in db.Motos
+                             orderby d.Marque.Nom, d.Modele
+                             select d;
+            ViewBag.MotoProposeeID = new SelectList(motosQuery, "ID", "Identification", selectedMoto);;
         }
 
         // Peuple les listes déroulantes des modèles moto

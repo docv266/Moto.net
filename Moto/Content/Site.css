@@ -103,14 +103,16 @@ fieldset {
 .fieldsetPhotos div img {
     border: 0;
     vertical-align:middle;
+    margin: 0 auto;
+    display: inline-block;
 }
 
 .fieldsetPhotos div {
-    height: 382px;
-    width: 452px;
+    height: 452px;
+    width: 602px;
     border: 1px solid #ccc;
     margin: 0 auto;
-    line-height: 377px;
+    line-height: 448px;
     background-color: white;
 }
 
@@ -133,15 +135,6 @@ fieldset {
     min-width: 210px !important;
 }
 
-.alertPerso {
-	position:absolute;
-    z-index:1;
-    top:10%;
-    width:1000px;
-    left: 50%;
-    margin-left:-500px;
-}
-
 #tableIndex tr:hover td {
       background-color: #efefef;
       cursor: pointer;
@@ -161,14 +154,64 @@ legend {
     line-height:75px;
 }
 
-.vcenter {
-    display: inline-block;
-    vertical-align: middle;
-    float: none;
+ @media (min-width: 993px){
+    .vertical-align {
+        display: flex;
+        align-items: center;
+    }
+
+    .Phrase {
+        font-weight: bold;
+        font-style:italic;
+        font-size:medium;
+        color: red;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+}
+
+  @media (min-width: 769px) and (max-width: 992px){
+    .vcenter {
+        margin-bottom:5px;
+    }
+
+    .Phrase {
+        font-weight: bold;
+        font-style:italic;
+        font-size:medium;
+        color: red;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+}
+
+  @media (max-width: 768px){
+
+    .vcenter {
+        margin-bottom:5px;
+    }
+
+    .Phrase {
+        font-weight: bold;
+        font-style:italic;
+        font-size:small;
+        color: red;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .formFilter .chosen-select {
+        margin-bottom: 10px;
+    }
+
+    .fieldsetPhotos div {
+        width: 100%;  
+        height: auto;
+        border: 0;
+        line-height: inherit;
+    }
 }
 
 .glyphSize {
-    font-size: 1.2em;
+    font-size: 1.1em;
     color: black;
     margin-top: 5px;
 }
@@ -191,11 +234,10 @@ legend {
   border-color: #ff6262;
 }
 
-.Phrase {
-    font-weight: bold;
-    font-style:italic;
-    font-size:medium;
-    color: red;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin-top: 2px;
+.boutonsModifierSupprimer {
+    margin-top:22px;
+}
+
+h1, h2 {
+    margin-top: 0;
 }

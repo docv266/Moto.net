@@ -42,7 +42,7 @@ namespace Motonet.Models
         {
             get
             {
-                return Marque.Nom + " " + Modele;
+                return Marque.Nom + " " + Modele + " (" + Cylindree + ")";
             }
         }
 

@@ -41,7 +41,11 @@
                     @Html.DisplayFor(modelItem => item.Departement.Identification)
                 </td>
                 <td class="hidden-xs">
-                    @Html.DisplayFor(modelItem => item.PrixAvecUnite)
+                    <div>@Html.DisplayFor(modelItem => item.PrixAvecUnite)</div>
+                    @if (item.MotosAcceptees.Any() || item.MarquesAcceptees.Any() || item.GenresAcceptes.Any())
+                    {
+                        <span class="glyphicon glyphicon-retweet" aria-hidden="true" style="margin-top:10px;color:red;" data-toggle="tooltip" title="Echange possible!" data-placement="bottom"></span>
+                    }
                 </td>
                 <td class="hidden-xs">
                     @Html.DisplayFor(modelItem => item.KilometrageAvecUnite)

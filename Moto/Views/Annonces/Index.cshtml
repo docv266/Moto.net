@@ -96,6 +96,15 @@
                         </div>
 
                         <div class="row formFilter">
+                            <div class="col-xs-4">
+                                <div class="form-group">
+                                    <label>Qui recherche mon deux-roues?</label>
+                                    @Html.DropDownList("MotoProposeeID", null, String.Empty, new { @class = "chosen-select form-control", data_placeholder = "Mon deux-roues" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row formFilter">
                             <div class="col-xs-10">
                                 <input type="submit" value="Filtrer" class="btn btn-danger btn-sm boutonFiltrer" />
                             </div>

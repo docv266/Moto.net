@@ -35,6 +35,8 @@ function retainDivCollapsedState(nameOfDiv, nameOfHeader) {
     }
 }
 
+
+
 // Faire disparaitre l'alerte au bout de quelques secondes
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();

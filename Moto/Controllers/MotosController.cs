@@ -283,12 +283,14 @@ namespace Motonet.Controllers
             ViewBag.MarqueID = new SelectList(marquesQuery, "ID", "Nom", selectedMarque);
         }
 
-        public JsonResult AutocompleteSuggestions(string searchstring)
+        public JsonResult AutocompleteSuggestions(string term)
         {
+            MotoContext mc = new MotoContext();
 
-            var suggestions = from s in db.Motos
-                                      select s.Identification ;
-            var motoList = suggestions.Where(n => n.ToLower().Contains(searchstring.ToLower()));
+
+            var suggestions = from s in mc.Motos
+                                      select s.Modele ;
+            var motoList = suggestions.Where(n => n.ToLower().Contains(term.ToLower()));
 
             return Json(motoList, JsonRequestBehavior.AllowGet);
         }

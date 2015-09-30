@@ -26,10 +26,10 @@ namespace Motonet.Controllers
         public ActionResult Index(string sortOrder, int? page, string currentFilterTitre,
             string currentFilterMoto, string currentFilterAnneeMin, string currentFilterAnneeMax,
             string currentFilterKilometrageMin, string currentFilterKilometrageMax, string currentFilterPrixMin,
-            string currentFilterPrixMax, string currentFilterCylindreeMin, string currentFilterCylindreeMax, List<int> currentFilterRegionID, List<int> currentFilterDepartementID, string currentFilterMotoProposeeID,
+            string currentFilterPrixMax, string currentFilterCylindreeMin, string currentFilterCylindreeMax, List<int> currentFilterRegionID, List<int> currentFilterDepartementID, string currentFilterMaMoto,
             string FiltreTitre, string FiltreMoto, string FiltreAnneeMin, string FiltreAnneeMax,
             string FiltreKilometrageMin, string FiltreKilometrageMax, string FiltrePrixMin,
-            string FiltrePrixMax, string FiltreCylindreeMin, string FiltreCylindreeMax, List<int> RegionsID, List<int> DepartementsID, int? MotoProposeeID)
+            string FiltrePrixMax, string FiltreCylindreeMin, string FiltreCylindreeMax, List<int> RegionsID, List<int> DepartementsID, string FiltreMaMoto)
         {
 
             ViewBag.CurrentSort = sortOrder;
@@ -42,7 +42,7 @@ namespace Motonet.Controllers
             if (FiltreTitre != null || FiltreMoto != null || FiltreAnneeMin != null || FiltreAnneeMax != null ||
                 FiltreKilometrageMin != null || FiltreKilometrageMax != null ||
                 FiltrePrixMin != null || FiltrePrixMax != null ||
-                FiltreCylindreeMin != null || FiltreCylindreeMax != null || RegionsID != null || DepartementsID != null || MotoProposeeID != null)
+                FiltreCylindreeMin != null || FiltreCylindreeMax != null || RegionsID != null || DepartementsID != null || FiltreMaMoto != null)
             {
                 page = 1;
             }
@@ -60,7 +60,7 @@ namespace Motonet.Controllers
                 FiltreCylindreeMax = currentFilterCylindreeMax;
                 RegionsID = currentFilterRegionID;
                 DepartementsID = currentFilterDepartementID;
-                MotoProposeeID = String.IsNullOrEmpty(currentFilterMotoProposeeID) ? 0 : int.Parse(currentFilterMotoProposeeID);
+                FiltreMaMoto = currentFilterMaMoto;
             }
 
             ViewBag.CurrentFilterTitre = FiltreTitre;
@@ -73,6 +73,7 @@ namespace Motonet.Controllers
             ViewBag.CurrentFilterPrixMax = FiltrePrixMax;
             ViewBag.CurrentFilterCylindreeMin = FiltreCylindreeMin;
             ViewBag.CurrentFilterCylindreeMax = FiltreCylindreeMax;
+            ViewBag.CurrentFilterMaMoto = FiltreMaMoto;
              
             //var annonces = from s in db.Annonces
             //            select s;
@@ -150,9 +151,10 @@ namespace Motonet.Controllers
                 annonces = annonces.Where(s => DepartementsID.Contains(s.Departement.ID));
             }
 
-            if (MotoProposeeID > 0)
+
+            if (!String.IsNullOrEmpty(FiltreMaMoto))
             {
-                Moto m = db.Motos.Find(MotoProposeeID);
+                Moto m = db.Motos.ToList().Where(a => a.Modele.Equals(FiltreMaMoto)).First();
 
                 annonces = annonces.ToList().Where(a =>
                     (
@@ -201,8 +203,6 @@ namespace Motonet.Controllers
 
             PopulateRegionsDropDownList(RegionsID);
             PopulateMultiDepartementsDropDownList(DepartementsID);
-            PopulateMotosDropDownList(MotoProposeeID);
-
 
             ViewBag.ActionName = "Index";
 

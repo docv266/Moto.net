@@ -53,11 +53,13 @@
                         </div>
 
                         <div id="conteneurMotoProposee">
-                            @Html.DropDownList("MotoProposeeID", (SelectList)ViewBag.MotoProposeeID, new { @class = "chosen-select form-control", data_toggle = "tooltip", title = "Votre moto n'apparait pas dans la liste? cochez la case ci-dessus!" })
+                            @*@Html.DropDownList("MotoProposeeID", (SelectList)ViewBag.MotoProposeeID, new { @class = "chosen-select form-control", data_toggle = "tooltip", title = "Votre moto n'apparait pas dans la liste? cochez la case ci-dessus!" })*@
+                            @Html.TextBox("FiltreMaMoto", ViewBag.CurrentFilterMaMoto as string, new { @class = "form-control", data_toggle = "tooltip", title = "Votre moto n'apparait pas dans la liste? cochez la case ci-dessus!" })
+                            @Html.Hidden("MotoProposeeID", ViewBag.MotoProposeeID as string, new { @class = "form-control" })
                         </div>
                         
                         <div id="conteneurMotoPerso" class="hidden">
-                            @Html.EditorFor(model => model.MotoPerso, new { htmlAttributes = new { @class = "form-control", placeholder = "Marque et modèle de ma moto", data_toggle = "tooltip", title = "Saisissez la marque et le modèle, la moto sera intégrée dans la base de données par nos soins." } })
+                            @Html.EditorFor(model => model.MotoPerso, new { htmlAttributes = new { @class = "form-control", placeholder = "Marque et modèle - Saisie libre", data_toggle = "tooltip", title = "Saisissez la marque et le modèle, la moto sera intégrée dans la base de données par nos soins." } })
                         </div>
 
                     </div>
@@ -233,9 +235,38 @@
 
     @Scripts.Render("~/bundles/chosenJs")
 
-<script src="~/Scripts/Site_AnnoncesCreate.js"></script>
+    <script src="~/Scripts/Site_AnnoncesCreate.js"></script>
 
     @Scripts.Render("~/bundles/inputFileJs")
+
+    <script type="text/javascript">
+
+        function autocomplete($ctl, cb, freeInput) {
+            $ctl.autocomplete({
+                minLength: 3,
+                delay: 500,
+                autoFocus: true,
+                messages: {
+                    noResults: '',
+                    results: function () { }
+                },
+                source: '@Url.Action("AutocompleteSuggestions", "Motos", null)',
+                select: function (e, ui) {
+                    console.log("ui.item", ui.item.id)
+                    console.log("ui.item", ui.item.value)
+                    $('#MotoProposeeID').val(ui.item.id)
+                    cb(e, ui)
+                },
+                change: function (e, ui) {
+                    if (!(freeInput || ui.item)) e.target.value = "";
+                }
+            });
+        }
+
+        autocomplete($('#FiltreMaMoto'), function () { });
+
+    </script>
+
 
 
     

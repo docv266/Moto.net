@@ -524,7 +524,7 @@ namespace Motonet.Controllers
             ViewBag.nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
             ViewBag.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
 
-            PopulateMotosDropDownLists();
+            PopulateMotosDropDownList();
             PopulateGenresDropDownList();
             PopulateMarquesDropDownList();
             PopulateDepartementsDropDownList();
@@ -643,7 +643,7 @@ namespace Motonet.Controllers
             {
                 annonce.MotosAccepteesID.Add(moto.ID);
             }
-            PopulateMotosDropDownLists(annonce.MotoProposeeID, annonce.MotosAccepteesID);
+            PopulateMotosDropDownList(annonce.MotosAccepteesID);
             
             
             foreach (Genre genre in annonce.GenresAcceptes)
@@ -719,7 +719,7 @@ namespace Motonet.Controllers
             {
                 annonce.MotosAccepteesID.Add(moto.ID);
             }
-            PopulateMotosDropDownLists(annonce.MotoProposeeID, annonce.MotosAccepteesID);
+            PopulateMotosDropDownList(annonce.MotosAccepteesID);
 
             foreach (Genre genre in annonce.GenresAcceptes)
             {
@@ -877,7 +877,7 @@ namespace Motonet.Controllers
             {
                 annonceToUpdate.MotosAccepteesID.Add(moto.ID);
             }
-            PopulateMotosDropDownLists(annonceToUpdate.MotoProposeeID, annonceToUpdate.MotosAccepteesID);
+            PopulateMotosDropDownList(annonceToUpdate.MotosAccepteesID);
 
 
 
@@ -1077,21 +1077,12 @@ namespace Motonet.Controllers
         }
 
         // Peuple les listes déroulantes des modèles moto
-        private void PopulateMotosDropDownList(object selectedMoto = null)
-        {
-            var motosQuery = from d in db.Motos
-                             orderby d.Marque.Nom, d.Modele
-                             select d;
-            ViewBag.MotoProposeeID = new SelectList(motosQuery, "ID", "Identification", selectedMoto);;
-        }
-
-        // Peuple les listes déroulantes des modèles moto
-        private void PopulateMotosDropDownLists(object selectedMoto = null, List<int> selectedMotos = null)
+        private void PopulateMotosDropDownList(List<int> selectedMotos = null)
         {
             var motosQuery = from d in db.Motos
                               orderby d.Marque.Nom, d.Modele
                               select d;
-            ViewBag.MotoProposeeID = new SelectList(motosQuery, "ID", "Identification", selectedMoto);
+
             ViewBag.MotosAccepteesID = new MultiSelectList(motosQuery, "ID", "Identification", selectedMotos);
         }
 

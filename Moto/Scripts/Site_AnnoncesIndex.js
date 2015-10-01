@@ -8,7 +8,7 @@ $(".chosen-select").chosen({ no_results_text: "Pas de résultat pour", width: '1
 function clearForm() {
 
     // Efface les valeurs des champs text et number de la form #formFilter
-    $("form#formFilter input[type=text],form#formFilter input[type=number]").each(function () {
+    $("form#formFilter input[type=text],form#formFilter input[type=number], #FiltreIdMaMoto").each(function () {
         var input = $(this);
         input.val("");
     });
@@ -35,12 +35,13 @@ function retainDivCollapsedState(nameOfDiv, nameOfHeader) {
     }
 }
 
-
-
 // Faire disparaitre l'alerte au bout de quelques secondes
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
     
     retainDivCollapsedState("collapseOne", "panel1");
 
+    $("#FiltreMaMoto").attr("placeholder", "Mon deux-roues : 3 caractères minimum");
+
 });
+

@@ -289,8 +289,11 @@ namespace Motonet.Controllers
 
 
             var suggestions = from s in mc.Motos
-                                      select s.Modele ;
-            var motoList = suggestions.Where(n => n.ToLower().Contains(term.ToLower()));
+                              select new {
+                                  id = s.ID,
+                                  value = s.Marque.Nom + " " + s.Modele + " (" + s.Cylindree + ")"
+                              };
+            var motoList = suggestions.ToList().Where(n => n.value.ToLower().Contains(term.ToLower()));
 
             return Json(motoList, JsonRequestBehavior.AllowGet);
         }

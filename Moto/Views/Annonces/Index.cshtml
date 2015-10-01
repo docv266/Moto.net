@@ -99,7 +99,8 @@
                             <div class="col-xs-4">
                                 <div class="form-group">
                                     <label>Qui recherche mon deux-roues?</label>
-                                    @Html.TextBox("FiltreMaMoto", ViewBag.CurrentFilterMaMoto as string, new { @class = "form-control", data_placeholder = "Mon deux-roues" })
+                                    @Html.TextBox("FiltreMaMoto", ViewBag.CurrentFilterMaMoto as string, new { @class = "form-control" })
+                                    @Html.Hidden("FiltreIdMaMoto", ViewBag.CurrentFilterIdMaMoto as string, new { @class = "form-control" })
                                 </div>
                             </div>
                         </div>
@@ -150,13 +151,29 @@
 
     <script type="text/javascript">
 
-        $(function () {
-            $("#FiltreMaMoto").autocomplete({
+        function autocomplete($ctl, cb, freeInput) {
+            $ctl.autocomplete({
+                minLength: 3,
+                delay: 500,
+                autoFocus: true,
+                messages: {
+                    noResults: '',
+                    results: function () { }
+                },
                 source: '@Url.Action("AutocompleteSuggestions", "Motos", null)',
-                minLength: 2,
-                delay: 500
+                select: function (e, ui) {
+                    console.log("ui.item", ui.item.id)
+                    console.log("ui.item", ui.item.value)
+                    $('#FiltreIdMaMoto').val(ui.item.id)
+                    cb(e, ui)
+                },
+                change: function (e, ui) {
+                    if (!(freeInput || ui.item)) e.target.value = "";
+                }
             });
-        });
+        }
+
+        autocomplete($('#FiltreMaMoto'), function () { });
 
     </script>
 

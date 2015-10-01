@@ -293,7 +293,7 @@ namespace Motonet.Controllers
                                   id = s.ID,
                                   value = s.Marque.Nom + " " + s.Modele + " (" + s.Cylindree + ")"
                               };
-            var motoList = suggestions.ToList().Where(n => n.value.ToLower().Contains(term.ToLower()));
+            var motoList = suggestions.ToList().Where(n => n.value.ToLower().Contains(term.ToLower())).Take(20);
 
             return Json(motoList, JsonRequestBehavior.AllowGet);
         }

@@ -298,5 +298,30 @@ namespace Motonet.Controllers
             return Json(motoList, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult FetchItems(string q)
+        {
+            MotoContext dbContext = new MotoContext(); //init dbContext
+            List<Moto> itemsList = dbContext.Motos.ToList(); //fetch list of items from db table
+            List<Moto> resultsList = new List<Moto>(); //create empty results list
+            foreach(var item in itemsList)
+            {   
+                //if any item contains the query string
+                if (item.Modele.IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0) 
+                {
+                    resultsList.Add(item); //then add item to the results list
+                }
+            }
+
+            //resultsList.Sort(delegate(Item c1, Item c2) { return c1.ItemName.CompareTo(c2.ItemName); }); //sort the results list alphabetically by ItemName
+            
+            var serialisedJson = from result in resultsList //serialise the results list into json
+                select new
+                {
+                    name = result.Modele, //each json object will have 
+                    id = result.ID      //these two variables [name, id]
+                };
+            return Json(serialisedJson , JsonRequestBehavior.AllowGet); //return the serialised results list
+        }
+
     }
 }

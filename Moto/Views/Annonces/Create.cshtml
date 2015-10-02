@@ -3,6 +3,7 @@
 @section Styles {
     @Styles.Render("~/Content/chosenStyle")
     @Styles.Render("~/Content/fileinputStyle")
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
 }
 
 
@@ -120,7 +121,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.MotosAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-5">
-                    @Html.DropDownList("MotosAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control" })
+                    @Html.DropDownList("MotosAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "form-control" })
                 </div>
                 <div class="col-md-5">
                     @Html.ValidationMessageFor(model => model.MotosAccepteesID, "", new { @class = "text-danger" })
@@ -239,6 +240,8 @@
 
     @Scripts.Render("~/bundles/inputFileJs")
 
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+
     <script type="text/javascript">
 
         function autocomplete($ctl, cb, freeInput) {
@@ -264,6 +267,32 @@
         }
 
         autocomplete($('#FiltreMaMoto'), function () { });
+
+        $(document).ready(function () {
+
+            $('#MotosAccepteesID').select2({
+                placeholder: "Select an Item",
+                allowClear: true,
+                style: "display: inline-block",
+                minimumInputLength: 2, //you can specify a min. query length to return results
+                ajax: {
+                    cache: false,
+                    dataType: "json",
+                    url: "@Url.Action("FetchItems", "Motos")",
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    },
+                },
+                //formatResult: itemFormatResult,
+                formatSelection: function (item) {
+                    return item.Modele;
+                },
+                escapeMarkup: function (m) { return m; }
+            });
+
+        });
 
     </script>
 

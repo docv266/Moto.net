@@ -54,9 +54,7 @@
                         </div>
 
                         <div id="conteneurMotoProposee">
-                            @*@Html.DropDownList("MotoProposeeID", (SelectList)ViewBag.MotoProposeeID, new { @class = "chosen-select form-control", data_toggle = "tooltip", title = "Votre moto n'apparait pas dans la liste? cochez la case ci-dessus!" })*@
-                            @Html.TextBox("FiltreMaMoto", ViewBag.CurrentFilterMaMoto as string, new { @class = "form-control", data_toggle = "tooltip", title = "Votre moto n'apparait pas dans la liste? cochez la case ci-dessus!" })
-                            @Html.Hidden("MotoProposeeID", ViewBag.MotoProposeeID as string, new { @class = "form-control" })
+                            @Html.DropDownList("MotoProposeeID", (SelectList)ViewBag.MotoProposeeID, new { @class = "form-control", data_toggle = "tooltip", title = "Votre moto n'apparait pas dans la liste? cochez la case ci-dessus!" })
                         </div>
                         
                         <div id="conteneurMotoPerso" class="hidden">
@@ -122,6 +120,7 @@
                 @Html.LabelFor(model => model.MotosAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-5">
                     @Html.DropDownList("MotosAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "form-control" })
+                    @*<select id="MotosAccepteesID" class="form-control" multiple></select>*@
                 </div>
                 <div class="col-md-5">
                     @Html.ValidationMessageFor(model => model.MotosAccepteesID, "", new { @class = "text-danger" })
@@ -218,86 +217,24 @@
 
         </fieldset>
 
-
         <div>
             <input type="submit" value="Créer l'annonce" class="btn btn-danger btn-lg center-block" />
         </div>
 
-
     </div>
 }
-
 
 @section Scripts {
 
     @Scripts.Render("~/bundles/jqueryval")
-
-
 
     @Scripts.Render("~/bundles/chosenJs")
 
     <script src="~/Scripts/Site_AnnoncesCreate.js"></script>
 
     @Scripts.Render("~/bundles/inputFileJs")
+    <script src="~/Scripts/ajax-chosen.min.js"></script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
-
-    <script type="text/javascript">
-
-        function autocomplete($ctl, cb, freeInput) {
-            $ctl.autocomplete({
-                minLength: 3,
-                delay: 500,
-                autoFocus: true,
-                messages: {
-                    noResults: '',
-                    results: function () { }
-                },
-                source: '@Url.Action("AutocompleteSuggestions", "Motos", null)',
-                select: function (e, ui) {
-                    console.log("ui.item", ui.item.id)
-                    console.log("ui.item", ui.item.value)
-                    $('#MotoProposeeID').val(ui.item.id)
-                    cb(e, ui)
-                },
-                change: function (e, ui) {
-                    if (!(freeInput || ui.item)) e.target.value = "";
-                }
-            });
-        }
-
-        autocomplete($('#FiltreMaMoto'), function () { });
-
-        $(document).ready(function () {
-
-            $('#MotosAccepteesID').select2({
-                placeholder: "Select an Item",
-                allowClear: true,
-                style: "display: inline-block",
-                minimumInputLength: 2, //you can specify a min. query length to return results
-                ajax: {
-                    cache: false,
-                    dataType: "json",
-                    url: "@Url.Action("FetchItems", "Motos")",
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
-                    },
-                },
-                //formatResult: itemFormatResult,
-                formatSelection: function (item) {
-                    return item.Modele;
-                },
-                escapeMarkup: function (m) { return m; }
-            });
-
-        });
-
-    </script>
-
-
-
-    
 
 }

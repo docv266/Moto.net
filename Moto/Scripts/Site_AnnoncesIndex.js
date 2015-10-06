@@ -41,7 +41,24 @@ $(document).ready(function () {
     
     retainDivCollapsedState("collapseOne", "panel1");
 
-    $("#FiltreMaMoto").attr("placeholder", "Mon deux-roues : 3 caractères minimum");
+    $('#MaMotoID').select2(
+    {
+        minimumInputLength: 3,
+        multiple: true,
+        ajax:
+        {
+            url: '/Motos/ListePartielleMotos/',
+            dataType: 'json',
+            delay: 500,
+            type: "GET",
+            processResults: function (data) {
+                return {
+                    results: data
+                };
+            }
+        },
+        placeholder: "Choisir dans la liste : 3 caractères minimum"
+    });
 
 });
 

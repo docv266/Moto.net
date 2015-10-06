@@ -26,10 +26,10 @@ namespace Motonet.Controllers
         public ActionResult Index(string sortOrder, int? page, string currentFilterTitre,
             string currentFilterMoto, string currentFilterAnneeMin, string currentFilterAnneeMax,
             string currentFilterKilometrageMin, string currentFilterKilometrageMax, string currentFilterPrixMin,
-            string currentFilterPrixMax, string currentFilterCylindreeMin, string currentFilterCylindreeMax, List<int> currentFilterRegionID, List<int> currentFilterDepartementID, string currentFilterMaMoto, string currentFilterIdMaMoto,
+            string currentFilterPrixMax, string currentFilterCylindreeMin, string currentFilterCylindreeMax, List<int> currentFilterRegionID, List<int> currentFilterDepartementID, string currentFilterMaMotoID,
             string FiltreTitre, string FiltreMoto, string FiltreAnneeMin, string FiltreAnneeMax,
             string FiltreKilometrageMin, string FiltreKilometrageMax, string FiltrePrixMin,
-            string FiltrePrixMax, string FiltreCylindreeMin, string FiltreCylindreeMax, List<int> RegionsID, List<int> DepartementsID, string FiltreMaMoto, string FiltreIdMaMoto)
+            string FiltrePrixMax, string FiltreCylindreeMin, string FiltreCylindreeMax, List<int> RegionsID, List<int> DepartementsID, string MaMotoID)
         {
 
             ViewBag.CurrentSort = sortOrder;
@@ -42,7 +42,7 @@ namespace Motonet.Controllers
             if (FiltreTitre != null || FiltreMoto != null || FiltreAnneeMin != null || FiltreAnneeMax != null ||
                 FiltreKilometrageMin != null || FiltreKilometrageMax != null ||
                 FiltrePrixMin != null || FiltrePrixMax != null ||
-                FiltreCylindreeMin != null || FiltreCylindreeMax != null || RegionsID != null || DepartementsID != null || FiltreIdMaMoto != null)
+                FiltreCylindreeMin != null || FiltreCylindreeMax != null || RegionsID != null || DepartementsID != null || MaMotoID != null)
             {
                 page = 1;
             }
@@ -60,8 +60,7 @@ namespace Motonet.Controllers
                 FiltreCylindreeMax = currentFilterCylindreeMax;
                 RegionsID = currentFilterRegionID;
                 DepartementsID = currentFilterDepartementID;
-                FiltreMaMoto = currentFilterMaMoto;
-                FiltreIdMaMoto = currentFilterIdMaMoto;
+                MaMotoID = currentFilterMaMotoID;
             }
 
             ViewBag.CurrentFilterTitre = FiltreTitre;
@@ -74,8 +73,7 @@ namespace Motonet.Controllers
             ViewBag.CurrentFilterPrixMax = FiltrePrixMax;
             ViewBag.CurrentFilterCylindreeMin = FiltreCylindreeMin;
             ViewBag.CurrentFilterCylindreeMax = FiltreCylindreeMax;
-            ViewBag.CurrentFilterMaMoto = FiltreMaMoto;
-            ViewBag.CurrentFilterIdMaMoto = FiltreIdMaMoto;
+            ViewBag.CurrentFilterIdMaMoto = MaMotoID;
              
 
             var annonces = db.Annonces.ToList().Where(s => s.Autorisee == true && s.Validee == true);
@@ -153,7 +151,7 @@ namespace Motonet.Controllers
             }
 
 
-            if (!String.IsNullOrEmpty(FiltreIdMaMoto) && int.TryParse(FiltreIdMaMoto, out intFiltreIdMaMoto))
+            if (!String.IsNullOrEmpty(MaMotoID) && int.TryParse(MaMotoID, out intFiltreIdMaMoto))
             {
                 Moto m = db.Motos.Find(intFiltreIdMaMoto);
 
@@ -202,6 +200,7 @@ namespace Motonet.Controllers
             int pageSize = int.Parse(ConfigurationManager.AppSettings["pageSize"]);
             int pageNumber = (page ?? 1);
 
+            ViewBag.MaMotoID = new SelectList(new List<String>(), "ID", "Identification", MaMotoID);
             PopulateRegionsDropDownList(RegionsID);
             PopulateMultiDepartementsDropDownList(DepartementsID);
 
@@ -524,7 +523,8 @@ namespace Motonet.Controllers
             ViewBag.nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
             ViewBag.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
 
-            PopulateMotosDropDownList();
+            ViewBag.MotoProposeeID = new SelectList(new List<String>(), "ID", "Identification", null);
+            ViewBag.MotosAccepteesID = new MultiSelectList(new List<String>(), "ID", "Identification", null);
             PopulateGenresDropDownList();
             PopulateMarquesDropDownList();
             PopulateDepartementsDropDownList();

@@ -8,6 +8,7 @@
 
     <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
     <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
+    <link href="~/Content/select2-bootstrap.css" rel="stylesheet" type="text/css" />
 }
 
 
@@ -99,7 +100,7 @@
                         <div class="row formFilter">
                             <div class="col-xs-4">
                                 <div class="form-group">
-                                    <label>Qui recherche mon deux-roues?</label>
+                                    <label>Sélectionnez votre moto afin de trouver les personnes intéressées:</label>
                                     @Html.DropDownList("MaMotoID", (SelectList)ViewBag.CurrentFilterMaMotoID, new { @class = "form-control" })
                                 </div>
                             </div>
@@ -149,5 +150,70 @@
 
     <script src="~/Scripts/Site_AnnoncesIndex.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+    <script src="~/Scripts/fr.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+
+            retainDivCollapsedState("collapseOne", "panel1");
+
+            $('#MaMotoID').select2(
+            {
+                minimumInputLength: 3,
+                theme: "bootstrap",
+                language: "fr",
+                ajax:
+                {
+                    url: '/Motos/ListePartielleMotos/',
+                    dataType: 'json',
+                    delay: 500,
+                    type: "GET",
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                },
+                placeholder: "Mon deux-roues"
+            });
+
+            // On ne lance la requête ajax que si une moto a été sélectionnée auparavant
+            if (@ViewBag.MaMotoIDAChercher > 0)
+            {
+
+                // Création de l'option temporaire
+                var $option = $('<option selected>Chargement...</option>').val(0);
+
+                // On affecte l'option temporaire au select
+                $('#MaMotoID').append($option).trigger('change'); // append the option and update Select2
+
+                // On lance la requête ajax pour récupérer le nom de la moto
+                $.ajax({
+                    type: 'GET',
+                    url: '/Motos/MotoEnParticulier/',
+                    data: { q: @ViewBag.MaMotoIDAChercher },
+                    dataType: 'json',
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                }).then(function (data) {
+                    // Here we should have the data object
+                    $option.text(data[0].text).val(data[0].id); // update the text that is displayed (and maybe even the value)
+                    $option.removeData(); // remove any caching data that might be associated
+                    $('#MaMotoID').trigger('change'); // notify JavaScript components of possible changes
+
+                });
+
+            }
+
+
+
+        });
+
+</script>
 
 }

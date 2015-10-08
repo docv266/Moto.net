@@ -206,6 +206,7 @@
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\Photos\Miniatures\thxMS.txt" />
     <Content Include="Content\Photos\Vignettes\thxMS.txt" />
+    <Content Include="Content\select2-bootstrap.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -241,6 +242,7 @@
     <Content Include="Scripts\fileinput_locale_th.js" />
     <Content Include="Scripts\fileinput_locale_uk.js" />
     <Content Include="Scripts\fileinput_locale_zh.js" />
+    <Content Include="Scripts\fr.js" />
     <Content Include="Scripts\globalize.js" />
     <Content Include="Scripts\globalize\currency.js" />
     <Content Include="Scripts\globalize\date.js" />

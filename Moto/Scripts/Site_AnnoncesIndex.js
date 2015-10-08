@@ -15,6 +15,8 @@ function clearForm() {
 
     // Efface les valeurs des champs chosen
     $(".chosen-select").val('').trigger("chosen:updated");
+
+    $('#MaMotoID').select2("val", "");
 }
 
 // Conserver l'état de la div de filtrage
@@ -35,30 +37,4 @@ function retainDivCollapsedState(nameOfDiv, nameOfHeader) {
     }
 }
 
-// Faire disparaitre l'alerte au bout de quelques secondes
-$(document).ready(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-    
-    retainDivCollapsedState("collapseOne", "panel1");
-
-    $('#MaMotoID').select2(
-    {
-        minimumInputLength: 3,
-        multiple: true,
-        ajax:
-        {
-            url: '/Motos/ListePartielleMotos/',
-            dataType: 'json',
-            delay: 500,
-            type: "GET",
-            processResults: function (data) {
-                return {
-                    results: data
-                };
-            }
-        },
-        placeholder: "Choisir dans la liste : 3 caractères minimum"
-    });
-
-});
 

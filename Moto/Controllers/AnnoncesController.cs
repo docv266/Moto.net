@@ -201,6 +201,14 @@ namespace Motonet.Controllers
             int pageNumber = (page ?? 1);
 
             ViewBag.MaMotoID = new SelectList(new List<String>(), "ID", "Identification", MaMotoID);
+            if (MaMotoID == null)
+            {
+                ViewBag.MaMotoIDAChercher = 0;
+            }
+            else
+            {
+                ViewBag.MaMotoIDAChercher = MaMotoID;
+            }
             PopulateRegionsDropDownList(RegionsID);
             PopulateMultiDepartementsDropDownList(DepartementsID);
 

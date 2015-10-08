@@ -308,5 +308,30 @@ namespace Motonet.Controllers
     
         }
 
+        public ActionResult MotoEnParticulier(string q)
+        {
+            MotoContext mc = new MotoContext();
+
+            if (String.IsNullOrEmpty(q))
+            {
+                return null;
+            }
+
+            var suggestions = from s in mc.Motos
+                              select new
+                              {
+                                  id = s.ID,
+                                  value = s.Marque.Nom + " " + s.Modele + " (" + s.Cylindree + ")"
+                              };
+            var motoList = suggestions.ToList().Where(n => n.id == int.Parse(q));
+
+            return Json(motoList.Select(m => new
+            {
+                id = m.id,
+                text = m.value
+            }), JsonRequestBehavior.AllowGet);
+
+        }
+
     }
 }

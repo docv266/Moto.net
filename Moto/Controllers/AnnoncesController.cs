@@ -209,6 +209,7 @@ namespace Motonet.Controllers
             {
                 ViewBag.MaMotoIDAChercher = MaMotoID;
             }
+
             PopulateRegionsDropDownList(RegionsID);
             PopulateMultiDepartementsDropDownList(DepartementsID);
 

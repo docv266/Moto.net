@@ -4,8 +4,6 @@
 
 @section Styles {
 
-    @Styles.Render("~/Content/chosenStyle")
-
     <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
     <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
     <link href="~/Content/select2-bootstrap.css" rel="stylesheet" type="text/css" />
@@ -90,20 +88,22 @@
                             <div class="col-xs-4">
                                 <div class="form-group">
                                     <label>Localisation:</label>
-                                    @Html.ListBox("RegionsID", null, new { multiple = "multiple", @class = "chosen-select form-control", data_placeholder = "Région" })
-                                    @Html.ListBox("DepartementsID", null, new { multiple = "multiple", @class = "chosen-select form-control", data_placeholder = "Département" })
+                                    @Html.DropDownList("RegionsID", null, new { multiple = "multiple", @class = "form-control", style = "width: 100%" })
+                                    @Html.DropDownList("DepartementsID", null, new { multiple = "multiple", @class = "form-control", style = "width: 100%" })
                                 </div>
                             </div>
 
                         </div>
 
                         <div class="row formFilter">
+
                             <div class="col-xs-4">
                                 <div class="form-group">
-                                    <label>Sélectionnez votre moto afin de trouver les personnes intéressées:</label>
-                                    @Html.DropDownList("MaMotoID", (SelectList)ViewBag.CurrentFilterMaMotoID, new { @class = "form-control" })
+                                    <label>Trouver les personnes intéressées par votre moto:</label>
+                                    @Html.DropDownList("MaMotoID", null, new { @class = "form-control", style = "width: 100%" })
                                 </div>
                             </div>
+
                         </div>
 
                         <div class="row formFilter">
@@ -143,8 +143,6 @@
     new { page, sortOrder = ViewBag.CurrentSort }))
 </div>
 @section Scripts {
-
-    @Scripts.Render("~/bundles/chosenJs")
 
     <script src="~/Scripts/js.cookie.js"></script>
 
@@ -209,6 +207,20 @@
                 });
 
             }
+
+            $('#RegionsID').select2(
+            {
+                theme: "bootstrap",
+                placeholder: "Régions",
+                multiple: true
+            });
+
+            $('#DepartementsID').select2(
+            {
+                theme: "bootstrap",
+                placeholder: "Départements",
+                multiple: true
+            });
 
 
 

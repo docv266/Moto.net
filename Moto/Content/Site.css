@@ -81,8 +81,8 @@ fieldset {
   border-radius: 3px;
 }
 
-.formFilter input, .formFilter .chosen-container {
-    margin-bottom: 10px;
+.formFilter input, .formFilter .select2 {
+    margin-top: 5px;
 }
 
 .boutonFiltrer {
@@ -198,8 +198,8 @@ legend {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    .formFilter .chosen-select {
-        margin-bottom: 10px;
+    .formFilter .select2 {
+    margin-top: 5px;
     }
 
     .fieldsetPhotos div {

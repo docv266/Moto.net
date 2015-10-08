@@ -1,10 +1,4 @@
-﻿
-// config Chosen
-$(".chosen-select").chosen({ no_results_text: "Pas de résultat pour", width: '100%' })
-
-
-
-// Effacer les données du formulaire de filtrage
+﻿// Effacer les données du formulaire de filtrage
 function clearForm() {
 
     // Efface les valeurs des champs text et number de la form #formFilter
@@ -13,14 +7,16 @@ function clearForm() {
         input.val("");
     });
 
-    // Efface les valeurs des champs chosen
-    $(".chosen-select").val('').trigger("chosen:updated");
-
+    $('#RegionsID').select2("data", null);
+    $('#RegionsID').select2("val", "");
+    $('#DepartementsID').select2("data", null);
+    $('#DepartementsID').select2("val", "");
     $('#MaMotoID').select2("val", "");
 }
 
 // Conserver l'état de la div de filtrage
-function retainDivCollapsedState(nameOfDiv, nameOfHeader) {
+function retainDivCollapsedState(nameOfDiv, nameOfHeader)
+{
     // when the div is shown, save a cookie with a value of 'true'
     $("#" + nameOfDiv).on('shown.bs.collapse', function () {
         Cookies.set(nameOfDiv, "true"); // this is a cookie.  named the same as the control (poor practice) for brevity 
@@ -36,5 +32,3 @@ function retainDivCollapsedState(nameOfDiv, nameOfHeader) {
         $("#" + nameOfHeader).addClass("collapsed");         // The header to stylize as expanded
     }
 }
-
-

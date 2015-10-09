@@ -92,8 +92,9 @@ namespace Motonet.Models
 
         public Boolean PresenceMotoPerso { get; set; }
 
-        [RequiredIf("PresenceMotoPerso == true", ErrorMessage = "Champ requis.")] 
+        [RequiredIf("PresenceMotoPerso == true", ErrorMessage = "Champ requis.")]
         [DataType(DataType.Text)]
+        [DisplayAttribute(Name = "Modèle")]
         public string MotoPerso { get; set; }
 
         [Required]

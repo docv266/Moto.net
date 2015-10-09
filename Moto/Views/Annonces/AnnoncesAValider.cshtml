@@ -42,7 +42,15 @@
                 @Html.ActionLink(item.Titre, "Details", new { id = item.ID })
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MotoProposee.Identification)
+                @if (item.PresenceMotoPerso)
+                {
+                    <span class="glyphicon glyphicon-warning-sign" style="color:orange" aria-hidden="true"></span>
+                    @Html.DisplayFor(modelItem => item.MotoPerso)
+                }
+                else
+                {
+                    @Html.DisplayFor(modelItem => item.MotoProposee.Identification)
+                }
             </td>
             <td>
                 @if (item.Photos.Count > 0)

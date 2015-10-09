@@ -152,47 +152,47 @@
 
     <script type="text/javascript">
 
-        $(document).ready(function () {
-            $('[data-toggle="tooltip"]').tooltip();
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
 
-            retainDivCollapsedState("collapseOne", "panel1");
+        retainDivCollapsedState("collapseOne", "panel1");
 
-            $('#MaMotoID').select2(
+        $('#MaMotoID').select2(
+        {
+            minimumInputLength: 3,
+            theme: "bootstrap",
+            language: "fr",
+            width: "100%",
+            ajax:
             {
-                minimumInputLength: 3,
-                theme: "bootstrap",
-                language: "fr",
-                width: "100%",
-                ajax:
-                {
-                    url: '/Motos/ListePartielleMotos/',
-                    dataType: 'json',
-                    delay: 500,
-                    type: "GET",
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
-                    }
-                },
-                placeholder: "Mon deux-roues"
-            });
+                url: '/Motos/ListePartielleMotos/',
+                dataType: 'json',
+                delay: 500,
+                type: "GET",
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            },
+            placeholder: "Mon deux-roues"
+        });
 
-            // On ne lance la requête ajax que si une moto a été sélectionnée auparavant
-            if (@ViewBag.MaMotoIDAChercher > 0)
-            {
+        // On ne lance la requête ajax que si une moto a été sélectionnée auparavant
+        if (@ViewBag.MaMotoIDAChercher > 0)
+        {
 
-                // Création de l'option temporaire
-                var $option = $('<option selected>Chargement...</option>').val(0);
+            // Création de l'option temporaire
+            var $option = $('<option selected>Chargement...</option>').val(0);
 
-                // On affecte l'option temporaire au select
-                $('#MaMotoID').append($option).trigger('change'); // append the option and update Select2
+            // On affecte l'option temporaire au select
+            $('#MaMotoID').append($option).trigger('change'); // append the option and update Select2
 
-                // On lance la requête ajax pour récupérer le nom de la moto
-                $.ajax({
-                    type: 'GET',
-                    url: '/Motos/MotoEnParticulier/',
-                    data: { q: @ViewBag.MaMotoIDAChercher },
+            // On lance la requête ajax pour récupérer le nom de la moto
+            $.ajax({
+                type: 'GET',
+                url: '/Motos/MotoEnParticulier/',
+                data: { q: @ViewBag.MaMotoIDAChercher },
                     dataType: 'json',
                     processResults: function (data) {
                         return {
@@ -219,13 +219,52 @@
 
             $('#DepartementsID').select2(
             {
+                minimumInputLength: 1,
                 theme: "bootstrap",
-                placeholder: "Départements",
+                language: "fr",
                 width: "100%",
-                multiple: true
+                ajax:
+                {
+                    url: '/Departements/ListePartielleDepartements/',
+                    dataType: 'json',
+                    delay: 500,
+                    type: "GET",
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                },
+                multiple: true,
+                placeholder: "Départements"
             });
 
+            // On ne lance la requête ajax que si des départements ont été sélectionnés auparavant
+            if ("@ViewBag.DepartementsIDAChercher" != "Vide")
+            {
 
+                // On lance la requête ajax pour récupérer le nom ddes départements
+                $.ajax({
+                    type: 'GET',
+                    url: '/Departements/DepartementEnParticulier/',
+                    data: { q: '@ViewBag.DepartementsIDAChercher' },
+                    dataType: 'json',
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                }).then(function (data)
+                {
+
+                    for (var i=0; i<data.length; i++)
+                    {
+                        $('#DepartementsID').append('<option selected value="' + data[i].id + '">' + data[i].text + '</option>').trigger('change');
+                    }
+
+                });
+
+            }
 
         });
 

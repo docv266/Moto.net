@@ -210,8 +210,17 @@ namespace Motonet.Controllers
                 ViewBag.MaMotoIDAChercher = MaMotoID;
             }
 
+            ViewBag.DepartementsID = new MultiSelectList(new List<String>(), "ID", "Identification", DepartementsID);
+            if (DepartementsID == null)
+            {
+                ViewBag.DepartementsIDAChercher = "Vide";
+            }
+            else
+            {
+                ViewBag.DepartementsIDAChercher = string.Join("/", DepartementsID.ToArray());
+            }
+
             PopulateRegionsDropDownList(RegionsID);
-            PopulateMultiDepartementsDropDownList(DepartementsID);
 
             ViewBag.ActionName = "Index";
 
@@ -534,9 +543,10 @@ namespace Motonet.Controllers
 
             ViewBag.MotoProposeeID = new SelectList(new List<String>(), "ID", "Identification", null);
             ViewBag.MotosAccepteesID = new MultiSelectList(new List<String>(), "ID", "Identification", null);
+            ViewBag.MarquesAccepteesID = new MultiSelectList(new List<String>(), "ID", "Identification", null);
+            ViewBag.DepartementID = new SelectList(new List<String>(), "ID", "Identification", null);
+
             PopulateGenresDropDownList();
-            PopulateMarquesDropDownList();
-            PopulateDepartementsDropDownList();
 
             return View();
         }
@@ -649,29 +659,13 @@ namespace Motonet.Controllers
             ViewBag.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
 
             ViewBag.MotoProposeeID = new SelectList(new List<String>(), "ID", "Identification", null);
-
-            foreach (Moto moto in annonce.MotosAcceptees)
-            {
-                annonce.MotosAccepteesID.Add(moto.ID);
-            }
-            PopulateMotosDropDownList(annonce.MotosAccepteesID);
-            
+          
             
             foreach (Genre genre in annonce.GenresAcceptes)
             {
                 annonce.GenresAcceptesID.Add(genre.ID);
             }
             PopulateGenresDropDownList(annonce.GenresAcceptesID);
-              
-                      
-            foreach (Marque marque in annonce.MarquesAcceptees)
-            {
-                annonce.MarquesAccepteesID.Add(marque.ID);
-            }
-            PopulateMarquesDropDownList(annonce.MarquesAccepteesID);
-            
-
-            PopulateDepartementsDropDownList(annonce.DepartementID);
 
 
             return View(annonce);
@@ -726,25 +720,11 @@ namespace Motonet.Controllers
             ViewBag.nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
             ViewBag.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
 
-            foreach (Moto moto in annonce.MotosAcceptees)
-            {
-                annonce.MotosAccepteesID.Add(moto.ID);
-            }
-            PopulateMotosDropDownList(annonce.MotosAccepteesID);
-
             foreach (Genre genre in annonce.GenresAcceptes)
             {
                 annonce.GenresAcceptesID.Add(genre.ID);
             }
             PopulateGenresDropDownList(annonce.GenresAcceptesID);
-
-            foreach (Marque marque in annonce.MarquesAcceptees)
-            {
-                annonce.MarquesAccepteesID.Add(marque.ID);
-            }
-            PopulateMarquesDropDownList(annonce.MarquesAccepteesID);
-
-            PopulateDepartementsDropDownList(annonce.DepartementID);
 
             ViewBag.password = password;
 
@@ -884,30 +864,11 @@ namespace Motonet.Controllers
             }
 
 
-            foreach (Moto moto in annonceToUpdate.MotosAcceptees)
-            {
-                annonceToUpdate.MotosAccepteesID.Add(moto.ID);
-            }
-            PopulateMotosDropDownList(annonceToUpdate.MotosAccepteesID);
-
-
-
             foreach (Genre genre in annonceToUpdate.GenresAcceptes)
             {
                 annonceToUpdate.GenresAcceptesID.Add(genre.ID);
             }
             PopulateGenresDropDownList(annonceToUpdate.GenresAcceptesID);
-
-
-
-            foreach (Marque marque in annonceToUpdate.MarquesAcceptees)
-            {
-                annonceToUpdate.MarquesAccepteesID.Add(marque.ID);
-            }
-            PopulateMarquesDropDownList(annonceToUpdate.MarquesAccepteesID);
-
-
-            PopulateDepartementsDropDownList(annonceToUpdate.DepartementID);
 
             ViewBag.tailleMaxiUploadEnOctet = tailleMaxiUploadEnOctet / 1024;
             ViewBag.nombreMaxdePhotos = nombreMaxdePhotos;
@@ -1087,16 +1048,6 @@ namespace Motonet.Controllers
             base.Dispose(disposing);
         }
 
-        // Peuple les listes déroulantes des modèles moto
-        private void PopulateMotosDropDownList(List<int> selectedMotos = null)
-        {
-            var motosQuery = from d in db.Motos
-                              orderby d.Marque.Nom, d.Modele
-                              select d;
-
-            ViewBag.MotosAccepteesID = new MultiSelectList(motosQuery, "ID", "Identification", selectedMotos);
-        }
-
         // Peuple la liste déroulante des genres moto
         private void PopulateGenresDropDownList(List<int> selectedGenres = null)
         {
@@ -1105,36 +1056,6 @@ namespace Motonet.Controllers
                              select d;
 
             ViewBag.GenresAcceptesID = new MultiSelectList(genresQuery, "ID", "Nom", selectedGenres);
-        }
-
-        // Peuple la liste déroulante des marques moto
-        private void PopulateMarquesDropDownList(List<int> selectedMarques = null)
-        {
-            var marquesQuery = from d in db.Marques
-                              orderby d.Nom
-                              select d;
-
-            ViewBag.MarquesAccepteesID = new MultiSelectList(marquesQuery, "ID", "Nom", selectedMarques);
-        }
-
-        // Peuple la liste déroulante des départements
-        private void PopulateDepartementsDropDownList(object selectedDepartement = null)
-        {
-            var departementsQuery = from d in db.Departements
-                               orderby d.Nom
-                               select d;
-
-            ViewBag.DepartementID = new SelectList(departementsQuery, "ID", "Nom", selectedDepartement);
-        }
-
-        // Peuple la liste déroulante des départements
-        private void PopulateMultiDepartementsDropDownList(List<int> selectedDepartements = null)
-        {
-            var departementsQuery = from d in db.Departements
-                                    orderby d.Nom
-                                    select d;
-
-            ViewBag.DepartementsID = new MultiSelectList(departementsQuery, "ID", "Nom", selectedDepartements);
         }
 
         // Peuple la liste déroulante des régions

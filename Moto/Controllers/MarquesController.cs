@@ -164,5 +164,30 @@ namespace Motonet.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public ActionResult ListePartielleMarques(string q)
+        {
+            MotoContext mc = new MotoContext();
+
+            if (String.IsNullOrEmpty(q))
+            {
+                return null;
+            }
+
+            var suggestions = from s in mc.Marques
+                              select new
+                              {
+                                  id = s.ID,
+                                  value = s.Nom
+                              };
+            var motoList = suggestions.ToList().Where(n => n.value.ToLower().Contains(q.ToLower())).Take(20);
+
+            return Json(motoList.Select(m => new
+            {
+                id = m.id,
+                text = m.value
+            }), JsonRequestBehavior.AllowGet);
+
+        }
     }
 }

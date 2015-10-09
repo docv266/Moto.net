@@ -10,6 +10,7 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Text;
 using System.Web.Mvc;
+using ExpressiveAnnotations.Attributes;
 
 namespace Motonet.Models
 {
@@ -85,12 +86,13 @@ namespace Motonet.Models
 
         public Boolean Validee { get; set; }
 
-        [Required]
+        [RequiredIf("PresenceMotoPerso == false", ErrorMessage = "Champ requis.")] 
         [DisplayAttribute(Name = "Modèle")]
-        public int MotoProposeeID { get; set; }
+        public int? MotoProposeeID { get; set; }
 
         public Boolean PresenceMotoPerso { get; set; }
 
+        [RequiredIf("PresenceMotoPerso == true", ErrorMessage = "Champ requis.")] 
         [DataType(DataType.Text)]
         public string MotoPerso { get; set; }
 

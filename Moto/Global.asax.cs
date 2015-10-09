@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExpressiveAnnotations.MvcUnobtrusive.Providers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,6 +20,9 @@ namespace Motonet
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            ModelValidatorProviders.Providers.Remove(ModelValidatorProviders.Providers.FirstOrDefault(x => x is DataAnnotationsModelValidatorProvider));
+            ModelValidatorProviders.Providers.Add(new ExpressiveAnnotationsModelValidatorProvider());
 
         }
     }

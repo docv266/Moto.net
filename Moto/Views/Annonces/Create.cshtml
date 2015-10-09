@@ -1,7 +1,6 @@
 ﻿@model Motonet.Models.Annonce
 
 @section Styles {
-    @Styles.Render("~/Content/chosenStyle")
     @Styles.Render("~/Content/fileinputStyle")
     <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
     <link href="~/Content/select2-bootstrap.css" rel="stylesheet" type="text/css" />
@@ -64,6 +63,7 @@
 
                     </div>
                 <div class="col-md-5">
+                        <br/>
                         @Html.ValidationMessageFor(model => model.MotoProposeeID, "", new { @class = "text-danger" })
                         @Html.ValidationMessageFor(model => model.MotoPerso, "", new { @class = "text-danger" })
                 </div>
@@ -119,8 +119,8 @@
 
             <div class="form-group">
                 @Html.LabelFor(model => model.MotosAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-5">
-                    @Html.DropDownList("MotosAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "form-control" })
+                <div class="col-md-5 toolTipClass">
+                    @Html.DropDownList("MotosAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "form-control", title = "Cette liste est indépendante de choix de marques/genres ci-dessous" })
                 </div>
                 <div class="col-md-5">
                     @Html.ValidationMessageFor(model => model.MotosAccepteesID, "", new { @class = "text-danger" })
@@ -132,7 +132,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.MarquesAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-5 toolTipClass">
-                    @Html.DropDownList("MarquesAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control", data_toggle = "tooltip", title = "Renseignez le genre et laissez ce champ vide si toutes les marques vous conviennent" })
+                    @Html.DropDownList("MarquesAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "form-control", title = "Renseignez le genre et laissez ce champ vide si toutes les marques vous conviennent" })
                 </div>
                 <div class="col-md-5">
                     @Html.ValidationMessageFor(model => model.MarquesAccepteesID, "", new { @class = "text-danger" })
@@ -142,7 +142,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.GenresAcceptesID, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-5 toolTipClass">
-                    @Html.DropDownList("GenresAcceptesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control", data_toggle = "tooltip", title = "Renseignez la marque et laissez ce champ vide si tous les genres vous conviennent" })
+                    @Html.DropDownList("GenresAcceptesID", null, String.Empty, new { multiple = "multiple", @class = "form-control", title = "Renseignez la marque et laissez ce champ vide si tous les genres vous conviennent" })
                 </div>
                 <div class="col-md-5">
                     @Html.ValidationMessageFor(model => model.GenresAcceptesID, "", new { @class = "text-danger" })
@@ -188,7 +188,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.DepartementID, htmlAttributes: new { @class = "control-label col-md-2 required" })
                 <div class="col-md-5">
-                    @Html.DropDownList("DepartementID", (SelectList)ViewBag.DepartementID, new { @class = "chosen-select form-control" })
+                    @Html.DropDownList("DepartementID", (SelectList)ViewBag.DepartementID, new { @class = "form-control" })
                 </div>
                 <div class="col-md-5">
                     @Html.ValidationMessageFor(model => model.DepartementID, "", new { @class = "text-danger" })
@@ -228,19 +228,40 @@
 
     @Scripts.Render("~/bundles/jqueryval")
 
-    @Scripts.Render("~/bundles/chosenJs")
-
     <script src="~/Scripts/Site_AnnoncesCreate.js"></script>
 
     @Scripts.Render("~/bundles/inputFileJs")
-    <script src="~/Scripts/ajax-chosen.min.js"></script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
     <script src="~/Scripts/fr.js"></script>
 
+    <script src="~/Scripts/expressive.annotations.validate.js"></script>
+
     <script type="text/javascript">
 
         $(document).ready(function () {
+
+            enableField();
+           
+            $('#MotoProposeeID').select2(
+            {
+                minimumInputLength: 3,
+                theme: "bootstrap",
+                language: "fr",
+                ajax:
+                {
+                    url: '/Motos/ListePartielleMotos/',
+                    dataType: 'json',
+                    delay: 500,
+                    type: "GET",
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                },
+                placeholder: "Mon deux-roues"
+            });
 
             $('#MotosAccepteesID').select2(
             {
@@ -263,24 +284,31 @@
                 placeholder: "Les modèles qui m'intéressent"
             });
 
-            $('#MotoProposeeID').select2(
+            $('#MarquesAccepteesID').select2(
             {
-                minimumInputLength: 3,
+                multiple: true,
                 theme: "bootstrap",
-                language: "fr",
-                ajax:
-                {
-                    url: '/Motos/ListePartielleMotos/',
-                    dataType: 'json',
-                    delay: 500,
-                    type: "GET",
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
-                    }
+                placeholder: "Les marques qui m'intéressent"
+            });
+
+            $('#GenresAcceptesID').select2(
+            {
+                multiple: true,
+                theme: "bootstrap",
+                placeholder: "Les genres qui m'intéressent"
+            });
+
+            $('#DepartementID').select2(
+            {
+                theme: "bootstrap",
+                placeholder: "Mon département"
+            });
+
+            $(".select2-container").tooltip({
+                title: function () {
+                    return $(this).prev().attr("title");
                 },
-                placeholder: "Mon deux-roues"
+                placement: "right"
             });
 
         });

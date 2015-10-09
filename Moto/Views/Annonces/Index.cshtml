@@ -50,8 +50,8 @@
                             <div class="col-xs-4">
                                 <div class="form-group">
                                     <label class="control-label">Année:</label>
-                                    @Html.TextBox("FiltreAnneeMin", ViewBag.CurrentFilterAnneeMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "1900", max = DateTime.Now.Year })
-                                    @Html.TextBox("FiltreAnneeMax", ViewBag.CurrentFilterAnneeMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "1900", max = DateTime.Now.Year })
+                                    @Html.TextBox("FiltreAnneeMin", ViewBag.CurrentFilterAnneeMin as string, new { @class = "form-control", type = "number", placeholder = "Min", min = "1900", max = DateTime.Now.Year })
+                                    @Html.TextBox("FiltreAnneeMax", ViewBag.CurrentFilterAnneeMax as string, new { @class = "form-control", type = "number", placeholder = "Max", min = "1900", max = DateTime.Now.Year })
 
                                 </div>
                             </div>
@@ -59,8 +59,8 @@
                             <div class="col-xs-4">
                                 <div class="form-group">
                                     <label>Kilomètrage:</label>
-                                    @Html.TextBox("FiltreKilometrageMin", ViewBag.CurrentFilterKilometrageMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "0", max = "999999" })
-                                    @Html.TextBox("FiltreKilometrageMax", ViewBag.CurrentFilterKilometrageMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "0", max = "999999" })
+                                    @Html.TextBox("FiltreKilometrageMin", ViewBag.CurrentFilterKilometrageMin as string, new { @class = "form-control", type = "number", placeholder = "Min", min = "0", max = "999999" })
+                                    @Html.TextBox("FiltreKilometrageMax", ViewBag.CurrentFilterKilometrageMax as string, new { @class = "form-control", type = "number", placeholder = "Max", min = "0", max = "999999" })
                                 </div>
                             </div>
 
@@ -72,24 +72,24 @@
 
                                 <div class="form-group">
                                     <label>Prix:</label>
-                                    @Html.TextBox("FiltrePrixMin", ViewBag.CurrentFilterPrixMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "0", max = "999999" })
-                                    @Html.TextBox("FiltrePrixMax", ViewBag.CurrentFilterPrixMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "0", max = "999999" })
+                                    @Html.TextBox("FiltrePrixMin", ViewBag.CurrentFilterPrixMin as string, new { @class = "form-control", type = "number", placeholder = "Min", min = "0", max = "999999" })
+                                    @Html.TextBox("FiltrePrixMax", ViewBag.CurrentFilterPrixMax as string, new { @class = "form-control", type = "number", placeholder = "Max", min = "0", max = "999999" })
                                 </div>
                             </div>
 
                             <div class="col-xs-4">
                                 <div class="form-group">
                                     <label>Cylindrée:</label>
-                                    @Html.TextBox("FiltreCylindreeMin", ViewBag.CurrentFilterCylindreeMin as string, new { @class = "form-control", type = "number", placeholder = "min", min = "0", max = "7000" })
-                                    @Html.TextBox("FiltreCylindreeMax", ViewBag.CurrentFilterCylindreeMax as string, new { @class = "form-control", type = "number", placeholder = "max", min = "0", max = "7000" })
+                                    @Html.TextBox("FiltreCylindreeMin", ViewBag.CurrentFilterCylindreeMin as string, new { @class = "form-control", type = "number", placeholder = "Min", min = "0", max = "7000" })
+                                    @Html.TextBox("FiltreCylindreeMax", ViewBag.CurrentFilterCylindreeMax as string, new { @class = "form-control", type = "number", placeholder = "Max", min = "0", max = "7000" })
                                 </div>
                             </div>
 
                             <div class="col-xs-4">
                                 <div class="form-group">
                                     <label>Localisation:</label>
-                                    @Html.DropDownList("RegionsID", null, new { multiple = "multiple", @class = "form-control", style = "width: 100%" })
-                                    @Html.DropDownList("DepartementsID", null, new { multiple = "multiple", @class = "form-control", style = "width: 100%" })
+                                    @Html.DropDownList("RegionsID", null, new { multiple = "multiple", @class = "form-control" })
+                                    @Html.DropDownList("DepartementsID", null, new { multiple = "multiple", @class = "form-control" })
                                 </div>
                             </div>
 
@@ -100,7 +100,7 @@
                             <div class="col-xs-4">
                                 <div class="form-group">
                                     <label>Trouver les personnes intéressées par votre moto:</label>
-                                    @Html.DropDownList("MaMotoID", null, new { @class = "form-control", style = "width: 100%" })
+                                    @Html.DropDownList("MaMotoID", null, new { @class = "form-control" })
                                 </div>
                             </div>
 
@@ -162,6 +162,7 @@
                 minimumInputLength: 3,
                 theme: "bootstrap",
                 language: "fr",
+                width: "100%",
                 ajax:
                 {
                     url: '/Motos/ListePartielleMotos/',
@@ -212,6 +213,7 @@
             {
                 theme: "bootstrap",
                 placeholder: "Régions",
+                width: "100%",
                 multiple: true
             });
 
@@ -219,6 +221,7 @@
             {
                 theme: "bootstrap",
                 placeholder: "Départements",
+                width: "100%",
                 multiple: true
             });
 

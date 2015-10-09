@@ -550,10 +550,10 @@ namespace Motonet.Controllers
             int tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]);
             int nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && (annonce.MotoProposeeID != null || !String.IsNullOrEmpty(annonce.MotoPerso) && annonce.PresenceMotoPerso))
             {
                 
-                                // On hash le mot de passe
+                // On hash le mot de passe
                 annonce.MotDePasse = Annonce.HashPassword(annonce.MotDePasse);
                 annonce.ConfirmerMotDePasse = annonce.MotDePasse;
 
@@ -565,7 +565,7 @@ namespace Motonet.Controllers
 
                 db.Annonces.Add(annonce);
 
-                // On sauvi ici pour que l'ID de l'annonce soit accessible pour l'utiliser pour nommer les photos.
+                // On sauve ici pour que l'ID de l'annonce soit accessible afin de l'utiliser pour nommer les photos.
                 db.SaveChanges();
 
 
@@ -647,7 +647,9 @@ namespace Motonet.Controllers
             ViewBag.tailleMaxiUploadEnOctet = tailleMaxiUploadEnOctet / 1024;
             ViewBag.nombreMaxdePhotos = nombreMaxdePhotos;
             ViewBag.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
-            
+
+            ViewBag.MotoProposeeID = new SelectList(new List<String>(), "ID", "Identification", null);
+
             foreach (Moto moto in annonce.MotosAcceptees)
             {
                 annonce.MotosAccepteesID.Add(moto.ID);

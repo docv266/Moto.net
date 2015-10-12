@@ -189,5 +189,33 @@ namespace Motonet.Controllers
             }), JsonRequestBehavior.AllowGet);
 
         }
+
+        public ActionResult MarqueEnParticulier(string q)
+        {
+            MotoContext mc = new MotoContext();
+
+            if (String.IsNullOrEmpty(q))
+            {
+                return null;
+            }
+
+            var suggestions = from s in mc.Marques
+                              select new
+                              {
+                                  id = s.ID,
+                                  value = s.Nom
+                              };
+
+            List<int> liste = q.Split('/').Select(Int32.Parse).ToList();
+
+            var marquesList = suggestions.ToList().Where(n => liste.Contains(n.id));
+
+            return Json(marquesList.Select(m => new
+            {
+                id = m.id,
+                text = m.value
+            }), JsonRequestBehavior.AllowGet);
+
+        }
     }
 }

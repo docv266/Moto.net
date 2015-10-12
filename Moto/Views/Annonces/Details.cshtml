@@ -91,7 +91,7 @@
                 <dl>
 
                     <dt>
-                        @if (Model.MotoProposeeID == null)
+                        @if (Model.PresenceMotoPerso)
                         {
                             @Html.DisplayNameFor(model => model.MotoPerso)
                         }
@@ -100,7 +100,7 @@
                             @Html.DisplayNameFor(model => model.MotoProposee.Modele)
                         }    
                     </dt>
-                    @if (Model.MotoProposeeID == null)
+                    @if (Model.PresenceMotoPerso)
                     {
                         <dd>
                             <span class="glyphicon glyphicon-warning-sign" style="color:orange" aria-hidden="true"></span>

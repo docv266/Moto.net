@@ -323,7 +323,10 @@ namespace Motonet.Controllers
                                   id = s.ID,
                                   value = s.Marque.Nom + " " + s.Modele + " (" + s.Cylindree + ")"
                               };
-            var motoList = suggestions.ToList().Where(n => n.id == int.Parse(q));
+
+            List<int> liste = q.Split('/').Select(Int32.Parse).ToList();
+
+            var motoList = suggestions.ToList().Where(n => liste.Contains(n.id));
 
             return Json(motoList.Select(m => new
             {

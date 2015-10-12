@@ -1,4 +1,4 @@
-﻿@model Motonet.Models.Annonce
+﻿@model Motonet.ViewModels.CreateViewModel
 
 @section Styles {
     @Styles.Render("~/Content/fileinputStyle")
@@ -20,92 +20,98 @@
 
         <fieldset>
 
+            @*@Html.ValidationSummary()*@
+
             <legend>Ce que vous proposez</legend>
 
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
-                @Html.LabelFor(model => model.Titre, htmlAttributes: new { @class = "control-label col-md-2 required" })
+                @Html.LabelFor(model => model.Annonce.Titre, htmlAttributes: new { @class = "control-label col-md-2 required" })
                 <div class="col-md-5">
-                    @Html.EditorFor(model => model.Titre, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.Annonce.Titre, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
                 <div class="col-md-5">
-                    @Html.ValidationMessageFor(model => model.Titre, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Annonce.Titre, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2 required" })
+                @Html.LabelFor(model => model.Annonce.Description, htmlAttributes: new { @class = "control-label col-md-2 required" })
                 <div class="col-md-5">
-                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", rows = 10, maxLength = @ViewBag.nombreMaxCaracteresDescription } })
+                    @Html.EditorFor(model => model.Annonce.Description, new { htmlAttributes = new { @class = "form-control", rows = 10, maxLength = Model.nombreMaxCaracteresDescription } })
                 </div>
                 <div class="col-md-5">
-                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Annonce.Description, "", new { @class = "text-danger" })
                 </div>
             </div>
             
             <div class="form-group">
-                @Html.LabelFor(model => model.MotoProposeeID, htmlAttributes: new { @class = "control-label col-md-2 required" })
+                @Html.LabelFor(model => model.Annonce.MotoProposeeID, htmlAttributes: new { @class = "control-label col-md-2 required" })
                 <div class="col-md-5 toolTipClass">
 
                         <div class="checkbox">
                             <label>
-                                @Html.CheckBoxFor(model => model.PresenceMotoPerso, new { onclick = "enableField()" } )Ma moto n'apparaît pas dans la liste
+                                @Html.CheckBoxFor(model => model.Annonce.PresenceMotoPerso, new { onclick = "enableField()" })Ma moto n'apparaît pas dans la liste
                             </label>
                         </div>
 
-                        <div id="conteneurMotoProposee">
-                            @Html.DropDownList("MotoProposeeID", (SelectList)ViewBag.MotoProposeeID, new { @class = "form-control", data_toggle = "tooltip", title = "Votre moto n'apparait pas dans la liste? cochez la case ci-dessus!" })
+                        <div class="conteneurMotoProposee toolTipClass">
+                            @Html.DropDownListFor(model => model.Annonce.MotoProposeeID, Model.MotoProposeeList, new { @class = "form-control", title = "Votre moto n'apparait pas dans la liste? cochez la case ci-dessus!" })
                         </div>
                         
-                        <div id="conteneurMotoPerso" class="hidden">
-                            @Html.EditorFor(model => model.MotoPerso, new { htmlAttributes = new { @class = "form-control", placeholder = "Marque et modèle - Saisie libre", data_toggle = "tooltip", title = "Saisissez la marque et le modèle, la moto sera intégrée dans la base de données par nos soins." } })
+                        <div class="conteneurMotoPerso toolTipClass hidden">
+                            @Html.EditorFor(model => model.Annonce.MotoPerso, new { htmlAttributes = new { @class = "form-control", placeholder = "Marque et modèle - Saisie libre", title = "Saisissez la marque et le modèle, la moto sera intégrée dans la base de données par nos soins." } })
                         </div>
 
-                    </div>
+                </div>
                 <div class="col-md-5">
                         <br/>
-                        @Html.ValidationMessageFor(model => model.MotoProposeeID, "", new { @class = "text-danger" })
-                        @Html.ValidationMessageFor(model => model.MotoPerso, "", new { @class = "text-danger" })
+                        <div class="conteneurMotoProposee">
+                            @Html.ValidationMessageFor(model => model.Annonce.MotoProposeeID, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="conteneurMotoPerso hidden">
+                            @Html.ValidationMessageFor(model => model.Annonce.MotoPerso, "", new { @class = "text-danger" })
+                        </div>
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.Photos, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.Annonce.Photos, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-5">
-                    <input type="file" class="file" multiple id="photos" name="photos" data-language="fr" accept="image/*" data-show-upload="false" data-max-file-count=@ViewBag.nombreMaxdePhotos data-max-file-size=@ViewBag.tailleMaxiUploadEnOctet>
+                    <input type="file" class="file" multiple id="photos" name="photos" data-language="fr" accept="image/*" data-show-upload="false" data-max-file-count= @Model.nombreMaxdePhotos data-max-file-size= @Model.tailleMaxiUploadEnOctet>
                 </div>
                 <div class="col-md-5">
-                    @Html.ValidationMessageFor(model => model.Photos, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Annee, htmlAttributes: new { @class = "control-label col-md-2 required" })
-                <div class="col-md-5">
-                    @Html.EditorFor(model => model.Annee, new { htmlAttributes = new { @class = "form-control", step = "10" } })
-                </div>
-                <div class="col-md-5">
-                    @Html.ValidationMessageFor(model => model.Annee, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Annonce.Photos, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.Kilometrage, htmlAttributes: new { @class = "control-label col-md-2 required" })
+                @Html.LabelFor(model => model.Annonce.Annee, htmlAttributes: new { @class = "control-label col-md-2 required" })
                 <div class="col-md-5">
-                    @Html.EditorFor(model => model.Kilometrage, new { htmlAttributes = new { @class = "form-control", step = "1000" } })
+                    @Html.EditorFor(model => model.Annonce.Annee, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
                 <div class="col-md-5">
-                    @Html.ValidationMessageFor(model => model.Kilometrage, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Annonce.Annee, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.Prix, htmlAttributes: new { @class = "control-label col-md-2 required" })
+                @Html.LabelFor(model => model.Annonce.Kilometrage, htmlAttributes: new { @class = "control-label col-md-2 required" })
                 <div class="col-md-5">
-                    @Html.EditorFor(model => model.Prix, new { htmlAttributes = new { @class = "form-control", step = "100" } })
+                    @Html.EditorFor(model => model.Annonce.Kilometrage, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
                 <div class="col-md-5">
-                    @Html.ValidationMessageFor(model => model.Prix, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Annonce.Kilometrage, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Annonce.Prix, htmlAttributes: new { @class = "control-label col-md-2 required" })
+                <div class="col-md-5">
+                    @Html.EditorFor(model => model.Annonce.Prix, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col-md-5">
+                    @Html.ValidationMessageFor(model => model.Annonce.Prix, "", new { @class = "text-danger" })
                 </div>
             </div>
 
@@ -118,34 +124,34 @@
             <p>Vous pouvez choisir des modèles précis</p>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.MotosAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.Annonce.MotosAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-5 toolTipClass">
-                    @Html.DropDownList("MotosAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "form-control", title = "Cette liste est indépendante de choix de marques/genres ci-dessous" })
+                    @Html.ListBoxFor(model => model.Annonce.MotosAccepteesID, Model.MotosAccepteesList, new { multiple = "multiple", @class = "form-control", title = "Cette liste est indépendante du choix des marques/genres ci-dessous" })
                 </div>
                 <div class="col-md-5">
-                    @Html.ValidationMessageFor(model => model.MotosAccepteesID, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Annonce.MotosAccepteesID, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <p>Ou choisir une combinaison marque/genre</p>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.MarquesAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.Annonce.MarquesAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-5 toolTipClass">
-                    @Html.DropDownList("MarquesAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "form-control", title = "Renseignez le genre et laissez ce champ vide si toutes les marques vous conviennent" })
+                    @Html.ListBoxFor(model => model.Annonce.MarquesAccepteesID, Model.MarquesAccepteesList, new { multiple = "multiple", @class = "form-control", title = "Renseignez le genre et laissez ce champ vide si toutes les marques vous conviennent" })
                 </div>
                 <div class="col-md-5">
-                    @Html.ValidationMessageFor(model => model.MarquesAccepteesID, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Annonce.MarquesAccepteesID, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.GenresAcceptesID, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.Annonce.GenresAcceptesID, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-5 toolTipClass">
-                    @Html.DropDownList("GenresAcceptesID", null, String.Empty, new { multiple = "multiple", @class = "form-control", title = "Renseignez la marque et laissez ce champ vide si tous les genres vous conviennent" })
+                    @Html.ListBoxFor(model => model.Annonce.GenresAcceptesID, Model.GenresAcceptesList, new { multiple = "multiple", @class = "form-control", title = "Renseignez la marque et laissez ce champ vide si tous les genres vous conviennent" })
                 </div>
                 <div class="col-md-5">
-                    @Html.ValidationMessageFor(model => model.GenresAcceptesID, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Annonce.GenresAcceptesID, "", new { @class = "text-danger" })
                 </div>
             </div>
 
@@ -156,62 +162,62 @@
             <legend>A propos de vous</legend>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.Nom, htmlAttributes: new { @class = "control-label col-md-2 required" })
+                @Html.LabelFor(model => model.Annonce.Nom, htmlAttributes: new { @class = "control-label col-md-2 required" })
                 <div class="col-md-5">
-                    @Html.EditorFor(model => model.Nom, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.Annonce.Nom, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
                 <div class="col-md-5">
-                    @Html.ValidationMessageFor(model => model.Nom, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Mail, htmlAttributes: new { @class = "control-label col-md-2 required" })
-                <div class="col-md-5">
-                    @Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "form-control" } })
-                </div>
-                <div class="col-md-5">
-                    @Html.ValidationMessageFor(model => model.Mail, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Annonce.Nom, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.Telephone, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.Annonce.Mail, htmlAttributes: new { @class = "control-label col-md-2 required" })
                 <div class="col-md-5">
-                    @Html.EditorFor(model => model.Telephone, new { htmlAttributes = new { @class = "form-control", type = "tel" } })
+                    @Html.EditorFor(model => model.Annonce.Mail, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
                 <div class="col-md-5">
-                    @Html.ValidationMessageFor(model => model.Telephone, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.DepartementID, htmlAttributes: new { @class = "control-label col-md-2 required" })
-                <div class="col-md-5">
-                    @Html.DropDownList("DepartementID", (SelectList)ViewBag.DepartementID, new { @class = "form-control" })
-                </div>
-                <div class="col-md-5">
-                    @Html.ValidationMessageFor(model => model.DepartementID, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Annonce.Mail, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.MotDePasse, htmlAttributes: new { @class = "control-label col-md-2 required" })
+                @Html.LabelFor(model => model.Annonce.Telephone, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-5">
-                    @Html.EditorFor(model => model.MotDePasse, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.Annonce.Telephone, new { htmlAttributes = new { @class = "form-control", type = "tel" } })
                 </div>
                 <div class="col-md-5">
-                    @Html.ValidationMessageFor(model => model.MotDePasse, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Annonce.Telephone, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.ConfirmerMotDePasse, htmlAttributes: new { @class = "control-label col-md-2 required" })
+                @Html.LabelFor(model => model.Annonce.DepartementID, htmlAttributes: new { @class = "control-label col-md-2 required" })
                 <div class="col-md-5">
-                    @Html.EditorFor(model => model.ConfirmerMotDePasse, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.DropDownListFor(model => model.Annonce.DepartementID, Model.DepartementList, new { @class = "form-control" })
                 </div>
                 <div class="col-md-5">
-                    @Html.ValidationMessageFor(model => model.ConfirmerMotDePasse, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Annonce.DepartementID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Annonce.MotDePasse, htmlAttributes: new { @class = "control-label col-md-2 required" })
+                <div class="col-md-5">
+                    @Html.EditorFor(model => model.Annonce.MotDePasse, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col-md-5">
+                    @Html.ValidationMessageFor(model => model.Annonce.MotDePasse, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Annonce.ConfirmerMotDePasse, htmlAttributes: new { @class = "control-label col-md-2 required" })
+                <div class="col-md-5">
+                    @Html.EditorFor(model => model.Annonce.ConfirmerMotDePasse, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col-md-5">
+                    @Html.ValidationMessageFor(model => model.Annonce.ConfirmerMotDePasse, "", new { @class = "text-danger" })
                 </div>
             </div>
 
@@ -236,5 +242,229 @@
     <script src="~/Scripts/fr.js"></script>
 
     <script src="~/Scripts/expressive.annotations.validate.js"></script>
+
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+
+        enableField();
+
+        $('#Annonce_MotosAccepteesID').select2(
+        {
+            minimumInputLength: 3,
+            multiple: true,
+            theme: "bootstrap",
+            language: "fr",
+            ajax:
+            {
+                url: '/Motos/ListePartielleMotos/',
+                dataType: 'json',
+                delay: 500,
+                type: "GET",
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            },
+            placeholder: "Les modèles qui m'intéressent"
+        });
+
+        // On ne lance la requête ajax que si une moto a été sélectionnée auparavant
+        if ('@Model.Annonce.MotosAccepteesID.Any()' == 'True')
+        {
+
+            // On lance la requête ajax pour récupérer le nom de la moto
+            $.ajax({
+                type: 'GET',
+                url: '/Motos/MotoEnParticulier/',
+                data: { q: '@string.Join("/", Model.Annonce.MotosAccepteesID.ToArray())' },
+                dataType: 'json',
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }).then(function (data) {
+                // Here we should have the data object
+                for (var i=0; i<data.length; i++)
+                {
+                    $('#Annonce_MotosAccepteesID').append('<option selected value="' + data[i].id + '">' + data[i].text + '</option>').trigger('change');
+                }
+
+            });
+
+        }
+
+        $('#Annonce_MarquesAccepteesID').select2(
+        {
+            minimumInputLength: 1,
+            multiple: true,
+            theme: "bootstrap",
+            language: "fr",
+            ajax:
+            {
+                url: '/Marques/ListePartielleMarques/',
+                dataType: 'json',
+                delay: 500,
+                type: "GET",
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            },
+            placeholder: "Les marques qui m'intéressent"
+        });
+
+        // On ne lance la requête ajax que si une moto a été sélectionnée auparavant
+        if ('@Model.Annonce.MarquesAccepteesID.Any()' == 'True')
+        {
+
+            // On lance la requête ajax pour récupérer le nom de la moto
+            $.ajax({
+                type: 'GET',
+                url: '/Marques/MarqueEnParticulier/',
+                data: { q: '@string.Join("/", Model.Annonce.MarquesAccepteesID.ToArray())' },
+                dataType: 'json',
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }).then(function (data) {
+                // Here we should have the data object
+                for (var i=0; i<data.length; i++)
+                {
+                    $('#Annonce_MarquesAccepteesID').append('<option selected value="' + data[i].id + '">' + data[i].text + '</option>').trigger('change');
+                }
+
+            });
+
+        }
+
+        $('#Annonce_GenresAcceptesID').select2(
+        {
+            multiple: true,
+            theme: "bootstrap",
+            placeholder: "Les genres qui m'intéressent"
+        });
+
+
+        $('#Annonce_MotoProposeeID').select2(
+        {
+            minimumInputLength: 3,
+            theme: "bootstrap",
+            language: "fr",
+            ajax:
+            {
+                url: '/Motos/ListePartielleMotos/',
+                dataType: 'json',
+                delay: 500,
+                type: "GET",
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            },
+            placeholder: "Mon deux-roues"
+        });
+
+        // On ne lance la requête ajax que si une moto a été sélectionnée auparavant
+        if (@Model.Annonce.MotoProposeeID != null)
+        {
+
+            // Création de l'option temporaire
+            var $option1 = $('<option selected>Chargement...</option>').val(0);
+
+            // On affecte l'option temporaire au select
+            $('#Annonce_MotoProposeeID').append($option1).trigger('change'); // append the option and update Select2
+
+            // On lance la requête ajax pour récupérer le nom de la moto
+            $.ajax({
+                type: 'GET',
+                url: '/Motos/MotoEnParticulier/',
+                data: { q: @Model.Annonce.MotoProposeeID },
+                dataType: 'json',
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }).then(function (data) {
+                // Here we should have the data object
+                $option1.text(data[0].text).val(data[0].id); // update the text that is displayed (and maybe even the value)
+                $option1.removeData(); // remove any caching data that might be associated
+                $('#Annonce_MotoProposeeID').trigger('change'); // notify JavaScript components of possible changes
+
+            });
+
+        }
+
+        $('#Annonce_DepartementID').select2(
+        {
+            minimumInputLength: 1,
+            theme: "bootstrap",
+            language: "fr",
+            ajax:
+            {
+                url: '/Departements/ListePartielleDepartements/',
+                dataType: 'json',
+                delay: 500,
+                type: "GET",
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            },
+            placeholder: "Mon département"
+        });
+
+
+
+        // On ne lance la requête ajax que si une moto a été sélectionnée auparavant
+        if (@Model.Annonce.DepartementID != null)
+        {
+
+            // Création de l'option temporaire
+            var $option2 = $('<option selected>Chargement...</option>').val(0);
+
+            // On affecte l'option temporaire au select
+            $('#Annonce_DepartementID').append($option2).trigger('change'); // append the option and update Select2
+
+            // On lance la requête ajax pour récupérer le nom de la moto
+            $.ajax({
+                type: 'GET',
+                url: '/Departements/DepartementEnParticulier/',
+                data: { q: @Model.Annonce.DepartementID },
+                dataType: 'json',
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            }).then(function (data) {
+                // Here we should have the data object
+                $option2.text(data[0].text).val(data[0].id); // update the text that is displayed (and maybe even the value)
+                $option2.removeData(); // remove any caching data that might be associated
+                $('#Annonce_DepartementID').trigger('change'); // notify JavaScript components of possible changes
+
+            });
+
+        }
+
+        $(".select2-container").tooltip({
+            title: function () {
+                return $(this).prev().attr("title");
+            },
+            placement: "right"
+        });
+
+
+    });
+
+</script>
 
     }

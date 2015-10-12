@@ -31,16 +31,16 @@ namespace Motonet.Models
         [Required]
         [RangeYearToCurrent(1900, ErrorMessage = "L'année doit être comprise entre {0} et {1}.")]
         [DisplayAttribute(Name="Année")]
-        public int Annee { get; set; }
+        public int? Annee { get; set; }
 
         [Required]
         [Range(0, 999999, ErrorMessage = "Veuillez saisir un nombre compris entre {2} et {1}.")]
         [DisplayAttribute(Name = "Kilométrage")]
-        public int Kilometrage { get; set; }
+        public int? Kilometrage { get; set; }
 
         [Required]
         [Range(0, 999999, ErrorMessage = "Veuillez saisir un nombre compris entre {2} et {1}.")]
-        public int Prix { get; set; }
+        public int? Prix { get; set; }
 
         [Required]
         [StringLength(30, ErrorMessage = "La longueur doit être comprise entre {2} et {1}.", MinimumLength = 3)]
@@ -101,7 +101,6 @@ namespace Motonet.Models
         [DisplayAttribute(Name = "Département")]
         public int DepartementID { get; set; }
 
-        [Required]
         [DisplayAttribute(Name = "Modèles")]
         public List<int> MotosAccepteesID { get; set; }
 

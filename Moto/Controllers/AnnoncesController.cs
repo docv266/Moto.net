@@ -1,5 +1,6 @@
 ﻿using Motonet.DAL;
 using Motonet.Models;
+using Motonet.ViewModels;
 using PagedList;
 using Postal;
 using System;
@@ -537,18 +538,17 @@ namespace Motonet.Controllers
         public ActionResult Create()
         {
 
-            ViewBag.tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]) / 1024;
-            ViewBag.nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
-            ViewBag.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
+            CreateViewModel cvm = new CreateViewModel();
 
-            ViewBag.MotoProposeeID = new SelectList(new List<String>(), "ID", "Identification", null);
-            ViewBag.MotosAccepteesID = new MultiSelectList(new List<String>(), "ID", "Identification", null);
-            ViewBag.MarquesAccepteesID = new MultiSelectList(new List<String>(), "ID", "Identification", null);
-            ViewBag.DepartementID = new SelectList(new List<String>(), "ID", "Identification", null);
+            cvm.tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]) / 1024;
+            cvm.nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
+            cvm.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
 
-            PopulateGenresDropDownList();
+            cvm.Annonce.MotoProposeeID = db.Motos.First().ID;
+            cvm.Annonce.DepartementID = db.Departements.First().ID;
 
-            return View();
+
+            return View(cvm);
         }
 
         // Affiche le formulaire de création d'une annonce (affichages suivants)
@@ -654,21 +654,15 @@ namespace Motonet.Controllers
                 
             }
 
-            ViewBag.tailleMaxiUploadEnOctet = tailleMaxiUploadEnOctet / 1024;
-            ViewBag.nombreMaxdePhotos = nombreMaxdePhotos;
-            ViewBag.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
+            CreateViewModel cvm = new CreateViewModel();
 
-            ViewBag.MotoProposeeID = new SelectList(new List<String>(), "ID", "Identification", null);
-          
-            
-            foreach (Genre genre in annonce.GenresAcceptes)
-            {
-                annonce.GenresAcceptesID.Add(genre.ID);
-            }
-            PopulateGenresDropDownList(annonce.GenresAcceptesID);
+            cvm.tailleMaxiUploadEnOctet = tailleMaxiUploadEnOctet / 1024;
+            cvm.nombreMaxdePhotos = nombreMaxdePhotos;
+            cvm.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
 
+            cvm.Annonce = annonce;
 
-            return View(annonce);
+            return View(cvm);
         }
 
         // Affiche la demande de mot de passe avant de pouvoir éditer l'annonce
@@ -1049,13 +1043,13 @@ namespace Motonet.Controllers
         }
 
         // Peuple la liste déroulante des genres moto
-        private void PopulateGenresDropDownList(List<int> selectedGenres = null)
+        private MultiSelectList PopulateGenresDropDownList(List<int> selectedGenres = null)
         {
             var genresQuery = from d in db.Genres
                              orderby d.Nom
                              select d;
 
-            ViewBag.GenresAcceptesID = new MultiSelectList(genresQuery, "ID", "Nom", selectedGenres);
+            return new MultiSelectList(genresQuery, "ID", "Nom", selectedGenres);
         }
 
         // Peuple la liste déroulante des régions

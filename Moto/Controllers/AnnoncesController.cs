@@ -538,17 +538,19 @@ namespace Motonet.Controllers
         public ActionResult Create()
         {
 
-            CreateViewModel cvm = new CreateViewModel();
+            CreateEditViewModel cevm = new CreateEditViewModel();
 
-            cvm.tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]) / 1024;
-            cvm.nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
-            cvm.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
+            cevm.CreatePage = true;
 
-            cvm.Annonce.MotoProposeeID = db.Motos.First().ID;
-            cvm.Annonce.DepartementID = db.Departements.First().ID;
+            cevm.tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]) / 1024;
+            cevm.nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
+            cevm.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
+
+            cevm.Annonce.MotoProposeeID = db.Motos.First().ID;
+            cevm.Annonce.DepartementID = db.Departements.First().ID;
 
 
-            return View(cvm);
+            return View(cevm);
         }
 
         // Affiche le formulaire de création d'une annonce (affichages suivants)
@@ -654,15 +656,17 @@ namespace Motonet.Controllers
                 
             }
 
-            CreateViewModel cvm = new CreateViewModel();
+            CreateEditViewModel cevm = new CreateEditViewModel();
 
-            cvm.tailleMaxiUploadEnOctet = tailleMaxiUploadEnOctet / 1024;
-            cvm.nombreMaxdePhotos = nombreMaxdePhotos;
-            cvm.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
+            cevm.CreatePage = true;
 
-            cvm.Annonce = annonce;
+            cevm.tailleMaxiUploadEnOctet = tailleMaxiUploadEnOctet / 1024;
+            cevm.nombreMaxdePhotos = nombreMaxdePhotos;
+            cevm.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
 
-            return View(cvm);
+            cevm.Annonce = annonce;
+
+            return View(cevm);
         }
 
         // Affiche la demande de mot de passe avant de pouvoir éditer l'annonce
@@ -696,6 +700,7 @@ namespace Motonet.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var annonce = db.Annonces.Find(annonceID);
+            BuildIDListFromObjects(annonce);
 
 
             // On vérifie que le code saisi est le bon (une fois hashé)
@@ -710,56 +715,87 @@ namespace Motonet.Controllers
 
             // A ce niveau, le mot de passe a été renseigné et est correct
             // On affiche la page d'édition de l'annonce
-            ViewBag.tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]) / 1024;
-            ViewBag.nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
-            ViewBag.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
+            CreateEditViewModel cevm = new CreateEditViewModel();
 
-            foreach (Genre genre in annonce.GenresAcceptes)
-            {
-                annonce.GenresAcceptesID.Add(genre.ID);
-            }
-            PopulateGenresDropDownList(annonce.GenresAcceptesID);
+            cevm.CreatePage = false;
+
+            cevm.tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]) / 1024;
+            cevm.nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
+            cevm.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
+
+            cevm.Annonce = annonce;
 
             ViewBag.password = password;
 
-            return View("Edit", annonce);
+            return View("Edit", cevm);
                         
         }
 
         // Affiche le formulaire pour éditer l'annonce (affichages suivants)
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost(int? id, int? photoPrincipale, string password, IEnumerable<HttpPostedFileBase> photos)
+        public ActionResult EditPost([Bind(Include = "ID,Titre,Description,MotoProposeeID,PresenceMotoPerso,MotoPerso,PhotosID,Annee,Kilometrage,Prix,MotosAccepteesID,MarquesAccepteesID,GenresAcceptesID,Nom,Mail,Telephone,DepartementID,MotDepasse,ConfirmerMotDePasse")] Annonce annonce, CreateEditViewModel cevm, int? photoPrincipale, string password, IEnumerable<HttpPostedFileBase> photos)
         {
 
             int tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]);
             int nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
             int nombrePhotosAjoutees = 0;
 
-            if (id == null)
+            if (annonce == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var annonceToUpdate = db.Annonces.Find(id);
 
+            Annonce annonceCible = db.Annonces.Find(annonce.ID);
 
             // On vérifie que le code saisi est le bon (une fois hashé)
-            if (!Annonce.VerifyHashedPassword(annonceToUpdate.MotDePasse, password) && (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"]))
+            if (!Annonce.VerifyHashedPassword(annonceCible.MotDePasse, password) && (Session["estAdmin"] == null || !(Boolean)Session["estAdmin"]))
             {
                 ViewBag.Message = "Mot de passe incorrect";
                 return View();
             }
 
-            annonceToUpdate.ConfirmerMotDePasse = annonceToUpdate.MotDePasse;
-
-            if (TryUpdateModel(annonceToUpdate, "",
-               new string[] { "Titre", "Description", "MotoProposeeID", "Annee", "Kilometrage", "Prix", "MotosAccepteesID", "MarquesAccepteesID", "GenresAcceptesID", "Nom", "Mail", "Telephone", "DepartementID" }))
+            if (ModelState.IsValid)
             {
                 try
                 {
-                    
-                    annonceToUpdate.Date = DateTime.Today;
-                    ProcessManyToManyRelationships(annonceToUpdate);
+
+
+
+                    ProcessManyToManyRelationships(annonce);
+
+                    db.Entry(annonceCible).Collection(a => a.MotosAcceptees).Load();
+                    db.Entry(annonceCible).Collection(a => a.MarquesAcceptees).Load();
+                    db.Entry(annonceCible).Collection(a => a.GenresAcceptes).Load();
+                    db.Entry(annonceCible).Collection(a => a.Photos).Load();
+
+                    // Mapping
+                    annonceCible.Titre = annonce.Titre;
+                    annonceCible.Description = annonce.Description;
+                    annonceCible.Annee = annonce.Annee;
+                    annonceCible.Kilometrage = annonce.Kilometrage;
+                    annonceCible.Prix = annonce.Prix;
+                    annonceCible.Nom = annonce.Nom;
+                    annonceCible.MotDePasse = annonce.MotDePasse;
+                    annonceCible.ConfirmerMotDePasse = annonce.ConfirmerMotDePasse;
+                    annonceCible.Mail = annonce.Mail;
+                    annonceCible.Telephone = annonce.Telephone;
+                    annonceCible.Date = DateTime.Today;
+                    annonceCible.MotoProposeeID = annonce.MotoProposeeID;
+                    annonceCible.MotoProposee = annonce.MotoProposee;
+                    annonceCible.PresenceMotoPerso = annonce.PresenceMotoPerso;
+                    annonceCible.MotoPerso = annonce.MotoPerso;
+                    annonceCible.DepartementID = annonce.DepartementID;
+                    annonceCible.Departement = annonce.Departement;
+                    annonceCible.MotosAccepteesID = annonce.MotosAccepteesID;
+                    annonceCible.MotosAcceptees = annonce.MotosAcceptees;
+                    annonceCible.MarquesAccepteesID = annonce.MarquesAccepteesID;
+                    annonceCible.MarquesAcceptees = annonce.MarquesAcceptees;
+                    annonceCible.GenresAcceptesID = annonce.GenresAcceptesID;
+                    annonceCible.GenresAcceptes = annonce.GenresAcceptes;
+                    annonceCible.PhotosID = annonce.PhotosID;
+                    annonceCible.Photos = annonce.Photos;
+
                     db.SaveChanges();
 
 
@@ -767,12 +803,12 @@ namespace Motonet.Controllers
                     {
                         // On vide la liste pour mettre uniquement les nouvelles photos.
                         // On supprime les photos
-                        foreach (Photo photoASupprimer in annonceToUpdate.Photos)
+                        foreach (Photo photoASupprimer in annonce.Photos)
                         {
                             System.IO.File.Delete(photoASupprimer.CheminComplet);
                         }
 
-                        db.Photos.RemoveRange(annonceToUpdate.Photos);
+                        db.Photos.RemoveRange(annonce.Photos);
                         db.SaveChanges();
 
                         // On parcourt les fichiers sélectionnés (dans la limite de "nombreMaxdePhotos") afin de les redimensionner et les stocker
@@ -790,7 +826,7 @@ namespace Motonet.Controllers
 
                                 Image imageRedimensionneeMiniature = ScaleImage(imageOriginale, largeurMaxMiniature, hauteurMaxMiniature, false);
 
-                                String savePathMiniature = Server.MapPath("~/Content/Photos/Miniatures/" + annonceToUpdate.ID + "_" + i + ".png");
+                                String savePathMiniature = Server.MapPath("~/Content/Photos/Miniatures/" + annonce.ID + "_" + i + ".png");
 
                                 imageRedimensionneeMiniature.Save(savePathMiniature, System.Drawing.Imaging.ImageFormat.Png);
 
@@ -801,7 +837,7 @@ namespace Motonet.Controllers
                                     ModifiedDate = DateTime.Now
                                 };
 
-                                annonceToUpdate.Photos.Add(photoMiniature);
+                                annonce.Photos.Add(photoMiniature);
 
                                 // Ajout de la version Vignette de cette image
                                 int largeurMaxVignette = int.Parse(ConfigurationManager.AppSettings["largeurMaxVignette"]);
@@ -809,7 +845,7 @@ namespace Motonet.Controllers
 
                                 Image imageRedimensionneeVignette = ScaleImage(imageOriginale, largeurMaxVignette, hauteurMaxVignette, true);
 
-                                String savePathVignette = Server.MapPath("~/Content/Photos/Vignettes/" + annonceToUpdate.ID + "_" + i + ".png");
+                                String savePathVignette = Server.MapPath("~/Content/Photos/Vignettes/" + annonce.ID + "_" + i + ".png");
 
                                 imageRedimensionneeVignette.Save(savePathVignette, System.Drawing.Imaging.ImageFormat.Png);
 
@@ -820,7 +856,7 @@ namespace Motonet.Controllers
                                     ModifiedDate = DateTime.Now
                                 };
 
-                                annonceToUpdate.Photos.Add(photoVignette);
+                                annonce.Photos.Add(photoVignette);
                                 nombrePhotosAjoutees++;
                             }
                         }
@@ -829,48 +865,40 @@ namespace Motonet.Controllers
                     if (nombrePhotosAjoutees >= 1)
                     {
                         // On défini la photo principale (la première de la liste)
-                        annonceToUpdate.Photos.ElementAt(0).Principale = true;
+                        annonce.Photos.ElementAt(0).Principale = true;
                         // Et la vignette correspondante
-                        annonceToUpdate.Photos.ElementAt(1).Principale = true;
+                        annonce.Photos.ElementAt(1).Principale = true;
                     }
                     else if (photoPrincipale != null && photoPrincipale != 0)
                     {
                         // On change de photo principale s'il y a des photos et s'il y a un changement de photo principale
-                        foreach (Photo photoP in annonceToUpdate.Photos)
+                        foreach (Photo photoP in annonce.Photos)
                         {
                             photoP.Principale = false;
                         }
 
-                        Photo photoPr = annonceToUpdate.Photos.Find(p => p.ID == photoPrincipale);
+                        Photo photoPr = annonce.Photos.Find(p => p.ID == photoPrincipale);
                         photoPr.Principale = true;
-                        annonceToUpdate.Photos.ElementAt(annonceToUpdate.Photos.IndexOf(photoPr) + 1).Principale = true;
+                        annonce.Photos.ElementAt(annonce.Photos.IndexOf(photoPr) + 1).Principale = true;
                     }
 
                     db.SaveChanges();
 
-                    return RedirectToAction("Details", new { id = annonceToUpdate.ID });
+                    return RedirectToAction("Details", new { id = annonce.ID });
                 }
-                catch (DataException /* dex */)
+                catch (DataException e/* dex */)
                 {
+                    Console.WriteLine(e.Message);
                     //Log the error (uncomment dex variable name and add a line here to write a log.
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
 
+            cevm.tailleMaxiUploadEnOctet = int.Parse(ConfigurationManager.AppSettings["tailleMaxiUploadEnOctet"]) / 1024;
+            cevm.nombreMaxdePhotos = int.Parse(ConfigurationManager.AppSettings["nombreMaxdePhotos"]);
+            cevm.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
 
-            foreach (Genre genre in annonceToUpdate.GenresAcceptes)
-            {
-                annonceToUpdate.GenresAcceptesID.Add(genre.ID);
-            }
-            PopulateGenresDropDownList(annonceToUpdate.GenresAcceptesID);
-
-            ViewBag.tailleMaxiUploadEnOctet = tailleMaxiUploadEnOctet / 1024;
-            ViewBag.nombreMaxdePhotos = nombreMaxdePhotos;
-            ViewBag.nombreMaxCaracteresDescription = int.Parse(ConfigurationManager.AppSettings["nombreMaxCaracteresDescription"]);
-
-            ViewBag.password = password;
-
-            return View("Edit", annonceToUpdate);
+            return View("Edit", cevm);
 
         }
 
@@ -1084,6 +1112,12 @@ namespace Motonet.Controllers
                 annonce.GenresAcceptes.Add(db.Genres.Find(genreID));
             }
 
+            annonce.Photos.Clear();
+            foreach (int photoID in annonce.PhotosID)
+            {
+                annonce.Photos.Add(db.Photos.Find(photoID));
+            }
+
             // On affine les listes
             // S'il y a des marques mais pas de genres, on considère que tous les genres sont acceptés.
             // Et inversement
@@ -1096,6 +1130,35 @@ namespace Motonet.Controllers
                 annonce.MarquesAcceptees.AddRange(db.Marques.ToList());
             }
             
+        }
+
+        // Rempli les listes des IDs à partir des paramètres virtuels 
+        private void BuildIDListFromObjects(Annonce annonce)
+        {
+            annonce.MotosAccepteesID.Clear();
+            foreach (Moto moto in annonce.MotosAcceptees)
+            {
+                annonce.MotosAccepteesID.Add(moto.ID);
+            }
+
+            annonce.MarquesAccepteesID.Clear();
+            foreach (Marque marque in annonce.MarquesAcceptees)
+            {
+                annonce.MarquesAccepteesID.Add(marque.ID);
+            }
+
+            annonce.GenresAcceptesID.Clear();
+            foreach (Genre genre in annonce.GenresAcceptes)
+            {
+                annonce.GenresAcceptesID.Add(genre.ID);
+            }
+
+            annonce.PhotosID.Clear();
+            foreach (Photo photo in annonce.Photos)
+            {
+                annonce.PhotosID.Add(photo.ID);
+            }
+
         }
 
         // Redimensionne l'image en gardant son ratio et en étant inférieur au maximum de largeur et hauteur

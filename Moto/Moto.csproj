@@ -196,7 +196,7 @@
     <Compile Include="Models\Region.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\CreateViewModel.cs" />
+    <Compile Include="ViewModels\CreateEditViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\alt.png" />
@@ -270,7 +270,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\Site_AnnoncesCreate.js" />
+    <Content Include="Scripts\Site_AnnoncesCreateEdit.js" />
     <Content Include="Scripts\Site_AnnoncesIndex.js" />
     <Content Include="Scripts\Site_GoogleAnalytics.js" />
     <Content Include="Scripts\_references.js" />
@@ -339,6 +339,7 @@
     <Content Include="Views\Emails\MailAnnonceAutorisee.Html.cshtml" />
     <Content Include="Views\Emails\MailAdminAnnoncePostee.Text.cshtml" />
     <Content Include="Views\Emails\MailAdminAnnoncePostee.Html.cshtml" />
+    <Content Include="Views\Annonces\CreateEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

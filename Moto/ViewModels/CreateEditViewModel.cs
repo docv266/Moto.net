@@ -8,9 +8,9 @@ using System.Web.Mvc;
 
 namespace Motonet.ViewModels
 {
-    public class CreateViewModel
+    public class CreateEditViewModel
     {
-        public CreateViewModel()
+        public CreateEditViewModel()
         {
             Annonce = new Annonce();
 
@@ -24,6 +24,8 @@ namespace Motonet.ViewModels
 
             DepartementList = new SelectList(new List<String>(), "ID", "Identification", null);
         }
+
+        public bool CreatePage { get; set; }
 
         public Annonce Annonce { get; set; }
 

@@ -1,272 +1,62 @@
-﻿@model Motonet.Models.Annonce
+﻿@model Motonet.ViewModels.CreateEditViewModel
 
-
-@if (Model == null)
-{
-    Html.RenderPartial("~/Views/Shared/_PasswordForm.cshtml");
+@{
+    ViewBag.Title = "Modifier mon annonce";
+    Layout = "~/Views/Annonces/CreateEdit.cshtml";
 }
-else
+
+@if (Model != null)
+{
+  
+@section HiddenFields
 {
 
-    @section Styles {
-        <link href="~/Content/chosen.css" rel="stylesheet" />
-        <link href="~/Content/bootstrap-fileinput/css/fileinput.css" rel="stylesheet" />
+    @Html.HiddenFor(model => model.Annonce.ID)
+    @Html.HiddenFor(model => model.Annonce.MotDePasse)
+
+    @{
+        Model.Annonce.ConfirmerMotDePasse = Model.Annonce.MotDePasse;
     }
 
-    
-    ViewBag.Title = "Modifier une annonce";
-    
+    @Html.HiddenFor(model => model.Annonce.ConfirmerMotDePasse)
 
-    <h2>Modifier</h2>
+    @Html.ListBoxFor(model => model.Annonce.PhotosID, new MultiSelectList(Model.Annonce.PhotosID), new { @class = "hidden" })
 
-    using (Html.BeginForm("Edit", "Annonces", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    <input type="hidden" name="password" value=@ViewBag.password>
+    
+}  
+
+               
+@section PhotosActuelles
+{
+            
+    @if (Model.Annonce.Photos.Any())
     {
-        @Html.AntiForgeryToken();
-    
-        <div class="form-horizontal">
-            <hr />
+        <div class="form-group">
+            <label class="control-label col-md-2">
+                Photos actuelles - Choisir la photo principale
+            </label>
 
-            <fieldset>
+            <div class="col-md-10">
 
-                <h5>Ce que vous proposez:</h5>
+                <label class="imageRadio">
+                    <input type="radio" name="photoPrincipale" value=@Model.Annonce.Photos.Find(p => p.Taille == Photo.TypeTaille.Miniature && p.Principale == true).ID checked="checked" />
+                    <img src="~/Photo?id=@Model.Annonce.Photos.Find(p => p.Taille == Photo.TypeTaille.Miniature && p.Principale == true).ID" alt="Photo non disponible" />
+                </label>
 
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.HiddenFor(model => model.ID)
-
-                <input type="hidden" name="password" value=@ViewBag.password>   
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Titre, htmlAttributes: new { @class = "control-label col-md-2 required" })
-                    <div class="col-md-5">
-                        @Html.EditorFor(model => model.Titre, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                    <div class="col-md-5">
-                        @Html.ValidationMessageFor(model => model.Titre, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2 required" })
-                    <div class="col-md-5">
-                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", rows = 10, maxLength = @ViewBag.nombreMaxCaracteresDescription } })
-                    </div>
-                    <div class="col-md-5">
-                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                @*<div class="form-group">
-                    @Html.LabelFor(model => model.MotoProposeeID, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-5">
-                        @Html.DropDownList("MotoProposeeID", null, String.Empty, new { @class = "chosen-select form-control" })
-                    </div>
-                    <div class="col-md-5">
-                        @Html.ValidationMessageFor(model => model.MotoProposeeID, "", new { @class = "text-danger" })
-                    </div>
-                </div>*@
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.MotoProposeeID, htmlAttributes: new { @class = "control-label col-md-2 required" })
-                    <div class="col-md-5 toolTipClass">
-
-                        <div class="checkbox">
-                            <label>
-                                @Html.CheckBoxFor(model => model.PresenceMotoPerso, new { onclick = "enableField()" })Ma moto n'apparaît pas dans la liste
-                            </label>
-                        </div>
-
-                        <div id="conteneurMotoProposee">
-                            @Html.DropDownList("MotoProposeeID", null, String.Empty, new { @class = "chosen-select form-control", data_toggle = "tooltip", title = "Votre moto n'apparait pas dans la liste? cochez la case ci-dessus!" })
-                        </div>
-
-                        <div id="conteneurMotoPerso" class="hidden">
-                            @Html.EditorFor(model => model.MotoPerso, new { htmlAttributes = new { @class = "form-control", placeholder = "Marque et modèle de ma moto", data_toggle = "tooltip", title = "Saisissez la marque et le modèle, la moto sera intégrée dans la base de données par nos soins." } })
-                        </div>
-
-                    </div>
-                    <div class="col-md-5">
-                        @Html.ValidationMessageFor(model => model.MotoProposeeID, "", new { @class = "text-danger" })
-                        @Html.ValidationMessageFor(model => model.MotoPerso, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-            
-                @if (Model.Photos.Any())
+                @foreach (Photo photo in Model.Annonce.Photos.FindAll(p => p.Taille == Photo.TypeTaille.Miniature && p.Principale == false))
                 {
-                    <div class="form-group">
-                        <label class="control-label col-md-2">
-                            Photos actuelles - Choisir la photo principale
-                        </label>
-
-                        <div class="col-md-10">
-
-                            <label class="imageRadio">
-                                <input type="radio" name="photoPrincipale" value=@Model.Photos.Find(p => p.Taille == Photo.TypeTaille.Miniature && p.Principale == true).ID checked="checked" />
-                                <img src="~/Photo?id=@Model.Photos.Find(p => p.Taille == Photo.TypeTaille.Miniature && p.Principale == true).ID" alt="Photo non disponible" />
-                            </label>
-
-                            @foreach (Photo photo in Model.Photos.FindAll(p => p.Taille == Photo.TypeTaille.Miniature && p.Principale == false))
-                            {
                                 
-                                <label class="imageRadio">
-                                    <input type="radio" name="photoPrincipale" value=@photo.ID />
-                                    <img src="~/Photo?id=@photo.ID" alt="Photo non disponible" />
-                                </label>
+                    <label class="imageRadio">
+                        <input type="radio" name="photoPrincipale" value=@photo.ID />
+                        <img src="~/Photo?id=@photo.ID" alt="Photo non disponible" />
+                    </label>
                                 
-                            }
-                        </div>
-                    </div>
                 }
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Photos, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-5">
-                        <input type="file" class="file" multiple id="photos" name="photos" data-language="fr" accept="image/*" data-show-upload="false" data-max-file-count=@ViewBag.nombreMaxdePhotos data-max-file-size=@ViewBag.tailleMaxiUploadEnOctet />
-                    </div>
-                    <div class="col-md-5">
-                        @Html.ValidationMessageFor(model => model.Photos, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Annee, htmlAttributes: new { @class = "control-label col-md-2 required" })
-                    <div class="col-md-5">
-                        @Html.EditorFor(model => model.Annee, new { htmlAttributes = new { @class = "form-control", min = "1900", max = DateTime.Now.Year } })
-                    </div>
-                    <div class="col-md-5">
-                        @Html.ValidationMessageFor(model => model.Annee, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Kilometrage, htmlAttributes: new { @class = "control-label col-md-2 required" })
-                    <div class="col-md-5">
-                        @Html.EditorFor(model => model.Kilometrage, new { htmlAttributes = new { @class = "form-control", min = "0", max = "999999" } })
-                    </div>
-                    <div class="col-md-5">
-                        @Html.ValidationMessageFor(model => model.Kilometrage, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Prix, htmlAttributes: new { @class = "control-label col-md-2 required" })
-                    <div class="col-md-5">
-                        @Html.EditorFor(model => model.Prix, new { htmlAttributes = new { @class = "form-control", min = "0", max = "999999" } })
-                    </div>
-                    <div class="col-md-5">
-                        @Html.ValidationMessageFor(model => model.Prix, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-            </fieldset>
-
-            <fieldset>
-
-                <h5>Ce que vous cherchez:</h5>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.MotosAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-5">
-                        @Html.DropDownList("MotosAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control" })
-                    </div>
-                    <div class="col-md-5">
-                        @Html.ValidationMessageFor(model => model.MotosAccepteesID, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.MarquesAccepteesID, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-5 toolTipClass">
-                        @Html.DropDownList("MarquesAccepteesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control", data_toggle = "tooltip", title = "Renseignez le genre et laissez ce champ vide si toutes les marques vous conviennent" })
-                    </div>
-                    <div class="col-md-5">
-                        @Html.ValidationMessageFor(model => model.MarquesAccepteesID, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.GenresAcceptesID, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-5 toolTipClass">
-                        @Html.DropDownList("GenresAcceptesID", null, String.Empty, new { multiple = "multiple", @class = "chosen-select form-control", data_toggle = "tooltip", title = "Renseignez la marque et laissez ce champ vide si tous les genres vous conviennent" })
-                    </div>
-                    <div class="col-md-5">
-                        @Html.ValidationMessageFor(model => model.GenresAcceptesID, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-            </fieldset>
-
-            <fieldset>
-
-                <h5>A propos de vous:</h5>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Nom, htmlAttributes: new { @class = "control-label col-md-2 required" })
-                    <div class="col-md-5">
-                        @Html.EditorFor(model => model.Nom, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                    <div class="col-md-5">
-                        @Html.ValidationMessageFor(model => model.Nom, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Mail, htmlAttributes: new { @class = "control-label col-md-2 required" })
-                    <div class="col-md-5">
-                        @Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                    <div class="col-md-5">
-                        @Html.ValidationMessageFor(model => model.Mail, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Telephone, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-5">
-                        @Html.EditorFor(model => model.Telephone, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                    <div class="col-md-5">
-                        @Html.ValidationMessageFor(model => model.Telephone, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.DepartementID, htmlAttributes: new { @class = "control-label col-md-2 required" })
-                    <div class="col-md-5">
-                        @Html.DropDownList("DepartementID", null, String.Empty, new { @class = "chosen-select form-control" })
-                    </div>
-                    <div class="col-md-5">
-                        @Html.ValidationMessageFor(model => model.DepartementID, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-            </fieldset>
-
-            
-            <div>
-                <input type="submit" value="Valider les modifications" class="btn btn-primary" />
             </div>
-
-
-            </div>
+        </div>
     }
-    <br />
-    <div>
-        <a class="btn btn-warning" href="@Url.Content("~/Annonces/Details/" + Model.ID)">< Revenir à l'annonce</a>
-    </div>
-
-
-
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-
-
-
-        @Scripts.Render("~/bundles/chosenJs")
-
-        <script src="~/Scripts/Site_AnnoncesCreate.js"></script>
-
-        @Scripts.Render("~/bundles/inputFileJs")
-
-    }
-}
+                
+}   
+    
+}           

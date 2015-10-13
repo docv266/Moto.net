@@ -344,8 +344,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Departements\" />
-    <Folder Include="Views\Photo\" />
-    <Folder Include="Views\Sitemap\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

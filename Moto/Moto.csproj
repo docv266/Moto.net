@@ -166,6 +166,7 @@
     <Compile Include="Controllers\MotosController.cs" />
     <Compile Include="Controllers\PhotoController.cs" />
     <Compile Include="DAL\MotoContext.cs" />
+    <Compile Include="Extensions\UrlExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

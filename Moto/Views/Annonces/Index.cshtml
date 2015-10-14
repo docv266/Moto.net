@@ -1,5 +1,17 @@
-﻿@model PagedList.IPagedList<Motonet.Models.Annonce>
-@using PagedList.Mvc;
+﻿@using PagedList.Mvc;
+@using Motonet.Extensions;
+@model PagedList.IPagedList<Motonet.Models.Annonce>
+
+@section meta {
+
+    <meta property="og:title" content="Petites annonces moto - vente/échange" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@WebPageContext.Current.Page.Context.Request.Url.ToString()" />
+    <meta property="og:site_name" content="moto-echange.fr" />
+    <meta property="og:image" content="@Url.AbsoluteContent("/Content/Images/logo_simple.jpg")" />
+    <meta property="og:description" content="Vendre ou échanger facilement et gratuitement son deux-roues!" />
+
+}
 
 
 @section Styles {

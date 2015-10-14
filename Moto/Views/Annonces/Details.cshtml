@@ -1,4 +1,23 @@
-﻿@model Motonet.Models.Annonce
+﻿@using Motonet.Extensions;
+@model Motonet.Models.Annonce
+
+@section meta {
+
+    <meta property="og:title" content="@Model.Titre" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@WebPageContext.Current.Page.Context.Request.Url.ToString()" />
+    <meta property="og:site_name" content="moto-echange.fr" />
+    @if (Model.Photos.Any())
+    {
+        <meta property="og:image" content="@Url.AbsoluteContent("~/Photo?id=" + Model.Photos.Find(x => x.Taille == Photo.TypeTaille.Vignette && x.Principale == true).ID)" />
+    }
+    else
+    {
+        <meta property="og:image" content="@Url.AbsoluteContent("/Content/Images/logo.png")" />
+    }
+    <meta property="og:description" content="@Model.Description" />
+
+}
 
 @section Styles {
     

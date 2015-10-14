@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace Motonet.Extensions
 {
-    public class UrlExtensions
+    public static class UrlExtensions
     {
 
         public static string AbsoluteContent(this UrlHelper url, string contentPath)

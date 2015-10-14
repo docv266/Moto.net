@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Vendre ou échanger facilement et gratuitement son deux-roues!" />
 
-    <meta property="og:title" content="Petites annonces deux-roues" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="@WebPageContext.Current.Page.Context.Request.Url.ToString()" />
-    <meta property="og:site_name" content="moto-echange.fr" />
-    <meta property="og:image" content="@Url.AbsoluteContent(" ~ /Content/Images/logo.png")" />
-    <meta property="og:description" content="Vendre ou échanger facilement et gratuitement son deux-roues!" />
+    @RenderSection("meta", required: false)
 
     <title>Moto échange</title>
 

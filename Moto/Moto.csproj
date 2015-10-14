@@ -212,6 +212,7 @@
     <Content Include="Content\Images\date-from-16.ico" />
     <Content Include="Content\Images\euro-16.ico" />
     <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\logo_simple.jpg" />
     <Content Include="Content\Images\mail-16.ico" />
     <Content Include="Content\Images\map-marker-16.ico" />
     <Content Include="Content\Images\motorcycle-16.ico" />

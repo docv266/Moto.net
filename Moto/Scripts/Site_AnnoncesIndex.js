@@ -14,6 +14,11 @@ function clearForm() {
     $('#MaMotoID').select2("val", "");
 }
 
+function open_in_new_tab(url) {
+    var win = window.open(url, '_blank');
+    win.focus();
+}
+
 // Conserver l'état de la div de filtrage
 function retainDivCollapsedState(nameOfDiv, nameOfHeader)
 {

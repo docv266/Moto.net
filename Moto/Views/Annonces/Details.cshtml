@@ -111,25 +111,25 @@
 
                     @if (Model.PresenceMotoPerso)
                     {
-                        <dd>
+                        <dd class="vertical-align">
                             <span class="glyphicon glyphicon-warning-sign" style="color:orange" aria-hidden="true"></span>
                             @Html.DisplayFor(model => model.MotoPerso)
                         </dd>
                     }
                     else
                     {
-                        <dd data-toggle="tooltip" data-html="true" title="@Model.MotoProposee.IdentificationSuite" data-placement="left">
-                            <img src="~/Content/Images/motorcycle-16.ico" alt="Photo non disponible" />@Html.DisplayFor(model => model.MotoProposee.Identification)
+                        <dd class="vertical-align">
+                            <img src="~/Content/Images/motorcycle-16.ico" alt="Photo non disponible" data-toggle="tooltip" data-html="true" title="Modèle" data-placement="left"/><span data-toggle="tooltip" data-html="true" title="@Model.MotoProposee.IdentificationSuite" data-placement="right">@Html.DisplayFor(model => model.MotoProposee.Identification)</span>
                         </dd>
                     }
                     <dd class="vertical-align">
-                        <img src="~/Content/Images/tear-of-calendar-16.ico" alt="Photo non disponible" />@Html.DisplayFor(model => model.Annee)
+                        <img src="~/Content/Images/tear-of-calendar-16.ico" alt="Photo non disponible" data-toggle="tooltip" data-html="true" title="Année" data-placement="left" />@Html.DisplayFor(model => model.Annee)
                     </dd>
-                    <dd>
-                        <img src="~/Content/Images/wheel-16.ico" alt="Photo non disponible" />@Html.DisplayFor(model => model.KilometrageAvecUnite)
+                    <dd class="vertical-align">
+                        <img src="~/Content/Images/wheel-16.ico" alt="Photo non disponible" data-toggle="tooltip" data-html="true" title="Kilomètrage" data-placement="left" />@Html.DisplayFor(model => model.KilometrageAvecUnite)
                     </dd>
-                    <dd>
-                        <img src="~/Content/Images/euro-16.ico" alt="Photo non disponible" />@Html.DisplayFor(model => model.PrixAvecUnite)
+                    <dd class="vertical-align">
+                        <img src="~/Content/Images/euro-16.ico" alt="Photo non disponible" data-toggle="tooltip" data-html="true" title="Prix" data-placement="left" />@Html.DisplayFor(model => model.PrixAvecUnite)
                     </dd>
 
                 </dl>
@@ -141,20 +141,20 @@
 
                 <dl>
 
-                    <dd>
-                        <img src="~/Content/Images/date-from-16.ico" alt="Photo non disponible" />@Html.DisplayFor(model => model.Date)
+                    <dd class="vertical-align">
+                        <img src="~/Content/Images/date-from-16.ico" alt="Photo non disponible" data-toggle="tooltip" data-html="true" title="Date de l'annonce" data-placement="left" />@Html.DisplayFor(model => model.Date)
                     </dd>
-                    <dd>
-                        <img src="~/Content/Images/user-16.ico" alt="Photo non disponible" />@Html.DisplayFor(model => model.Nom)
+                    <dd class="vertical-align">
+                        <img src="~/Content/Images/user-16.ico" alt="Photo non disponible" data-toggle="tooltip" data-html="true" title="Pseudo du vendeur" data-placement="left" />@Html.DisplayFor(model => model.Nom)
                     </dd>
-                    <dd>
-                        <img src="~/Content/Images/map-marker-16.ico" alt="Photo non disponible" />@Html.DisplayFor(model => model.Departement.Nom)
+                    <dd class="vertical-align">
+                        <img src="~/Content/Images/map-marker-16.ico" alt="Photo non disponible" data-toggle="tooltip" data-html="true" title="Département" data-placement="left" />@Html.DisplayFor(model => model.Departement.Identification)
                     </dd>
-                    <dd>
-                        <img src="~/Content/Images/mail-16.ico" alt="Photo non disponible" />@Html.ActionLink("Envoyer un message", "EnvoyerMailAnnonce", new { id = Model.ID })
+                    <dd class="vertical-align">
+                        <img src="~/Content/Images/mail-16.ico" alt="Photo non disponible" data-toggle="tooltip" data-html="true" title="Mail" data-placement="left" />@Html.ActionLink("Envoyer un message", "EnvoyerMailAnnonce", new { id = Model.ID })
                     </dd>
-                    <dd>
-                        <img src="~/Content/Images/phone-2-16.ico" alt="Photo non disponible" />@Html.DisplayFor(model => model.Telephone)
+                    <dd class="vertical-align">
+                        <img src="~/Content/Images/phone-2-16.ico" alt="Photo non disponible" data-toggle="tooltip" data-html="true" title="Téléphone" data-placement="left" />@Html.DisplayFor(model => model.Telephone)
                     </dd>
 
                 </dl>
@@ -177,7 +177,7 @@
                                 <ul>
                                     @foreach (Moto moto in Model.MotosAcceptees)
                                     {
-                                        <li data-toggle="tooltip" data-html="true" title="@moto.IdentificationSuite" data-placement="bottom">@moto.Identification</li>
+                                        <li><span data-toggle="tooltip" data-html="true" title="@moto.IdentificationSuite" data-placement="right">@moto.Identification</span></li>
                                     }
                                 </ul>
                             </dd>

@@ -26,7 +26,7 @@
 
         @foreach (var item in Model)
         {
-            <tr onclick="location.href = '@(Url.Action("Details", "Annonces", new { id = item.ID }))'">
+            <tr onclick="open_in_new_tab('@(Url.Action("Details", "Annonces", new { id = item.ID }))')">
                 <td>
                     @if (item.Photos.Count > 0)
                     {
@@ -35,10 +35,12 @@
                 </td>
                 <td>
                     <h5 style="color:red;">@Html.DisplayFor(modelItem => item.Titre)</h5>
-                    <div data-toggle="tooltip" data-html="true" title="@item.MotoProposee.IdentificationSuite" data-placement="left" data-container="body">
+                    <span data-toggle="tooltip" data-html="true" title="@item.MotoProposee.IdentificationSuite" data-placement="right" >
                         <b>@Html.DisplayFor(modelItem => item.MotoProposee.Identification)</b>
+                    </span>
+                    <div>
+                        @Html.DisplayFor(modelItem => item.Departement.Identification)
                     </div>
-                    @Html.DisplayFor(modelItem => item.Departement.Identification)
                 </td>
                 <td class="hidden-xs">
                     <div>@Html.DisplayFor(modelItem => item.PrixAvecUnite)</div>

@@ -199,7 +199,7 @@
     <Compile Include="ViewModels\CreateEditViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\alt.png" />
+    <Content Include="Content\Images\alt.png" />
     <Content Include="Content\bootstrap-fileinput\css\fileinput.css" />
     <Content Include="Content\bootstrap-fileinput\css\fileinput.min.css" />
     <Content Include="Content\bootstrap-fileinput\img\loading-sm.gif" />
@@ -208,7 +208,16 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\logo.png" />
+    <Content Include="Content\Images\date-from-16.ico" />
+    <Content Include="Content\Images\euro-16.ico" />
+    <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\mail-16.ico" />
+    <Content Include="Content\Images\map-marker-16.ico" />
+    <Content Include="Content\Images\motorcycle-16.ico" />
+    <Content Include="Content\Images\phone-2-16.ico" />
+    <Content Include="Content\Images\tear-of-calendar-16.ico" />
+    <Content Include="Content\Images\user-16.ico" />
+    <Content Include="Content\Images\wheel-16.ico" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\Photos\Miniatures\thxMS.txt" />
     <Content Include="Content\Photos\Vignettes\thxMS.txt" />

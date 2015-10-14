@@ -77,7 +77,7 @@
             {
                 <fieldset class="fieldsetPhotos">
                     <div id="0" name="Vignette" style="display: block;">
-                        <img src="~/Content/alt.png" alt="Photo non disponible" class="img-responsive" />
+                        <img src="~/Content/Images/alt.png" alt="Photo non disponible" class="img-responsive" />
                     </div>
                 </fieldset>
             }
@@ -90,16 +90,6 @@
 
                 <dl>
 
-                    <dt>
-                        @if (Model.PresenceMotoPerso)
-                        {
-                            @Html.DisplayNameFor(model => model.MotoPerso)
-                        }
-                        else
-                        {
-                            @Html.DisplayNameFor(model => model.MotoProposee.Modele)
-                        }    
-                    </dt>
                     @if (Model.PresenceMotoPerso)
                     {
                         <dd>
@@ -110,26 +100,17 @@
                     else
                     {
                         <dd data-toggle="tooltip" data-html="true" title="@Model.MotoProposee.IdentificationSuite" data-placement="left">
-                            @Html.DisplayFor(model => model.MotoProposee.Identification)
+                            <img src="~/Content/Images/motorcycle-16.ico" alt="Photo non disponible" />@Html.DisplayFor(model => model.MotoProposee.Identification)
                         </dd>
                     }
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Annee)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Annee)
+                    <dd class="vertical-align">
+                        <img src="~/Content/Images/tear-of-calendar-16.ico" alt="Photo non disponible" />@Html.DisplayFor(model => model.Annee)
                     </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Kilometrage)
-                    </dt>
                     <dd>
-                        @Html.DisplayFor(model => model.KilometrageAvecUnite)
+                        <img src="~/Content/Images/wheel-16.ico" alt="Photo non disponible" />@Html.DisplayFor(model => model.KilometrageAvecUnite)
                     </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Prix)
-                    </dt>
                     <dd>
-                        @Html.DisplayFor(model => model.PrixAvecUnite)
+                        <img src="~/Content/Images/euro-16.ico" alt="Photo non disponible" />@Html.DisplayFor(model => model.PrixAvecUnite)
                     </dd>
 
                 </dl>
@@ -141,35 +122,20 @@
 
                 <dl>
 
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Date)
-                    </dt>
                     <dd>
-                        @Html.DisplayFor(model => model.Date)
+                        <img src="~/Content/Images/date-from-16.ico" alt="Photo non disponible" />@Html.DisplayFor(model => model.Date)
                     </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Nom)
-                    </dt>
                     <dd>
-                        @Html.DisplayFor(model => model.Nom)
+                        <img src="~/Content/Images/user-16.ico" alt="Photo non disponible" />@Html.DisplayFor(model => model.Nom)
                     </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Departement)
-                    </dt>
                     <dd>
-                        @Html.DisplayFor(model => model.Departement.Nom)
+                        <img src="~/Content/Images/map-marker-16.ico" alt="Photo non disponible" />@Html.DisplayFor(model => model.Departement.Nom)
                     </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Mail)
-                    </dt>
                     <dd>
-                        @Html.ActionLink("Envoyer un message", "EnvoyerMailAnnonce", new { id = Model.ID })
+                        <img src="~/Content/Images/mail-16.ico" alt="Photo non disponible" />@Html.ActionLink("Envoyer un message", "EnvoyerMailAnnonce", new { id = Model.ID })
                     </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Telephone)
-                    </dt>
                     <dd>
-                        @Html.DisplayFor(model => model.Telephone)
+                        <img src="~/Content/Images/phone-2-16.ico" alt="Photo non disponible" />@Html.DisplayFor(model => model.Telephone)
                     </dd>
 
                 </dl>

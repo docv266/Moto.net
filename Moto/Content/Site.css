@@ -241,3 +241,7 @@ legend {
 h1, h2 {
     margin-top: 0;
 }
+
+dd>img{
+    margin-right:10px;
+}

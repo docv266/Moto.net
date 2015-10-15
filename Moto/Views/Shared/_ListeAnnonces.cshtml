@@ -26,7 +26,7 @@
 
         @foreach (var item in Model)
         {
-            <tr onclick="open_in_new_tab('@(Url.Action("Details", "Annonces", new { id = item.ID }))')">
+            <tr onclick="window.location = '@(Url.Action("Details", "Annonces", new { id = item.ID }))'">
                 <td>
                     @if (item.Photos.Count > 0)
                     {

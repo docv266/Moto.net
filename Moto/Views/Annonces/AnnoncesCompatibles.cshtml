@@ -8,20 +8,28 @@
 
 <h2>Annonces compatibles</h2>
 
+@if (!Model.Any())
+{
+    <div class="row">
+        <div class="col-md-5 alert alert-warning">
+            <strong>Rien pour le moment!</strong><br />
+            Il n'y a aucune annonce compatible, réessayez plus tard!
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderPartial("~/Views/Shared/_ListeAnnonces.cshtml");
+}
 
-<br />
-@Html.PagedListPager(Model, page => Url.Action("AnnoncesCompatibles",
-    new { page, sortOrder = ViewBag.CurrentSort }))
-<br />
 
-@{Html.RenderPartial("~/Views/Shared/_ListeAnnonces.cshtml");}
 
-<div>
-    @Html.ActionLink("Revenir à l'annonce", "Details", new { id = ViewBag.annonceSourceId })
-</div>
+        <div>
+            @Html.ActionLink("Revenir à l'annonce", "Details", new { id = ViewBag.annonceSourceId })
+        </div>
 
-<br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        <br />
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("AnnoncesCompatibles",
+        @Html.PagedListPager(Model, page => Url.Action("AnnoncesCompatibles",
     new { page, sortOrder = ViewBag.CurrentSort }))

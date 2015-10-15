@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    /*background-color: #efefef;*/
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -79,6 +80,7 @@ fieldset {
   margin: 0 0 20px 0;
   border: 1px solid #c0c0c0;
   border-radius: 3px;
+  background-color: white;
 }
 
 .formFilter input, .formFilter .select2 {

@@ -23,6 +23,11 @@ namespace Motonet.Controllers
             return View();
         }
 
+        public ActionResult MentionsLegales()
+        {
+            return View();
+        }
+
         public ActionResult GenericError()
         {
             return View();

@@ -283,7 +283,6 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\Site_AnnoncesCreateEdit.js" />
     <Content Include="Scripts\Site_AnnoncesIndex.js" />
-    <Content Include="Scripts\Site_GoogleAnalytics.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -351,6 +350,7 @@
     <Content Include="Views\Emails\MailAdminAnnoncePostee.Text.cshtml" />
     <Content Include="Views\Emails\MailAdminAnnoncePostee.Html.cshtml" />
     <Content Include="Views\Annonces\CreateEdit.cshtml" />
+    <Content Include="Views\Home\MentionsLegales.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

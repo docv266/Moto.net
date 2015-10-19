@@ -23,8 +23,8 @@
 
 
 @section BoutonAjouter {
-    <a class="glyphSize" href="@Url.Action("Create", "Annonces", null)">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Créer mon annonce</a>
+    <a class="btn btn-default glyphSize pull-right" href="@Url.Action("Create", "Annonces", null)">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Créer mon annonce</a>
 }
 
 <div class="row">
@@ -109,27 +109,28 @@
 
                         <div class="row formFilter">
 
-                            <div class="col-xs-4">
+                            <div class="col-md-4 col-sm-8 col-xs-12">
                                 <div class="form-group">
-                                    <label>Trouver les personnes intéressées par votre moto:</label>
-                                    @Html.DropDownList("MaMotoID", null, new { @class = "form-control" })
+                                    <label>Qui recherche ma moto?</label>
+                                    @Html.DropDownList("MaMotoID", null, new { @class = "form-control", title = "Sélectionnez votre deux-roues et trouvez les personnes qui le recherchent!" })
                                 </div>
                             </div>
 
                         </div>
 
                         <div class="row formFilter">
-                            <div class="col-xs-10">
+                            <div class="col-xs-6">
                                 <input type="submit" value="Filtrer" class="btn btn-danger btn-sm boutonFiltrer" />
+                            
                             </div>
+                            <div class="col-xs-6">
 
-                            <div class="col-xs-2 text-right">
                                 <a class="btn btn-default btn-sm pull-right" onclick='clearForm()'>
                                     <span class="glyphicon glyphicon-remove" style="color:red;" aria-hidden="true"></span>
                                     Effacer les filtres
                                 </a>
 
-                            </div>
+                             </div>
 
                         </div>
 
@@ -250,7 +251,7 @@
                     }
                 },
                 multiple: true,
-                placeholder: "Départements"
+                placeholder: "Dép."
             });
 
             // On ne lance la requête ajax que si des départements ont été sélectionnés auparavant
@@ -279,6 +280,13 @@
                 });
 
             }
+
+            $(".select2-container").tooltip({
+                title: function () {
+                    return $(this).prev().attr("title");
+                },
+                placement: "bottom"
+            });
 
         });
 

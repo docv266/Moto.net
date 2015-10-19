@@ -169,6 +169,7 @@ legend {
         color: red;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+
 }
 
   @media (min-width: 769px) and (max-width: 992px){
@@ -182,6 +183,10 @@ legend {
         font-size:medium;
         color: red;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .glyphSize.pull-right {
+        float:left !important;
     }
 
 }
@@ -209,6 +214,10 @@ legend {
         height: auto;
         border: 0;
         line-height: inherit;
+    }
+
+    .glyphSize.pull-right {
+        float:left !important;
     }
 }
 

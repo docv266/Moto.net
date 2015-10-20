@@ -232,10 +232,29 @@
                     </dl>
 
                     <div class="text-center">
+
+                        @if (ViewBag.NbAnnComp <= 0)
+                        {
+                            <a class="btn btn-default disabled" href="@Url.Content("~/Annonces/AnnoncesCompatibles/" + Model.ID)" style="white-space: normal;">
+                                <span class="glyphicon glyphicon-resize-small" style="color:red;" aria-hidden="true"></span>
+                                Aucune annonce compatible pour le moment
+                            </a>
+                        }
+                        else if (ViewBag.NbAnnComp == 1)
+                        {
                         <a class="btn btn-default" href="@Url.Content("~/Annonces/AnnoncesCompatibles/" + Model.ID)" style="white-space: normal;">
                             <span class="glyphicon glyphicon-resize-small" style="color:red;" aria-hidden="true"></span>
-                            Voir les annonces compatibles
+                            Voir la seule annonce compatible
                         </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-default" href="@Url.Content("~/Annonces/AnnoncesCompatibles/" + Model.ID)" style="white-space: normal;">
+                                <span class="glyphicon glyphicon-resize-small" style="color:red;" aria-hidden="true"></span>
+                                Voir les @ViewBag.NbAnnComp annonces compatibles
+                            </a>
+                        }
+
                     </div>
 
                 </fieldset>

@@ -237,7 +237,6 @@ namespace Motonet.Controllers
             ViewBag.AnneeSortParm = sortOrder == "cylindree" ? "annee_desc" : "annee";
             ViewBag.KilometrageSortParm = sortOrder == "kilometrage" ? "kilometrage_desc" : "kilometrage";
 
-            //var annonces = from s in db.Annonces select s;
             Annonce b = db.Annonces.Find(id);
 
             var annonces = db.Annonces.ToList().Where
@@ -530,6 +529,42 @@ namespace Motonet.Controllers
 
             ViewBag.ToutesMarques = annonce.MarquesAcceptees.Count() == db.Marques.Count();
             ViewBag.TousGenres = annonce.GenresAcceptes.Count() == db.Genres.Count();
+
+            // On récupère le nombre d'annonces compatibles
+            Annonce b = db.Annonces.Find(id);
+
+            var annonces = db.Annonces.ToList().Where
+            (a =>
+                (
+                    a.Autorisee == true && a.Validee == true
+                )
+                &&
+                (
+                    a.MotosAcceptees.Contains(b.MotoProposee)
+                    ||
+                    (
+                        a.MarquesAcceptees.Contains(b.MotoProposee.Marque)
+                        &&
+                        a.GenresAcceptes.Contains(b.MotoProposee.Genre)
+                    )
+                )
+                &&
+                (
+                    b.MotosAcceptees.Contains(a.MotoProposee)
+                    ||
+                    (
+                        b.MarquesAcceptees.Contains(a.MotoProposee.Marque)
+                        &&
+                        b.GenresAcceptes.Contains(a.MotoProposee.Genre)
+                    )
+                )
+                &&
+                (
+                    a.ID != id
+                )
+            );
+
+            ViewBag.NbAnnComp = annonces.Count();
 
             return View(annonce);
         }

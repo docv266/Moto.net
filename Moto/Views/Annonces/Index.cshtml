@@ -157,6 +157,46 @@
     @Html.PagedListPager(Model, page => Url.Action("Index",
     new { page, sortOrder = ViewBag.CurrentSort }))
 </div>
+
+<div>
+    <fieldset>
+    <h2>&Agrave propos</h2>
+    <h3>Pourquoi ce site?</h3>
+    
+        En premier lieu ce site était un support d'apprentissage pour apprendre les technologies Web, en particulier en ASP.NET MVC.<br/>
+        Je suis développeur de métier et c'est une façon de faire de la "veille technologique", mettre en pratique les compétences demandées dans mon métier.
+    
+    <h3>Pourquoi l'échange moto?</h3>
+    
+        Tout simplement parce que je suis un passionné de deux-roues!<br/>
+        Il existe déjà de nombreux sites proposant un service de petites-annonces de motos, certains même propose l'échange.<br/>
+        Aucun de ces sites ne m'a pleinement convaincu:
+        <ul>
+            <li>Les échanges ne sont pas explicitement possibles. (Dans le monde du deux-roues, l'échange est courant)</li>
+            <li>La manipulation des données personnelles est obscure</li>
+            <li>L'interface du site ne donne pas envie d'aller plus loin (Responsive, Ajax, etc...)</li>
+        </ul>
+        J'ai donc eu envie de réaliser ma vision du site d'échange de moto:
+        <ul>
+            <li>Interface claire, simple et efficace. Adaptable à toutes les tailles d'écran sur les navigateurs modernes</li>
+            <li>Fonctionnalités permettant l'échange. On peut trouver rapidement une personne avec qui on peut faire affaire</li>
+            <li>La présence d'une base de données deux-roues.</li>
+            <li>Les données personnelles ne sont pas revendues ou utilisées à d'autres fins que l'utilisation du site. Elle sont supprimées à la suppression de l'annonce les contenant</li>
+            <li>Temps de chargement optimisés grâce à l'Ajax, la compression et la mise en cache des images</li>
+            <li>Pas de ségrégation! On y trouve des motos, des scooters, des grosses cylindrées et même des 50cm<sup>3</sup> !</li>
+        </ul>
+    
+    <h3>Et c'est gratuit?</h3>
+    
+        Oui, pour le moment toutes les fonctionnalités sont gratuites.<br/>
+        Il n'y a pas non plus de publicités afin de garder une navigation agréable.<br/>
+        Cependant l'hébergement du site n'est pas gratuit lui, et j'envisage à terme de trouver un moyen de monétiser ce site.<br/>
+        La problématique sera de trouver une solution qui n'altérera pas la qualité de navigation et laissera la possibilité d'utiliser les fonctionnalités principales gratuitement.
+    
+    </fieldset>
+</div>
+
+
 @section Scripts {
 
     <script src="~/Scripts/js.cookie.js"></script>
